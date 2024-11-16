@@ -1,17 +1,17 @@
 <template>
   <div class="login-container">
-    <LoginForm />
-    <RouterLink to="registration" class="login__link">Create an account</RouterLink>
+    <RegistrationForm />
+    <RouterLink to="login" class="login__link">Log in</RouterLink>
   </div>
 </template>
 
 <script>
-import LoginForm from '@/components/LoginForm.vue'
+import RegistrationForm from '@/components/RegistrationForm.vue'
 import { RouterLink } from 'vue-router';
 
 export default {
   components: {
-    LoginForm,
+    RegistrationForm,
     RouterLink,
   },
   data() {

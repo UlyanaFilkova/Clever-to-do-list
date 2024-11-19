@@ -36,18 +36,26 @@
 
 <script>
 import FormInput from '@/components/FormInput.vue'
+import { db } from '@/firebase/index.js'
+import {
+  collection,
+  addDoc,
+} from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
     FormInput,
   },
   data() {
+    const router = useRouter();
     return {
       username: '',
       password: '',
       repeatPassword: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
+      router
     }
   },
   computed: {
@@ -64,7 +72,7 @@ export default {
       return this.passwordError ? 'Password is required' : ''
     },
     repeatPasswordError() {
-      return !(this.repeatPassword.length === 0 || this.password !== this.repeatPassword)
+      return (this.repeatPassword.length === 0 || this.password !== this.repeatPassword)
     },
     repeatPasswordErrorMessage() {
       if (this.repeatPassword.length === 0) return 'Please, repeat the password'
@@ -81,8 +89,33 @@ export default {
       return true
     },
 
-    handleSubmit() {
-      if (!this.validateLoginForm()) return
+    async handleSubmit() {
+      console.log('Form submitted')
+      if (!this.validateLoginForm()) {
+        return
+      }
+
+      try {
+        // Добавление данных в Firestore
+        const docRef = await addDoc(collection(db, 'users'), {
+          username: this.username,
+          password: this.password, // TODO: хэшировать пароли
+        })
+
+        console.log('Document written with ID: ', docRef.id)
+
+   
+        this.router.push({ name: 'home' })
+
+        // Очистка формы после успешной регистрации
+        this.username = ''
+        this.password = ''
+        this.repeatPassword = ''
+        this.showErrors = false
+      } catch (e) {
+        console.error('Error adding document: ', e)
+       
+      }
     },
   },
 }

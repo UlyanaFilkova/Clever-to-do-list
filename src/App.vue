@@ -15,6 +15,8 @@ export default {
 </template>
 
 <style>
+@import 'assets/css/index.css';
+
   .wrapper{
     max-width: 762px;
     height: 100vh;

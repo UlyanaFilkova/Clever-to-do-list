@@ -3,7 +3,9 @@
     <h1>Login</h1>
     <FormInput
       v-model="username"
+      type="text"
       placeholder="Username"
+      name="username" 
       autocomplete="username"
       required
       :showErrors="showErrors"
@@ -14,6 +16,7 @@
       v-model="password"
       type="password"
       placeholder="Password"
+      name="password"
       autocomplete="current-password"
       required
       :showErrors="showErrors"
@@ -65,8 +68,6 @@ export default {
     handleSubmit() {
       if (!this.validateLoginForm()) return
 
-      console.log('Username:', this.username)
-      console.log('Password:', this.password)
     },
   },
 }

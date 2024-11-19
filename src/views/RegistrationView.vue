@@ -1,7 +1,10 @@
 <template>
   <div class="login-container">
     <RegistrationForm />
-    <RouterLink to="login" class="login__link">Log in</RouterLink>
+    <div>
+      Already have an account?
+      <RouterLink to="login" class="login__link">Login</RouterLink>
+    </div>
   </div>
 </template>
 

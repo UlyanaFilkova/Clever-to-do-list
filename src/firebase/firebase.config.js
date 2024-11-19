@@ -1,9 +1,9 @@
 export const firebaseConfig = {
-    apiKey: "AIzaSyBreYbAMC9-G78XTKG2w4XrTDb3_ND7a2I",
-    authDomain: "clever-to-do-list-1.firebaseapp.com",
-    databaseURL: "https://clever-to-do-list-1-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "clever-to-do-list-1",
-    storageBucket: "clever-to-do-list-1.firebasestorage.app",
-    messagingSenderId: "1059773812017",
-    appId: "1:1059773812017:web:aa537c386c2dfff6c6b410"
-  };
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+};

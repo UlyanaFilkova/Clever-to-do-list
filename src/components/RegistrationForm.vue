@@ -100,6 +100,7 @@ export default {
 
     async handleSubmit() {
       console.log('Form submitted')
+      console.log(import.meta.env);
       if (!this.validateLoginForm()) {
         return
       }

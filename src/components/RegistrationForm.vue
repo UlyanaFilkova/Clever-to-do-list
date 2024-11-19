@@ -31,6 +31,10 @@
     />
 
     <button type="submit">Register</button>
+
+    <div class="invalid-input" :style="{ visibility: showErrors ? 'visible' : 'hidden' }">
+      {{ dbError }}
+    </div>
   </form>
 </template>
 
@@ -44,21 +48,22 @@ import {
   where,
   getDocs,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
     FormInput,
   },
   data() {
-    const router = useRouter();
+    const router = useRouter()
     return {
       username: '',
       password: '',
       repeatPassword: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
-      router
+      dbError: '',
+      router,
     }
   },
   computed: {
@@ -75,7 +80,7 @@ export default {
       return this.passwordError ? 'Password is required' : ''
     },
     repeatPasswordError() {
-      return (this.repeatPassword.length === 0 || this.password !== this.repeatPassword)
+      return this.repeatPassword.length === 0 || this.password !== this.repeatPassword
     },
     repeatPasswordErrorMessage() {
       if (this.repeatPassword.length === 0) return 'Please, repeat the password'
@@ -93,22 +98,22 @@ export default {
     },
 
     async checkUsernameExists(username) {
-      const q = query(collection(db, 'users'), where('username', '==', username));
-      const querySnapshot = await getDocs(q);
-      return !querySnapshot.empty; // true, если пользователь существует
+      const q = query(collection(db, 'users'), where('username', '==', username))
+      const querySnapshot = await getDocs(q)
+      return !querySnapshot.empty // true, если пользователь существует
     },
 
     async handleSubmit() {
       console.log('Form submitted')
-      console.log(import.meta.env);
+      console.log(import.meta.env)
       if (!this.validateLoginForm()) {
         return
       }
 
-      const userExists = await this.checkUsernameExists(this.username);
+      const userExists = await this.checkUsernameExists(this.username)
       if (userExists) {
-        console.log('This username already exists. Please choose another one.');
-        return;
+        this.dbError = 'This username already exists.'
+        return
       }
 
       try {
@@ -120,7 +125,6 @@ export default {
 
         console.log('Document written with ID: ', docRef.id)
 
-   
         this.router.push({ name: 'home' })
 
         // Очистка формы после успешной регистрации
@@ -130,7 +134,6 @@ export default {
         this.showErrors = false
       } catch (e) {
         console.error('Error adding document: ', e)
-       
       }
     },
   },
@@ -142,6 +145,11 @@ export default {
   margin-bottom: 15px;
 }
 
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 input {
   width: 100%;
   padding: 10px;
@@ -151,6 +159,8 @@ input {
 
 .invalid-input {
   min-height: 18px;
+  color: red;
+  margin: 7px 0 7px 0;
 }
 
 button {

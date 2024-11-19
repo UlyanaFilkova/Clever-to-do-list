@@ -24,6 +24,9 @@
     />
 
     <button type="submit">Login</button>
+    <div class="invalid-input" :style="{ visibility: showErrors ? 'visible' : 'hidden' }">
+      {{ dbError }}
+    </div>
   </form>
 </template>
 
@@ -49,6 +52,7 @@ export default {
       password: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
+      dbError: '',
       router,
     }
   },
@@ -90,7 +94,7 @@ export default {
 
       const credentialsValid = await this.checkUser(this.username, this.password)
       if (!credentialsValid) {
-        console.log('Invalid username or password.')
+        this.dbError = 'Invalid username or password.'
         return
       }
 
@@ -111,6 +115,10 @@ export default {
 .input-group {
   margin-bottom: 15px;
 }
+h1{
+  text-align: center;
+  margin-bottom: 20px;
+}
 
 input {
   width: 100%;
@@ -121,6 +129,8 @@ input {
 
 .invalid-input {
   min-height: 18px;
+  color: red;
+  margin: 7px 0 7px 0;
 }
 
 button {

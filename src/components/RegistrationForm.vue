@@ -32,7 +32,7 @@
 
     <button type="submit">Register</button>
 
-    <div class="invalid-input" :style="{ visibility: showErrors ? 'visible' : 'hidden' }">
+    <div v-if='showErrors' class="invalid-input">
       {{ dbError }}
     </div>
   </form>
@@ -40,7 +40,7 @@
 
 <script>
 import FormInput from '@/components/FormInput.vue'
-import { db } from '@/firebase/index.js'
+import { firebase } from '@/firebase/firebase.config.js'
 import {
   collection,
   addDoc,
@@ -98,7 +98,7 @@ export default {
     },
 
     async checkUsernameExists(username) {
-      const q = query(collection(db, 'users'), where('username', '==', username))
+      const q = query(collection(firebase, 'users'), where('username', '==', username))
       const querySnapshot = await getDocs(q)
       return !querySnapshot.empty // true, если пользователь существует
     },
@@ -118,7 +118,7 @@ export default {
 
       try {
         // Добавление данных в Firestore
-        const docRef = await addDoc(collection(db, 'users'), {
+        const docRef = await addDoc(collection(firebase, 'users'), {
           username: this.username,
           password: this.password, // TODO: хэшировать пароли
         })
@@ -141,26 +141,9 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 15px;
-}
-
 h1 {
   text-align: center;
   margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.invalid-input {
-  min-height: 18px;
-  color: red;
-  margin: 7px 0 7px 0;
 }
 
 button {

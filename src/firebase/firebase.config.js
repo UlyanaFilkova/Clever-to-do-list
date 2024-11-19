@@ -1,4 +1,7 @@
-export const firebaseConfig = {
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js'
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
+
+const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
   databaseURL: import.meta.env.VITE_DATABASE_URL,
@@ -7,3 +10,6 @@ export const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_ID,
 };
+const app = initializeApp(firebaseConfig);
+const firebase = getFirestore(app);
+export { firebase };

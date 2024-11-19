@@ -24,7 +24,7 @@
     />
 
     <button type="submit">Login</button>
-    <div class="invalid-input" :style="{ visibility: showErrors ? 'visible' : 'hidden' }">
+    <div v-if='showErrors' class="invalid-input">
       {{ dbError }}
     </div>
   </form>
@@ -32,28 +32,25 @@
 
 <script>
 import FormInput from '@/components/FormInput.vue'
-import { db } from '@/firebase/index.js'
+import { firebase } from '@/firebase/firebase.config.js'
 import {
   collection,
   query,
   where,
   getDocs,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
-import { useRouter } from 'vue-router'
 
 export default {
   components: {
     FormInput,
   },
   data() {
-    const router = useRouter()
     return {
       username: '',
       password: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
-      dbError: '',
-      router,
+      dbError: ''
     }
   },
   computed: {
@@ -80,7 +77,7 @@ export default {
     },
 
     async checkUser(username, password) {
-      const q = query(collection(db, 'users'), where('username', '==', username))
+      const q = query(collection(firebase, 'users'), where('username', '==', username))
       const querySnapshot = await getDocs(q)
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data()
@@ -99,7 +96,7 @@ export default {
       }
 
       console.log('Login successful!')
-      this.router.push({ name: 'home' })
+      this.$router.push({ name: 'home' })
 
       // Очистка формы после успешной регистрации
       this.username = ''
@@ -112,25 +109,9 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 15px;
-}
 h1{
   text-align: center;
   margin-bottom: 20px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.invalid-input {
-  min-height: 18px;
-  color: red;
-  margin: 7px 0 7px 0;
 }
 
 button {

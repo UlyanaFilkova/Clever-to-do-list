@@ -3,23 +3,18 @@
     <RegistrationForm />
     <div>
       Already have an account?
-      <RouterLink to="login" class="login__link">Login</RouterLink>
+      <router-link to="login" class="login__link">Login</router-link>
     </div>
   </div>
 </template>
 
 <script>
 import RegistrationForm from '@/components/RegistrationForm.vue'
-import { RouterLink } from 'vue-router';
 
 export default {
   components: {
-    RegistrationForm,
-    RouterLink,
-  },
-  data() {
-    return {}
-  },
+    RegistrationForm
+  }
 }
 </script>
 
@@ -31,5 +26,13 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.login__link {
+  color: #0056b3;
+  text-decoration: underline;
+}
+.login__link:hover {
+  cursor: pointer;
+  text-decoration: none;
 }
 </style>

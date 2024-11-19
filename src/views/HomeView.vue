@@ -9,6 +9,7 @@
 <style scoped>
 .container {
   height: 100vh;
+  padding-top: 30px;
 }
 .exit-button{
   padding: 5px;

@@ -40,6 +40,9 @@ import { db } from '@/firebase/index.js'
 import {
   collection,
   addDoc,
+  query,
+  where,
+  getDocs,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 import { useRouter } from 'vue-router';
 
@@ -89,10 +92,22 @@ export default {
       return true
     },
 
+    async checkUsernameExists(username) {
+      const q = query(collection(db, 'users'), where('username', '==', username));
+      const querySnapshot = await getDocs(q);
+      return !querySnapshot.empty; // true, если пользователь существует
+    },
+
     async handleSubmit() {
       console.log('Form submitted')
       if (!this.validateLoginForm()) {
         return
+      }
+
+      const userExists = await this.checkUsernameExists(this.username);
+      if (userExists) {
+        console.log('This username already exists. Please choose another one.');
+        return;
       }
 
       try {

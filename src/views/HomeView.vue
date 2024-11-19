@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    привет, это список твоих задач
-
-    <button class="exit-button">Выйти из аккаунта</button>
+    Hello, it's your todos list!
+  
+    <RouterLink to="login" class="exit-button">Logout</RouterLink>
   </div>
 </template>
 

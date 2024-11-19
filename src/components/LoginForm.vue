@@ -5,7 +5,7 @@
       v-model="username"
       type="text"
       placeholder="Username"
-      name="username" 
+      name="username"
       autocomplete="username"
       required
       :showErrors="showErrors"
@@ -29,17 +29,27 @@
 
 <script>
 import FormInput from '@/components/FormInput.vue'
+import { db } from '@/firebase/index.js'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+} from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
+import { useRouter } from 'vue-router'
 
 export default {
   components: {
     FormInput,
   },
   data() {
+    const router = useRouter()
     return {
       username: '',
       password: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
+      router,
     }
   },
   computed: {
@@ -65,9 +75,33 @@ export default {
       return true
     },
 
-    handleSubmit() {
+    async checkUser(username, password) {
+      const q = query(collection(db, 'users'), where('username', '==', username))
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data()
+        return userData.password === password // Сравнение паролей
+      }
+      return false // Пользователь не найден
+    },
+
+    async handleSubmit() {
       if (!this.validateLoginForm()) return
 
+      const credentialsValid = await this.checkUser(this.username, this.password)
+      if (!credentialsValid) {
+        console.log('Invalid username or password.')
+        return
+      }
+
+      console.log('Login successful!')
+      this.router.push({ name: 'home' })
+
+      // Очистка формы после успешной регистрации
+      this.username = ''
+      this.password = ''
+      this.repeatPassword = ''
+      this.showErrors = false
     },
   },
 }

@@ -1,7 +1,7 @@
 <template>
   <header class="header">
-      <h2>To-do List</h2>
-      <button @click="logout" class="exit-button">Logout</button>
+    <h2>To-do List</h2>
+    <button @click="logout" class="exit-button">Logout</button>
   </header>
 </template>
 
@@ -16,17 +16,20 @@ export default {
 }
 </script>
 <style scoped>
-.header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 30px 0 20px 0;
-    padding-top: 0px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0 20px 0;
+  padding-top: 0px;
 }
 
 .exit-button {
   padding: 7px 10px;
   border-radius: 5px;
-  background: #c1f7ce;
+  background: #ffae80;
+}
+.exit-button:hover {
+  background: #ff904f;
 }
 </style>

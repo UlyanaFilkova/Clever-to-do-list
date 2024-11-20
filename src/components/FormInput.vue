@@ -1,7 +1,7 @@
 <template>
   <div class="input-group">
     <input :type="type" :value="modelValue" @input="handleInput" :placeholder="placeholder" />
-    <div class="invalid-input" :style="{ visibility: showErrors ? 'visible' : 'hidden' }">
+    <div v-if="showErrors" class="invalid-input">
       {{ errorMessage }}
     </div>
   </div>
@@ -42,7 +42,7 @@ export default {
 
 <style scoped>
 .input-group {
-  margin-bottom: 15px;
+  margin: 15px 0 15px 0;
 }
 input {
   width: 100%;
@@ -51,7 +51,9 @@ input {
   border-radius: 5px;
 }
 .invalid-input {
-  min-height: 18px;
+  font-size: 12px;
+  line-height: 12px;
   color: red;
+  margin-top: 5px;
 }
 </style>

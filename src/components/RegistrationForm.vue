@@ -29,13 +29,18 @@
       :showErrors="showErrors"
       :errorMessage="repeatPasswordErrorMessage"
     />
-
+    <div v-if="showErrors" class="invalid-input">
+      {{ dbError }}
+    </div>
     <button type="submit">Register</button>
   </form>
 </template>
 
 <script>
 import FormInput from '@/components/FormInput.vue'
+import { required, sameAs, minLength } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
+import { authService } from '@/services/auth.js'
 
 export default {
   components: {
@@ -46,62 +51,86 @@ export default {
       username: '',
       password: '',
       repeatPassword: '',
-      // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
+      dbError: '',
     }
   },
+  validations() {
+    return {
+      username: { required },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
+      repeatPassword: {
+        required,
+        sameAsPassword: sameAs(this.password),
+      },
+    }
+  },
+  setup() {
+    const v$ = useVuelidate()
+    return { v$ }
+  },
   computed: {
-    usernameError() {
-      return !this.username.length
-    },
     usernameErrorMessage() {
-      return this.usernameError ? 'Username is required' : ''
-    },
-    passwordError() {
-      return !this.password.length
+      return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
     },
     passwordErrorMessage() {
-      return this.passwordError ? 'Password is required' : ''
-    },
-    repeatPasswordError() {
-      return !(this.repeatPassword.length === 0 || this.password !== this.repeatPassword)
+      if (this.v$.password.$invalid && this.showErrors) {
+        if (this.v$.password.required.$invalid) {
+          return 'Password is required'
+        } else if (this.v$.password.minLength.$invalid) {
+          return 'Password must be at least 6 characters long'
+        }
+      }
+      return ''
     },
     repeatPasswordErrorMessage() {
-      if (this.repeatPassword.length === 0) return 'Please, repeat the password'
-      if (this.password !== this.repeatPassword) return 'Passwords must match'
+      if (this.v$.repeatPassword.$invalid && this.showErrors) {
+        if (this.v$.repeatPassword.required.$invalid) {
+          return 'Please, repeat the password'
+        } else if (this.v$.repeatPassword.sameAsPassword.$invalid) {
+          return 'Passwords must match'
+        }
+      }
       return ''
     },
   },
   methods: {
-    validateLoginForm() {
+    async handleSubmit() {
       this.showErrors = true
-      if (this.usernameError || this.passwordError || this.repeatPasswordError) {
-        return false
-      }
-      return true
-    },
+      // validation
+      this.v$.$touch() // Mark all fields as touched
 
-    handleSubmit() {
-      if (!this.validateLoginForm()) return
+      if (this.v$.$invalid) {
+        return
+      }
+
+      const userExists = await authService.checkUsernameExists(this.username)
+      if (userExists) {
+        this.dbError = 'This username is already taken'
+        return
+      }
+
+      const userId = await authService.registerUser(this.username, this.password)
+      localStorage.setItem('userId', userId)
+      this.$router.push({ name: 'home' })
+
+      // Clear form after successful login
+      this.username = ''
+      this.password = ''
+      this.repeatPassword = ''
+      this.showErrors = false
     },
   },
 }
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 15px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.invalid-input {
-  min-height: 18px;
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 button {
@@ -112,9 +141,17 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 button:hover {
   background-color: #0056b3;
+}
+.invalid-input {
+  font-size: 12px;
+  line-height: 12px;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 </style>

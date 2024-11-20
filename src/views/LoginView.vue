@@ -1,21 +1,19 @@
 <template>
   <div class="login-container">
     <LoginForm />
-    <RouterLink to="registration" class="login__link">Create an account</RouterLink>
+    <div class="form-link">
+      Don't have an account yet?
+      <router-link to="registration" class="login__link">Create</router-link>
+    </div>
   </div>
 </template>
 
 <script>
 import LoginForm from '@/components/LoginForm.vue'
-import { RouterLink } from 'vue-router';
 
 export default {
   components: {
     LoginForm,
-    RouterLink,
-  },
-  data() {
-    return {}
   },
 }
 </script>
@@ -28,5 +26,19 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-link{
+  margin: 0 auto;
+  width:fit-content;
+}
+
+.login__link {
+  color: #0056b3;
+  text-decoration: underline;
+}
+.login__link:hover {
+  cursor: pointer;
+  text-decoration: none;
 }
 </style>

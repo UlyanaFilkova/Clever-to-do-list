@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <LoginForm />
-    <div>
+    <div class="form-link">
       Don't have an account yet?
       <router-link to="registration" class="login__link">Create</router-link>
     </div>
@@ -26,6 +26,11 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-link{
+  margin: 0 auto;
+  width:fit-content;
 }
 
 .login__link {

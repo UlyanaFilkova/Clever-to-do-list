@@ -49,7 +49,6 @@ export default {
     return {
       username: '',
       password: '',
-      // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
       dbError: '',
     }
@@ -130,6 +129,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 button:hover {

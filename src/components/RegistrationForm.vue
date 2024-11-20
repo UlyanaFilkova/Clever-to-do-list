@@ -60,7 +60,6 @@ export default {
       username: '',
       password: '',
       repeatPassword: '',
-      // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
       dbError: '',
       router,
@@ -69,10 +68,13 @@ export default {
   validations() {
     return {
       username: { required },
-      password: { required },
+      password: {
+        required,
+        minLength: minLength(6),
+      },
       repeatPassword: {
         required,
-        sameAsPassword: sameAs(this.password)
+        sameAsPassword: sameAs(this.password),
       },
     }
   },
@@ -81,53 +83,31 @@ export default {
     return { v$ }
   },
   computed: {
-    
     usernameErrorMessage() {
       return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
     },
     passwordErrorMessage() {
-      return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
+      if (this.v$.password.$invalid && this.showErrors) {
+        if (this.v$.password.required.$invalid) {
+          return 'Password is required'
+        } else if (this.v$.password.minLength.$invalid) {
+          return 'Password must be at least 6 characters long'
+        }
+      }
+      return ''
     },
     repeatPasswordErrorMessage() {
       if (this.v$.repeatPassword.$invalid && this.showErrors) {
         if (this.v$.repeatPassword.required.$invalid) {
-          return 'Please, repeat the password' 
+          return 'Please, repeat the password'
         } else if (this.v$.repeatPassword.sameAsPassword.$invalid) {
-          return 'Passwords must match' 
+          return 'Passwords must match'
         }
       }
-      return '' // No error
+      return ''
     },
-    // usernameError() {
-    //   return !this.username.length
-    // },
-    // usernameErrorMessage() {
-    //   return this.usernameError ? 'Username is required' : ''
-    // },
-    // passwordError() {
-    //   return !this.password.length
-    // },
-    // passwordErrorMessage() {
-    //   return this.passwordError ? 'Password is required' : ''
-    // },
-    // repeatPasswordError() {
-    //   return this.repeatPassword.length === 0 || this.password !== this.repeatPassword
-    // },
-    // repeatPasswordErrorMessage() {
-    //   if (this.repeatPassword.length === 0) return 'Please, repeat the password'
-    //   if (this.password !== this.repeatPassword) return 'Passwords must match'
-    //   return ''
-    // },
   },
   methods: {
-    // validateLoginForm() {
-    //   this.showErrors = true
-    //   if (this.usernameError || this.passwordError || this.repeatPasswordError) {
-    //     return false
-    //   }
-    //   return true
-    // },
-
     async checkUsernameExists(username) {
       const q = query(collection(firebase, 'users'), where('username', '==', username))
       const querySnapshot = await getDocs(q)
@@ -136,9 +116,6 @@ export default {
 
     async handleSubmit() {
       this.showErrors = true
-      // if (!this.validateLoginForm()) {
-      //   return
-      // }
       this.v$.$touch() // Mark all fields as touched
 
       if (this.v$.$invalid) {
@@ -189,6 +166,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 button:hover {

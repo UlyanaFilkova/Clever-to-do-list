@@ -33,13 +33,7 @@
 import FormInput from '@/components/FormInput.vue'
 import { required } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { firebase } from '@/firebase/firebase.config.js'
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-} from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
+import { authService } from '@/services/auth.js'
 
 export default {
   components: {
@@ -80,30 +74,21 @@ export default {
       return true
     },
 
-    async checkUser(username, password) {
-      const q = query(collection(firebase, 'users'), where('username', '==', username))
-      const querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        const userData = querySnapshot.docs[0].data()
-        return userData.password === password // Сравнение паролей
-      }
-      return false // Пользователь не найден
-    },
-
     async handleSubmit() {
       this.showErrors = true
+      
+      // validation
       this.v$.$touch() // Mark all fields as touched
-
       if (this.v$.$invalid) {
         return
       }
-      const credentialsValid = await this.checkUser(this.username, this.password)
+
+      const credentialsValid = await authService.checkUser(this.username, this.password)
       if (!credentialsValid) {
         this.dbError = 'Invalid username or password'
         return
       }
 
-      console.log('Login successful!')
       this.$router.push({ name: 'home' })
 
       // Clear form after successful login

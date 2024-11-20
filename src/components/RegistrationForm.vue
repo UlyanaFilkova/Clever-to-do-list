@@ -40,29 +40,19 @@
 import FormInput from '@/components/FormInput.vue'
 import { required, sameAs, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { firebase } from '@/firebase/firebase.config.js'
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-} from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
-import { useRouter } from 'vue-router'
+import { authService } from '@/services/auth.js'
 
 export default {
   components: {
     FormInput,
   },
   data() {
-    const router = useRouter()
     return {
       username: '',
       password: '',
       repeatPassword: '',
       showErrors: false,
       dbError: '',
-      router,
     }
   },
   validations() {
@@ -108,45 +98,32 @@ export default {
     },
   },
   methods: {
-    async checkUsernameExists(username) {
-      const q = query(collection(firebase, 'users'), where('username', '==', username))
-      const querySnapshot = await getDocs(q)
-      return !querySnapshot.empty // true, если пользователь существует
-    },
-
     async handleSubmit() {
       this.showErrors = true
+      // validation
       this.v$.$touch() // Mark all fields as touched
 
       if (this.v$.$invalid) {
         return
       }
 
-      const userExists = await this.checkUsernameExists(this.username)
+      const userExists = await authService.checkUsernameExists(this.username)
       if (userExists) {
         this.dbError = 'This username is already taken'
         return
       }
 
-      try {
-        // Добавление данных в Firestore
-        const docRef = await addDoc(collection(firebase, 'users'), {
-          username: this.username,
-          password: this.password, // TODO: хэшировать пароли
-        })
+      const docRef = await authService.registerUser(this.username, this.password)
 
-        console.log('Document written with ID: ', docRef.id)
+      console.log('Document written with ID: ', docRef.id)
 
-        this.router.push({ name: 'home' })
+      this.$router.push({ name: 'home' })
 
-        // Очистка формы после успешной регистрации
-        this.username = ''
-        this.password = ''
-        this.repeatPassword = ''
-        this.showErrors = false
-      } catch (e) {
-        console.error('Error adding document: ', e)
-      }
+      // Clear form after successful login
+      this.username = ''
+      this.password = ''
+      this.repeatPassword = ''
+      this.showErrors = false
     },
   },
 }

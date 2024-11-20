@@ -29,17 +29,17 @@
       :showErrors="showErrors"
       :errorMessage="repeatPasswordErrorMessage"
     />
-
-    <button type="submit">Register</button>
-
-    <div v-if='showErrors' class="invalid-input">
+    <div v-if="showErrors" class="invalid-input">
       {{ dbError }}
     </div>
+    <button type="submit">Register</button>
   </form>
 </template>
 
 <script>
 import FormInput from '@/components/FormInput.vue'
+import { required, sameAs, minLength } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
 import { firebase } from '@/firebase/firebase.config.js'
 import {
   collection,
@@ -66,36 +66,67 @@ export default {
       router,
     }
   },
+  validations() {
+    return {
+      username: { required },
+      password: { required },
+      repeatPassword: {
+        required,
+        sameAsPassword: sameAs(this.password)
+      },
+    }
+  },
+  setup() {
+    const v$ = useVuelidate()
+    return { v$ }
+  },
   computed: {
-    usernameError() {
-      return !this.username.length
-    },
+    
     usernameErrorMessage() {
-      return this.usernameError ? 'Username is required' : ''
-    },
-    passwordError() {
-      return !this.password.length
+      return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
     },
     passwordErrorMessage() {
-      return this.passwordError ? 'Password is required' : ''
-    },
-    repeatPasswordError() {
-      return this.repeatPassword.length === 0 || this.password !== this.repeatPassword
+      return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
     },
     repeatPasswordErrorMessage() {
-      if (this.repeatPassword.length === 0) return 'Please, repeat the password'
-      if (this.password !== this.repeatPassword) return 'Passwords must match'
-      return ''
+      if (this.v$.repeatPassword.$invalid && this.showErrors) {
+        if (this.v$.repeatPassword.required.$invalid) {
+          return 'Please, repeat the password' 
+        } else if (this.v$.repeatPassword.sameAsPassword.$invalid) {
+          return 'Passwords must match' 
+        }
+      }
+      return '' // No error
     },
+    // usernameError() {
+    //   return !this.username.length
+    // },
+    // usernameErrorMessage() {
+    //   return this.usernameError ? 'Username is required' : ''
+    // },
+    // passwordError() {
+    //   return !this.password.length
+    // },
+    // passwordErrorMessage() {
+    //   return this.passwordError ? 'Password is required' : ''
+    // },
+    // repeatPasswordError() {
+    //   return this.repeatPassword.length === 0 || this.password !== this.repeatPassword
+    // },
+    // repeatPasswordErrorMessage() {
+    //   if (this.repeatPassword.length === 0) return 'Please, repeat the password'
+    //   if (this.password !== this.repeatPassword) return 'Passwords must match'
+    //   return ''
+    // },
   },
   methods: {
-    validateLoginForm() {
-      this.showErrors = true
-      if (this.usernameError || this.passwordError || this.repeatPasswordError) {
-        return false
-      }
-      return true
-    },
+    // validateLoginForm() {
+    //   this.showErrors = true
+    //   if (this.usernameError || this.passwordError || this.repeatPasswordError) {
+    //     return false
+    //   }
+    //   return true
+    // },
 
     async checkUsernameExists(username) {
       const q = query(collection(firebase, 'users'), where('username', '==', username))
@@ -104,15 +135,19 @@ export default {
     },
 
     async handleSubmit() {
-      console.log('Form submitted')
-      console.log(import.meta.env)
-      if (!this.validateLoginForm()) {
+      this.showErrors = true
+      // if (!this.validateLoginForm()) {
+      //   return
+      // }
+      this.v$.$touch() // Mark all fields as touched
+
+      if (this.v$.$invalid) {
         return
       }
 
       const userExists = await this.checkUsernameExists(this.username)
       if (userExists) {
-        this.dbError = 'This username already exists.'
+        this.dbError = 'This username is already taken'
         return
       }
 
@@ -158,5 +193,12 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+.invalid-input {
+  font-size: 12px;
+  line-height: 12px;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 </style>

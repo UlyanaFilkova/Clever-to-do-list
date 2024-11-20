@@ -52,6 +52,7 @@ input {
 }
 .invalid-input {
   font-size: 12px;
+  line-height: 12px;
   color: red;
   margin-top: 5px;
 }

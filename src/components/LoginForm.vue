@@ -22,16 +22,17 @@
       :showErrors="showErrors"
       :errorMessage="passwordErrorMessage"
     />
-
-    <button type="submit">Login</button>
-    <div v-if='showErrors' class="invalid-input">
+    <div v-if="showErrors" class="invalid-input">
       {{ dbError }}
     </div>
+    <button type="submit">Login</button>
   </form>
 </template>
 
 <script>
 import FormInput from '@/components/FormInput.vue'
+import { required } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
 import { firebase } from '@/firebase/firebase.config.js'
 import {
   collection,
@@ -50,21 +51,25 @@ export default {
       password: '',
       // если еще ни разу не было нажатия submit, то никакие ошибки не отображаем
       showErrors: false,
-      dbError: ''
+      dbError: '',
     }
   },
+  validations() {
+    return {
+      username: { required },
+      password: { required },
+    }
+  },
+  setup() {
+    const v$ = useVuelidate()
+    return { v$ }
+  },
   computed: {
-    usernameError() {
-      return !this.username.length
-    },
     usernameErrorMessage() {
-      return this.usernameError ? 'Username is required' : ''
-    },
-    passwordError() {
-      return !this.password.length
+      return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
     },
     passwordErrorMessage() {
-      return this.passwordError ? 'Password is required' : ''
+      return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
     },
   },
   methods: {
@@ -87,21 +92,24 @@ export default {
     },
 
     async handleSubmit() {
-      if (!this.validateLoginForm()) return
+      this.showErrors = true
+      this.v$.$touch() // Mark all fields as touched
 
+      if (this.v$.$invalid) {
+        return
+      }
       const credentialsValid = await this.checkUser(this.username, this.password)
       if (!credentialsValid) {
-        this.dbError = 'Invalid username or password.'
+        this.dbError = 'Invalid username or password'
         return
       }
 
       console.log('Login successful!')
       this.$router.push({ name: 'home' })
 
-      // Очистка формы после успешной регистрации
+      // Clear form after successful login
       this.username = ''
       this.password = ''
-      this.repeatPassword = ''
       this.showErrors = false
     },
   },
@@ -109,7 +117,7 @@ export default {
 </script>
 
 <style scoped>
-h1{
+h1 {
   text-align: center;
   margin-bottom: 20px;
 }
@@ -126,5 +134,12 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+.invalid-input {
+  font-size: 12px;
+  line-height: 12px;
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 </style>

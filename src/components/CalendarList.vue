@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="calendar__container">
     <DayCard
       v-for="(day, index) in days"
       :key="index"
@@ -50,15 +50,16 @@ export default {
 }
 </script>
 <style scoped>
-.header {
+.calendar__container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 10px;
+  justify-content: left;
+  margin-left: 20px;
+  
 }
-
-.exit-button {
-  padding: 5px;
-  margin-left: 100px;
-  background: #c1f7ce;
+@media (max-width: 576px) {
+  .calendar__container {
+    margin-left: 0 10px;
+  }
 }
 </style>

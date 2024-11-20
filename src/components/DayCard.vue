@@ -48,12 +48,15 @@ export default {
 
 <style scoped>
 .day__container {
+  min-width: 50px;
   width: 50px;
+  flex-shrink: 0;
 }
 .day__card {
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
   width: 100%;
+  min-width: 50px;
   padding: 5px 7px;
   display: flex;
   gap: 8px;

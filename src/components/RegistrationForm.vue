@@ -114,6 +114,7 @@ export default {
       }
 
       const userId = await authService.registerUser(this.username, this.password)
+
       localStorage.setItem('userId', userId)
       this.$router.push({ name: 'home' })
 

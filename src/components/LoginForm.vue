@@ -66,14 +66,6 @@ export default {
     },
   },
   methods: {
-    validateLoginForm() {
-      this.showErrors = true
-      if (this.usernameError || this.passwordError) {
-        return false
-      }
-      return true
-    },
-
     async handleSubmit() {
       this.showErrors = true
 
@@ -88,8 +80,8 @@ export default {
         this.dbError = 'Invalid username or password'
         return
       }
-      localStorage.setItem('userId', userId)
 
+      localStorage.setItem('userId', userId)
       this.$router.push({ name: 'home' })
 
       // Clear form after successful login

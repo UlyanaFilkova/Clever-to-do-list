@@ -76,7 +76,7 @@ export default {
 
     async handleSubmit() {
       this.showErrors = true
-      
+
       // validation
       this.v$.$touch() // Mark all fields as touched
       if (this.v$.$invalid) {
@@ -95,6 +95,8 @@ export default {
       this.username = ''
       this.password = ''
       this.showErrors = false
+
+      
     },
   },
 }

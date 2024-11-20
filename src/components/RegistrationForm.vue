@@ -113,10 +113,8 @@ export default {
         return
       }
 
-      const docRef = await authService.registerUser(this.username, this.password)
-
-      console.log('Document written with ID: ', docRef.id)
-
+      const userId = await authService.registerUser(this.username, this.password)
+      localStorage.setItem('userId', userId)
       this.$router.push({ name: 'home' })
 
       // Clear form after successful login

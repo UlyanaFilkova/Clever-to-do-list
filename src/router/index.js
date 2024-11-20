@@ -24,8 +24,23 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomeView,
+      meta: { requiresAuth: true }
     },
   ],
 })
+
+// Глобальный навигационный охранник
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('userId') !== null;
+
+  // Проверяем, требует ли маршрут аутентификации
+  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    // Если не аутентифицирован, перенаправляем на страницу логина
+    next({ name: 'login' });
+  } else {
+    // Если аутентифицирован или маршрут не требует аутентификации, продолжаем
+    next();
+  }
+});
 
 export default router

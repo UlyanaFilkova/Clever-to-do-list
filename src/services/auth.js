@@ -15,10 +15,12 @@ export const authService = {
     const q = query(usersCollection, where('username', '==', username))
     const querySnapshot = await getDocs(q)
     if (!querySnapshot.empty) {
-      const userData = querySnapshot.docs[0].data()
-      return userData.password === password // Compare passwords
+      const userData = querySnapshot.docs[0].data();
+      if (userData.password === password) {
+        return querySnapshot.docs[0].id; // return userId, if passwords match
+      }
     }
-    return false // User not found
+    return false
   },
 
   async registerUser(username, password) {

@@ -83,11 +83,12 @@ export default {
         return
       }
 
-      const credentialsValid = await authService.checkUser(this.username, this.password)
-      if (!credentialsValid) {
+      const userId = await authService.checkUser(this.username, this.password)
+      if (!userId) {
         this.dbError = 'Invalid username or password'
         return
       }
+      localStorage.setItem('userId', userId)
 
       this.$router.push({ name: 'home' })
 
@@ -95,8 +96,6 @@ export default {
       this.username = ''
       this.password = ''
       this.showErrors = false
-
-      
     },
   },
 }

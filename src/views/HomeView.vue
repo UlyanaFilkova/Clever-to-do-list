@@ -1,27 +1,30 @@
 <template>
   <div class="container">
     <HomeHeader />
-    <CalendarList/>
+    <CalendarList />
   </div>
 </template>
 
 <script>
-import CalendarList from '@/components/CalendarList.vue';
+import CalendarList from '@/components/CalendarList.vue'
 import HomeHeader from '@/components/HomeHeader.vue'
 
 export default {
   components: {
     HomeHeader,
-    CalendarList
+    CalendarList,
   },
-  
 }
 </script>
 
 <style scoped>
 .container {
   height: 100vh;
-  padding-top: 30px;
+  margin: 0 20px;
 }
-
+@media (max-width: 576px) {
+  .container {
+    margin: 0 15px;
+  }
+}
 </style>

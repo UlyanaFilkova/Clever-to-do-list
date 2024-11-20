@@ -41,6 +41,7 @@ export default {
         const date = new Date(currentYear, currentMonth, day)
         const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' })
         this.days.push({ date: day, dayOfWeek })
+        // this.days.push({ date: day, dayOfWeek })
       }
     },
     setActiveDayIndex(index) {
@@ -54,12 +55,32 @@ export default {
   display: flex;
   gap: 10px;
   justify-content: left;
-  margin-left: 20px;
-  
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
-@media (max-width: 576px) {
-  .calendar__container {
-    margin-left: 0 10px;
-  }
+/* For WebKit browsers (Chrome, Safari) */
+.calendar__container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+  height: 8px; /* Height of the scrollbar */
+}
+
+.calendar__container::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.calendar__container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Color of the scrollbar thumb on hover */
+}
+
+/* For Firefox */
+.calendar__container {
+  scrollbar-width: thin; /* Make the scrollbar thin */
+  scrollbar-color: #888 transparent; /* Color of the scrollbar thumb and track */
+}
+
+.calendar__container:hover {
+  scrollbar-color: #555 transparent; /* Color of the scrollbar thumb on hover */
 }
 </style>

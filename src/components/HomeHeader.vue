@@ -20,13 +20,8 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 20px 20px 0;
-}
-
-@media(max-width: 576px){
-    .header{
-        margin: 0 10px;
-    }
+    margin: 30px 0 20px 0;
+    padding-top: 0px;
 }
 
 .exit-button {

@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <HomeHeader />
-    <Calendar/>
+    <CalendarList/>
   </div>
 </template>
 
 <script>
-import Calendar from '@/components/Calendar.vue';
+import CalendarList from '@/components/CalendarList.vue';
 import HomeHeader from '@/components/HomeHeader.vue'
 
 export default {
   components: {
     HomeHeader,
-    Calendar
+    CalendarList
   },
   
 }

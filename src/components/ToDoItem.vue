@@ -5,7 +5,7 @@
       :class="{ todo__indicator_done: todo.isDone || isHovered }"
       @mouseover="isHovered = true"
       @mouseleave="isHovered = false"
-      @click="toggleTodoStatus"
+      @click="handleIndicatorClick"
     >
       <svg
         v-if="todo.isDone || isHovered"
@@ -37,14 +37,17 @@ export default {
     }
   },
   methods: {
-    async toggleTodoStatus() {
-     
-      await todoService.updateTodoStatus(
-        localStorage.getItem('userId'),
-        this.todo.id,
-        this.todo.isDone,
-      )
+    handleIndicatorClick() {
+      this.$emit('toggle-todo', this.todo);
     },
+    // async toggleTodoStatus() {
+     
+    //   await todoService.updateTodoStatus(
+    //     localStorage.getItem('userId'),
+    //     this.todo.id,
+    //     this.todo.isDone,
+    //   )
+    // },
   },
 }
 </script>

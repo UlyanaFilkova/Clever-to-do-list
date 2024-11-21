@@ -1,7 +1,12 @@
 <template>
   <div class="todo-list__container">
     <h2>{{ todos.length }} Tasks Today</h2>
-    <ToDoItem v-for="(todo, index) in todos" :key="index" :todo="todo" />
+    <ToDoItem
+      v-for="(todo, index) in todos"
+      :key="index"
+      :todo="todo"
+      @toggle-todo="toggleTodoStatus"
+    />
   </div>
 </template>
 <script>
@@ -20,6 +25,12 @@ export default {
   async mounted() {
     const userId = localStorage.getItem('userId')
     this.todos = await todoService.getTodos(userId)
+  },
+  methods: {
+    async toggleTodoStatus(todo) {
+      await todoService.updateTodoStatus(localStorage.getItem('userId'), todo.id, todo.isDone)
+      todo.isDone = !todo.isDone
+    },
   },
 }
 </script>

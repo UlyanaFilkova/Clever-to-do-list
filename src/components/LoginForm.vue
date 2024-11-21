@@ -22,6 +22,19 @@
       :showErrors="showErrors"
       :errorMessage="passwordErrorMessage"
     />
+    <!-- <FormInput
+      v-for="(field, index) in inputFields"
+      :key="index"
+      v-model="field.model"
+      :type="field.type"
+      :placeholder="field.placeholder"
+      :name="field.name"
+      :autocomplete="field.autocomplete"
+      :required="field.required"
+      :showErrors="field.showErrors"
+      :errorMessage="field.errorMessage"
+    /> -->
+
     <div v-if="showErrors" class="invalid-input">
       {{ dbError }}
     </div>
@@ -63,6 +76,23 @@ export default {
     },
     passwordErrorMessage() {
       return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
+    },
+    inputFields() {
+      // здесь нужны реактивные ссылки, а не значения
+      // в Composition API я бы использовала reactive/ref
+      // в data() нельзя использовать computed значения, а мне они нужны для ошибок
+      return [
+        {
+          model: this.username,
+          type: 'text',
+          placeholder: 'Username',
+          name: 'username',
+          autocomplete: 'username',
+          required: true,
+          showErrors: this.showErrors,
+          errorMessage: this.usernameErrorMessage,
+        },
+      ]
     },
   },
   methods: {

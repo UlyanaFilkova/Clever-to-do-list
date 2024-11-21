@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar__container">
+  <div class="calendar__container" @wheel="handleWheel">
     <DayCard
       v-for="(day, index) in days"
       :key="index"
@@ -76,10 +76,39 @@ export default {
           day.hasUndone = todosByDate[dayDateString].hasUndone
         }
       })
-
     },
+
     setActiveDayIndex(index) {
       this.activeDayIndex = index
+    },
+
+    handleWheel(event) {
+      // Прокручиваем контейнер по горизонтали
+      event.preventDefault()
+      this.smoothScroll(event.deltaY)
+    },
+
+    smoothScroll(amount) {
+      const container = this.$el
+      const start = container.scrollLeft
+      const end = start + amount
+      const duration = 300
+      const startTime = performance.now()
+
+      const animateScroll = (currentTime) => {
+        const timeElapsed = currentTime - startTime
+        const progress = Math.min(timeElapsed / duration, 1) // Нормализуем прогресс от 0 до 1
+        const easeInOut =
+          progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress // Функция easing
+
+        container.scrollLeft = start + (end - start) * easeInOut // Обновляем scrollLeft
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll) // Запрашиваем следующий кадр анимации
+        }
+      }
+
+      requestAnimationFrame(animateScroll) // Запускаем анимацию
     },
   },
 }

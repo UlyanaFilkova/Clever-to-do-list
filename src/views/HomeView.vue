@@ -2,17 +2,20 @@
   <div class="container">
     <HomeHeader />
     <CalendarList />
+    <ToDoList />
   </div>
 </template>
 
 <script>
 import CalendarList from '@/components/CalendarList.vue'
 import HomeHeader from '@/components/HomeHeader.vue'
+import ToDoList from '@/components/ToDoList.vue'
 
 export default {
   components: {
     HomeHeader,
     CalendarList,
+    ToDoList
   },
 }
 </script>

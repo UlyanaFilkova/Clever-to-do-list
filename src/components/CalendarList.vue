@@ -15,7 +15,7 @@
 
 <script>
 import DayCard from './DayCard.vue'
-import { authService } from '@/services/auth.js'
+import { todoService } from '@/services/todo.js'
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
 
     async getDays(userId) {
       this.calculateDays()
-      const todos = await authService.getTodos(userId)
+      const todos = await todoService.getTodos(userId)
 
       const todosByDate = {}
 
@@ -121,6 +121,7 @@ export default {
   max-width: 100%;
   overflow-x: auto;
   padding-bottom: 8px;
+  margin-bottom: 20px;
 }
 /* For WebKit browsers (Chrome, Safari) */
 .calendar__container::-webkit-scrollbar {

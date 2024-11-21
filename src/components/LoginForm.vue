@@ -25,7 +25,7 @@
     <!-- <FormInput
       v-for="(field, index) in inputFields"
       :key="index"
-      v-model="field.model"
+      :modelValue="field.model"
       :type="field.type"
       :placeholder="field.placeholder"
       :name="field.name"
@@ -58,6 +58,27 @@ export default {
       password: '',
       showErrors: false,
       dbError: '',
+      inputFields: [
+        {
+          model: this.username,
+          type: 'text',
+          placeholder: 'Username',
+          name: 'username',
+          autocomplete: 'username',
+          required: true,
+          showErrors: this.showErrors,
+          errorMessage: null,
+        },
+        {
+          model: this.password,
+          type: 'password',
+          placeholder: 'Password',
+          name: 'password',
+          autocomplete: 'current-password',
+          required: true,
+          errorMessage: '',
+        },
+      ],
     }
   },
   validations() {
@@ -70,6 +91,10 @@ export default {
     const v$ = useVuelidate()
     return { v$ }
   },
+  // mounted() {
+  //   this.inputFields[0].model = this.username
+  //   this.inputFields[1].model = this.password
+  // },
   computed: {
     usernameErrorMessage() {
       return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
@@ -77,24 +102,34 @@ export default {
     passwordErrorMessage() {
       return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
     },
-    inputFields() {
-      // здесь нужны реактивные ссылки, а не значения
-      // в Composition API я бы использовала reactive/ref
-      // в data() нельзя использовать computed значения, а мне они нужны для ошибок
-      return [
-        {
-          model: this.username,
-          type: 'text',
-          placeholder: 'Username',
-          name: 'username',
-          autocomplete: 'username',
-          required: true,
-          showErrors: this.showErrors,
-          errorMessage: this.usernameErrorMessage,
-        },
-      ]
-    },
+    // inputFields() {
+    //   // здесь нужны реактивные ссылки, а не значения
+    //   // в Composition API я бы использовала reactive/ref
+    //   // в data() нельзя использовать computed значения, а мне они нужны для ошибок
+    //   return [
+    //     {
+    //       model: this.username,
+    //       type: 'text',
+    //       placeholder: 'Username',
+    //       name: 'username',
+    //       autocomplete: 'username',
+    //       required: true,
+    //       showErrors: this.showErrors,
+    //       errorMessage: this.usernameErrorMessage,
+    //     },
+    //   ]
+    // },
   },
+  // watch: {
+  //   username(newValue) {
+  //     this.inputFields[0].model = newValue
+  //     this.inputFields[0].errorMessage = this.usernameErrorMessage
+  //   },
+  //   password(newValue) {
+  //     this.inputFields[1].model = newValue
+  //     this.inputFields[1].errorMessage = this.passwordErrorMessage
+  //   },
+  // },
   methods: {
     async handleSubmit() {
       this.showErrors = true

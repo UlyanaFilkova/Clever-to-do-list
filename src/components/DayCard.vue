@@ -71,12 +71,12 @@ export default {
   margin-bottom: 5px;
 }
 .day__card_current {
-  background: #000;
-  border: #000;
+  background: #fb6914;
+  border: 1.5px solid #fb6914;
   color: #fff;
 }
 .day__card_current .day__dayOfWeek {
-  color: #c0c0c0;
+  color: #eaeaea;
 }
 .day__card_active {
   border: 1.5px solid #fb6914;

@@ -5,6 +5,7 @@
       :class="{ todo__indicator_done: todo.isDone || isHovered }"
       @mouseover="isHovered = true"
       @mouseleave="isHovered = false"
+      @click="toggleTodoStatus"
     >
       <svg
         v-if="todo.isDone || isHovered"
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+import { todoService } from '@/services/todo.js'
 export default {
   props: {
     todo: {
@@ -33,6 +35,16 @@ export default {
     return {
       isHovered: false,
     }
+  },
+  methods: {
+    async toggleTodoStatus() {
+     
+      await todoService.updateTodoStatus(
+        localStorage.getItem('userId'),
+        this.todo.id,
+        this.todo.isDone,
+      )
+    },
   },
 }
 </script>

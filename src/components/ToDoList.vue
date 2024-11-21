@@ -5,31 +5,21 @@
       v-for="(todo, index) in todos"
       :key="index"
       :todo="todo"
-      @toggle-todo="toggleTodoStatus"
+      @toggle-todo="$emit('toggle-todo', todo)"
     />
   </div>
 </template>
 <script>
 import ToDoItem from '@/components/ToDoItem.vue'
-import { todoService } from '@/services/todo.js'
 
 export default {
   components: {
     ToDoItem,
   },
-  data() {
-    return {
-      todos: [],
-    }
-  },
-  async mounted() {
-    const userId = localStorage.getItem('userId')
-    this.todos = await todoService.getTodos(userId)
-  },
-  methods: {
-    async toggleTodoStatus(todo) {
-      await todoService.updateTodoStatus(localStorage.getItem('userId'), todo.id, todo.isDone)
-      todo.isDone = !todo.isDone
+  props: {
+    todos: {
+      type: Array,
+      required: true,
     },
   },
 }

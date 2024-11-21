@@ -15,11 +15,16 @@
 
 <script>
 import DayCard from './DayCard.vue'
-import { todoService } from '@/services/todo.js'
 
 export default {
   components: {
     DayCard,
+  },
+  props: {
+    todos: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -29,10 +34,25 @@ export default {
       activeDayIndex: null,
     }
   },
-  created() {
-    this.getDays(localStorage.getItem('userId'))
+  watch: {
+    todos: {
+      handler() {
+        console.log(this.days)
+        if (this.days.length === 0) {
+          this.getDays()
+        } else {
+          this.updateDays()
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
   },
   methods: {
+    getDays() {
+      this.calculateDays()
+      this.updateDays()
+    },
     // returns days from the current day to the end of the month
     calculateDays() {
       const today = new Date()
@@ -46,13 +66,9 @@ export default {
       }
     },
 
-    async getDays(userId) {
-      this.calculateDays()
-      const todos = await todoService.getTodos(userId)
-
+    updateDays() {
       const todosByDate = {}
-
-      todos.forEach((todo) => {
+      this.todos.forEach((todo) => {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
 
         if (!todosByDate[todoDate]) {
@@ -68,13 +84,8 @@ export default {
 
       this.days.forEach((day) => {
         const dayDateString = day.date.toDateString()
-        day.hasDone = false
-        day.hasUndone = false
-
-        if (todosByDate[dayDateString]) {
-          day.hasDone = todosByDate[dayDateString].hasDone
-          day.hasUndone = todosByDate[dayDateString].hasUndone
-        }
+        day.hasDone = todosByDate[dayDateString]?.hasDone || false
+        day.hasUndone = todosByDate[dayDateString]?.hasUndone || false
       })
     },
 

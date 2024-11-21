@@ -30,6 +30,6 @@ export default {
   background: #ffae80;
 }
 .exit-button:hover {
-  background: #ff904f;
+  background: #ff8a47;
 }
 </style>

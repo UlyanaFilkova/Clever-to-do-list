@@ -24,23 +24,32 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomeView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
   ],
 })
 
-// Глобальный навигационный охранник
+// Global Navigation Guard
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('userId') !== null;
-
-  // Проверяем, требует ли маршрут аутентификации
-  if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-    // Если не аутентифицирован, перенаправляем на страницу логина
-    next({ name: 'login' });
-  } else {
-    // Если аутентифицирован или маршрут не требует аутентификации, продолжаем
-    next();
+  const isAuthenticated = localStorage.getItem('userId') !== null
+  
+  if (isAuthenticated) {
+    // If the user tries to get to the login or registration page, redirect to the home page
+    if (to.name === 'login' || to.name === 'registration') {
+      next({ name: 'home' })
+    } else {
+      next()
+    }
   }
-});
+
+  // Check if the route requires authentication
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+    // If not authenticated, redirect to login page
+    next({ name: 'login' })
+  } else {
+    // If authenticated or the route does not require authentication, continue
+    next()
+  }
+})
 
 export default router

@@ -33,6 +33,7 @@ export default {
     this.getDays(localStorage.getItem('userId'))
   },
   methods: {
+    // returns days from the current day to the end of the month
     calculateDays() {
       const today = new Date()
       const currentMonth = today.getMonth()
@@ -41,35 +42,44 @@ export default {
 
       for (let day = today.getDate(); day <= lastDayOfMonth; day++) {
         const date = new Date(currentYear, currentMonth, day)
-        // const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' })
-        // this.days.push({ date: day, dayOfWeek })
         this.days.push({ date: date })
       }
     },
-    setActiveDayIndex(index) {
-      this.activeDayIndex = index
-    },
+
     async getDays(userId) {
       this.calculateDays()
       const todos = await authService.getTodos(userId)
 
+      const todosByDate = {}
+
+      todos.forEach((todo) => {
+        const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
+
+        if (!todosByDate[todoDate]) {
+          todosByDate[todoDate] = { hasDone: false, hasUndone: false }
+        }
+
+        if (todo.isDone) {
+          todosByDate[todoDate].hasDone = true
+        } else {
+          todosByDate[todoDate].hasUndone = true
+        }
+      })
+
       this.days.forEach((day) => {
+        const dayDateString = day.date.toDateString()
         day.hasDone = false
         day.hasUndone = false
 
-        const todosForDay = todos.filter((todo) => {
-          const todoDate = new Date(todo.date.seconds * 1000) // convert to milliseconds
-          return todoDate.toDateString() === day.date.toDateString()
-        })
-
-        todosForDay.forEach((task) => {
-          if (task.isDone) {
-            day.hasDone = true
-          } else {
-            day.hasUndone = true
-          }
-        })
+        if (todosByDate[dayDateString]) {
+          day.hasDone = todosByDate[dayDateString].hasDone
+          day.hasUndone = todosByDate[dayDateString].hasUndone
+        }
       })
+
+    },
+    setActiveDayIndex(index) {
+      this.activeDayIndex = index
     },
   },
 }

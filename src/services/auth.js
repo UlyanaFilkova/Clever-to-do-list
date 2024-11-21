@@ -15,9 +15,9 @@ export const authService = {
     const q = query(usersCollection, where('username', '==', username))
     const querySnapshot = await getDocs(q)
     if (!querySnapshot.empty) {
-      const userData = querySnapshot.docs[0].data();
+      const userData = querySnapshot.docs[0].data()
       if (userData.password === password) {
-        return querySnapshot.docs[0].id; // return userId, if passwords match
+        return querySnapshot.docs[0].id // return userId, if passwords match
       }
     }
     return false
@@ -29,12 +29,20 @@ export const authService = {
       password,
     })
 
-    // Добавление первой задачи в подколлекцию todos
+    // Добавление первых задач в подколлекцию todos
     const todosCollection = collection(docRef, 'todos') // Получаем ссылку на подколлекцию todos
     await addDoc(todosCollection, {
-      title: 'Welcome to your task list!', // Заголовок задачи
-      description: 'description', // Статус задачи
-      date: new Date(), // Дата создания задачи
+      title: 'Register on Clever To-do App',
+      description: 'Welcome to your task list!',
+      isDone: true,
+      date: new Date(),
+    })
+    await addDoc(todosCollection, {
+      title: 'Create you first to-do',
+      description:
+        'Click "Add a new task" button and create your first to-do! Then mark this task as completed',
+      isDone: false,
+      date: new Date(),
     })
 
     return docRef.id
@@ -46,16 +54,15 @@ export const authService = {
     return !querySnapshot.empty // true if user exists
   },
 
-  async getUserTasks(userId) {
-    const userDocRef = doc(usersCollection, userId) // Получаем ссылку на документ пользователя
-    const todosCollection = collection(userDocRef, 'todos') // Получаем ссылку на подколлекцию todos
-    const querySnapshot = await getDocs(todosCollection) // Получаем все документы из подколлекции
+  async getTodos(userId) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+    const querySnapshot = await getDocs(todosCollection)
 
     const tasks = []
     querySnapshot.forEach((doc) => {
-      tasks.push({ id: doc.id, ...doc.data() }) // Добавляем данные задачи в массив
+      tasks.push({ id: doc.id, ...doc.data() })
     })
-    console.dir(tasks)
-    return tasks // Возвращаем массив задач
+    return tasks
   },
 }

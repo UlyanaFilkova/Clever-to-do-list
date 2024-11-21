@@ -6,7 +6,7 @@
       @click="$emit('click')"
     >
       <div class="day__dayOfWeek">{{ dayOfWeek }}</div>
-      <div class="day__date">{{ date }}</div>
+      <div class="day__date">{{ day }}</div>
     </div>
     <div class="day__points">
       <div v-if="hasDone" class="day__point day__done"></div>
@@ -19,20 +19,17 @@
 export default {
   props: {
     date: {
-      type: Number,
+      type: Date,
       required: true,
     },
-    dayOfWeek: {
-      type: String,
-      required: true,
-    },
+
     hasDone: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     hasUndone: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     isCurrent: {
       type: Boolean,
@@ -41,6 +38,14 @@ export default {
     isActive: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    dayOfWeek() {
+      return this.date.toLocaleString('en-US', { weekday: 'short' })
+    },
+    day() {
+      return this.date.getDate()
     },
   },
 }

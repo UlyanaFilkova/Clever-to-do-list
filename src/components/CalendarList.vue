@@ -4,8 +4,8 @@
       v-for="(day, index) in days"
       :key="index"
       :date="day.date"
-      :dayOfWeek="day.dayOfWeek"
       :hasDone="day.hasDone"
+      :hasUndone="day.hasUndone"
       :isCurrent="index === currentDayIndex"
       :isActive="index === activeDayIndex"
       @click="setActiveDayIndex(index)"
@@ -15,6 +15,7 @@
 
 <script>
 import DayCard from './DayCard.vue'
+import { authService } from '@/services/auth.js'
 
 export default {
   components: {
@@ -22,13 +23,14 @@ export default {
   },
   data() {
     return {
+      //массив объектов {date, hasDone, hasUndone}
       days: [],
       currentDayIndex: 0,
       activeDayIndex: null,
     }
   },
   created() {
-    this.calculateDays()
+    this.getDays(localStorage.getItem('userId'))
   },
   methods: {
     calculateDays() {
@@ -39,13 +41,35 @@ export default {
 
       for (let day = today.getDate(); day <= lastDayOfMonth; day++) {
         const date = new Date(currentYear, currentMonth, day)
-        const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' })
-        this.days.push({ date: day, dayOfWeek })
+        // const dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' })
         // this.days.push({ date: day, dayOfWeek })
+        this.days.push({ date: date })
       }
     },
     setActiveDayIndex(index) {
       this.activeDayIndex = index
+    },
+    async getDays(userId) {
+      this.calculateDays()
+      const todos = await authService.getTodos(userId)
+
+      this.days.forEach((day) => {
+        day.hasDone = false
+        day.hasUndone = false
+
+        const todosForDay = todos.filter((todo) => {
+          const todoDate = new Date(todo.date.seconds * 1000) // convert to milliseconds
+          return todoDate.toDateString() === day.date.toDateString()
+        })
+
+        todosForDay.forEach((task) => {
+          if (task.isDone) {
+            day.hasDone = true
+          } else {
+            day.hasUndone = true
+          }
+        })
+      })
     },
   },
 }
@@ -61,26 +85,26 @@ export default {
 }
 /* For WebKit browsers (Chrome, Safari) */
 .calendar__container::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
-  height: 8px; /* Height of the scrollbar */
+  width: 8px;
+  height: 8px;
 }
 
 .calendar__container::-webkit-scrollbar-thumb {
-  background-color: #888; /* Color of the scrollbar thumb */
-  border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+  background-color: #888;
+  border-radius: 4px;
 }
 
 .calendar__container::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* Color of the scrollbar thumb on hover */
+  background-color: #555;
 }
 
 /* For Firefox */
 .calendar__container {
-  scrollbar-width: thin; /* Make the scrollbar thin */
-  scrollbar-color: #888 transparent; /* Color of the scrollbar thumb and track */
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
 }
 
 .calendar__container:hover {
-  scrollbar-color: #555 transparent; /* Color of the scrollbar thumb on hover */
+  scrollbar-color: #555 transparent;
 }
 </style>

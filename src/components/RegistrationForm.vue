@@ -2,43 +2,27 @@
   <form @submit.prevent="handleSubmit">
     <h1>Create an account</h1>
     <FormInput
-      v-model="username"
-      type="text"
-      placeholder="Username"
-      autocomplete="username"
-      required
-      :showErrors="showErrors"
-      :errorMessage="usernameErrorMessage"
+      v-for="(field, index) in inputFields"
+      :key="index"
+      :modelValue="field.model"
+      :type="field.type"
+      :placeholder="field.placeholder"
+      :name="field.name"
+      :autocomplete="field.autocomplete"
+      :required="field.required"
+      :errorMessage="field.errorMessage"
+      @update:modelValue="(value) => (field.model = value)"
     />
-
-    <FormInput
-      v-model="password"
-      type="password"
-      placeholder="Password"
-      autocomplete="new-password"
-      required
-      :showErrors="showErrors"
-      :errorMessage="passwordErrorMessage"
-    />
-
-    <FormInput
-      v-model="repeatPassword"
-      type="password"
-      placeholder="Repeat Password"
-      required
-      :showErrors="showErrors"
-      :errorMessage="repeatPasswordErrorMessage"
-    />
-    <div v-if="showErrors" class="invalid-input">
-      {{ dbError }}
+    <div class="invalid-input">
+      {{ errorMessage }}
     </div>
-    <button type="submit">Register</button>
+    <button type="submit">Login</button>
   </form>
 </template>
 
 <script>
 import FormInput from '@/components/FormInput.vue'
-import { required, sameAs, minLength } from '@vuelidate/validators'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { registerUser, checkUsernameExists } from '@/services/auth.js'
 
@@ -48,81 +32,94 @@ export default {
   },
   data() {
     return {
-      username: '',
-      password: '',
-      repeatPassword: '',
-      showErrors: false,
-      dbError: '',
+      v$: useVuelidate(),
+      errorMessage: '',
+      inputFields: [
+        {
+          model: '',
+          type: 'email',
+          placeholder: 'Email',
+          name: 'username',
+          autocomplete: 'username',
+          required: true,
+          errorMessage: '',
+        },
+        {
+          model: '',
+          type: 'password',
+          placeholder: 'Password',
+          name: 'password',
+          autocomplete: 'new-password',
+          required: true,
+          errorMessage: '',
+        },
+        {
+          model: '',
+          type: 'password',
+          placeholder: 'Repeat Password',
+          name: 'repeat-password',
+          autocomplete: 'new-password',
+          required: true,
+          errorMessage: '',
+        },
+      ],
     }
   },
   validations() {
     return {
-      username: { required },
-      password: {
-        required,
-        minLength: minLength(6),
-      },
-      repeatPassword: {
-        required,
-        sameAsPassword: sameAs(this.password),
+      validationFields: {
+        username: { required, email },
+        password: { required, minLength: minLength(6) },
+        repeatPassword: { required, sameAsPassword: sameAs(this.inputFields[1].model) },
       },
     }
   },
-  setup() {
-    const v$ = useVuelidate()
-    return { v$ }
-  },
   computed: {
-    usernameErrorMessage() {
-      return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
-    },
-    passwordErrorMessage() {
-      if (this.v$.password.$invalid && this.showErrors) {
-        if (this.v$.password.required.$invalid) {
-          return 'Password is required'
-        } else if (this.v$.password.minLength.$invalid) {
-          return 'Password must be at least 6 characters long'
-        }
+    validationFields() {
+      return {
+        username: this.inputFields[0].model,
+        password: this.inputFields[1].model,
+        repeatPassword: this.inputFields[2].model,
       }
-      return ''
-    },
-    repeatPasswordErrorMessage() {
-      if (this.v$.repeatPassword.$invalid && this.showErrors) {
-        if (this.v$.repeatPassword.required.$invalid) {
-          return 'Please, repeat the password'
-        } else if (this.v$.repeatPassword.sameAsPassword.$invalid) {
-          return 'Passwords must match'
-        }
-      }
-      return ''
     },
   },
   methods: {
     async handleSubmit() {
-      this.showErrors = true
-      // validation
-      this.v$.$touch() // Mark all fields as touched
+      this.errorMessage = ''
+      this.v$.validationFields.$touch()
 
-      if (this.v$.$invalid) {
-        return
+      if (this.v$.validationFields.$invalid) {
+        console.log('errors')
+        if (this.v$.validationFields.username.required.$invalid) {
+          this.errorMessage = 'Email is required'
+        } else if (this.v$.validationFields.username.email.$invalid) {
+          this.errorMessage = 'Invalid email'
+        } else if (this.v$.validationFields.password.required.$invalid) {
+          this.errorMessage = 'Password is required'
+        } else if (this.v$.validationFields.password.minLength.$invalid) {
+          this.errorMessage = 'Password must be at least 6 characters long'
+        } else if (this.v$.validationFields.repeatPassword.required.$invalid) {
+          this.errorMessage = 'Please, repeat the password'
+        } else if (this.v$.validationFields.repeatPassword.sameAsPassword.$invalid) {
+          this.errorMessage = 'Passwords must match'
+        }
+      } else {
+        console.log('success')
+        const userExists = await checkUsernameExists(this.inputFields[0].model)
+        if (userExists) {
+          this.errorMessage = 'This username is already taken'
+          return
+        }
+        const result = await registerUser(this.inputFields[0].model, this.inputFields[1].model)
+        if (result === true) {
+          this.$router.push({ name: 'home' })
+          // Clear form after successful login
+          this.inputFields[0].model = ''
+          this.inputFields[1].model = ''
+          this.inputFields[2].model = ''
+          return
+        } 
       }
-
-      const userExists = await checkUsernameExists(this.username)
-      if (userExists) {
-        this.dbError = 'This username is already taken'
-        return
-      }
-
-      const userId = await registerUser(this.username, this.password)
-
-      localStorage.setItem('userId', userId)
-      this.$router.push({ name: 'home' })
-
-      // Clear form after successful login
-      this.username = ''
-      this.password = ''
-      this.repeatPassword = ''
-      this.showErrors = false
     },
   },
 }

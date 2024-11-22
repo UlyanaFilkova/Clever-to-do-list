@@ -78,7 +78,6 @@ export default {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
-        console.log(this.v$.validationFields)
         if (this.v$.validationFields.username.required.$invalid) {
           this.errorMessage = 'Email is required'
         } else if (this.v$.validationFields.username.email.$invalid) {
@@ -96,8 +95,6 @@ export default {
           this.inputFields[0].model = ''
           this.inputFields[1].model = ''
           return
-        } else {
-          this.errorMessage = result
         }
       }
     },

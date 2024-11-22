@@ -35,8 +35,12 @@ export const registerUser = async (username, password) => {
     username,
     password,
   })
-  // Добавление первых задач в подколлекцию todos
-  const todosCollection = collection(docRef, 'todos') // Получаем ссылку на подколлекцию todos
+  if (!docRef) {
+    return false
+  }
+
+  // Adding the first tasks to the todos subcollection
+  const todosCollection = collection(docRef, 'todos')
 
   await addDoc(todosCollection, {
     title: 'Register on Clever To-do App',
@@ -52,7 +56,8 @@ export const registerUser = async (username, password) => {
     date: new Date(),
   })
 
-  return docRef.id
+  localStorage.setItem('userId', docRef.id)
+  return true
 }
 
 export const checkUsernameExists = async (username) => {

@@ -71,7 +71,7 @@ export default {
   margin-bottom: 5px;
 }
 .day__card_active,
-.day__card_current.day__card_active{
+.day__card_current.day__card_active {
   background-color: #fb6914;
   border: 1.5px solid #fb6914;
   color: #fff;
@@ -96,11 +96,7 @@ export default {
 }
 .day__card:not(.day__card_active):hover {
   border: 1.5px solid #ffa876;
-  /* color: #fb6914; */
   background-color: #ffefe6;
-}
-.day__card:not(.day__card_active):hover .day__dayOfWeek {
-  /* color: #fb6914; */
 }
 
 .day__dayOfWeek {

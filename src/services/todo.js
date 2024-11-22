@@ -9,9 +9,10 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 
 const usersCollection = collection(firebase, 'users')
+const userId = localStorage.getItem('userId')
 
 export default {
-  async getTodos(userId) {
+  async getTodos() {
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
 
@@ -27,7 +28,7 @@ export default {
     })
     return tasks
   },
-  async updateTodoStatus(userId, todoId, isDone) {
+  async updateTodoStatus(todoId, isDone) {
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
     const todoDocRef = doc(todosCollection, todoId)

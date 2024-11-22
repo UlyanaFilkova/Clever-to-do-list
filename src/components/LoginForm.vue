@@ -95,6 +95,8 @@ export default {
           this.inputFields[0].model = ''
           this.inputFields[1].model = ''
           return
+        } else {
+          this.errorMessage = result
         }
       }
     },

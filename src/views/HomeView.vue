@@ -29,14 +29,12 @@ export default {
     }
   },
   async beforeCreate() {
-    const userId = localStorage.getItem('userId')
-    this.todos = await todoService.getTodos(userId)
-    // console.log(this.activeDate)
+    this.todos = await todoService.getTodos()
   },
   methods: {
     async handleToggleTodo(todo) {
       todo.isDone = !todo.isDone
-      await todoService.updateTodoStatus(localStorage.getItem('userId'), todo.id, todo.isDone)
+      await todoService.updateTodoStatus(todo.id, todo.isDone)
     },
   },
 }

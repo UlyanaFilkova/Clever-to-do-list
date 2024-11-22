@@ -28,7 +28,6 @@ export default {
   },
   computed: {
     filteredTodos() {
-      console.log(this.activeDayIndex)
       const today = new Date()
       const targetDate = new Date(today)
       targetDate.setDate(today.getDate() + this.activeDayIndex)

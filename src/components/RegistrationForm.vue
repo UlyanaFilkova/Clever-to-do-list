@@ -40,7 +40,7 @@
 import FormInput from '@/components/FormInput.vue'
 import { required, sameAs, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { authService } from '@/services/auth.js'
+import { registerUser, checkUsernameExists } from '@/services/auth.js'
 
 export default {
   components: {
@@ -107,13 +107,13 @@ export default {
         return
       }
 
-      const userExists = await authService.checkUsernameExists(this.username)
+      const userExists = await checkUsernameExists(this.username)
       if (userExists) {
         this.dbError = 'This username is already taken'
         return
       }
 
-      const userId = await authService.registerUser(this.username, this.password)
+      const userId = await registerUser(this.username, this.password)
 
       localStorage.setItem('userId', userId)
       this.$router.push({ name: 'home' })

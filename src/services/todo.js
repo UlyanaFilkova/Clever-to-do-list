@@ -1,7 +1,6 @@
 import { firebase } from '@/firebase.config.js'
 import {
   collection,
-  addDoc,
   query,
   where,
   getDocs,
@@ -11,13 +10,12 @@ import {
 
 const usersCollection = collection(firebase, 'users')
 
-export const todoService = {
+export default {
   async getTodos(userId) {
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
 
-   
-    const today = new Date()  // today's date
+    const today = new Date() // today's date
     today.setHours(0, 0, 0, 0) // set time to 00:00
 
     const todosQuery = query(todosCollection, where('date', '>=', today))
@@ -35,9 +33,7 @@ export const todoService = {
     const todoDocRef = doc(todosCollection, todoId)
 
     try {
-      await updateDoc(todoDocRef, {
-        isDone: !isDone,
-      })
+      await updateDoc(todoDocRef, { isDone })
       return true
     } catch {
       return false

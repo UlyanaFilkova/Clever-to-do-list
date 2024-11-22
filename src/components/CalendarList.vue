@@ -1,12 +1,12 @@
 <template>
-  <div class="calendar__container" @wheel="handleWheel">
+  <div class="calendar__container" @wheel.prevent="handleWheel">
     <DayCard
       v-for="(day, index) in days"
       :key="index"
       :date="day.date"
       :hasDone="day.hasDone"
       :hasUndone="day.hasUndone"
-      :isCurrent="index === currentDayIndex"
+      :isCurrent="index === 0"
       :isActive="index === activeDayIndex"
       @click="this.$emit('changeActiveDay', index)"
     />
@@ -34,19 +34,13 @@ export default {
     return {
       //массив объектов {date, hasDone, hasUndone}
       days: [],
-      currentDayIndex: 0,
     }
   },
   watch: {
     todos: {
       handler() {
-        if (this.days.length === 0) {
-          this.getDays()
-        } else {
-          this.updateDays()
-        }
+        this.days.length === 0 ? this.getDays() : this.updateDays()
       },
-      immediate: true,
       deep: true,
     },
   },
@@ -64,7 +58,7 @@ export default {
 
       for (let day = today.getDate(); day <= lastDayOfMonth; day++) {
         const date = new Date(currentYear, currentMonth, day)
-        this.days.push({ date: date })
+        this.days.push({ date })
       }
     },
 
@@ -92,8 +86,6 @@ export default {
     },
 
     handleWheel(event) {
-      // Прокручиваем контейнер по горизонтали
-      event.preventDefault()
       this.smoothScroll(event.deltaY)
     },
 

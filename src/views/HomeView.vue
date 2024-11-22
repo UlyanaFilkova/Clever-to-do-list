@@ -3,10 +3,10 @@
     <HomeHeader />
     <CalendarList
       :todos="todos"
-      :activeDayIndex
+      :activeDayIndex="activeDayIndex"
       @changeActiveDay="(index) => (activeDayIndex = index)"
     />
-    <ToDoList @toggle-todo="handleToggleTodo" :todos="todos" :activeDayIndex />
+    <ToDoList :todos="todos" :activeDayIndex="activeDayIndex" @toggle-todo="handleToggleTodo" />
   </div>
 </template>
 
@@ -14,7 +14,7 @@
 import CalendarList from '@/components/CalendarList.vue'
 import HomeHeader from '@/components/HomeHeader.vue'
 import ToDoList from '@/components/ToDoList.vue'
-import { todoService } from '@/services/todo.js'
+import todoService from '@/services/todo.js'
 
 export default {
   components: {
@@ -35,8 +35,8 @@ export default {
   },
   methods: {
     async handleToggleTodo(todo) {
-      await todoService.updateTodoStatus(localStorage.getItem('userId'), todo.id, todo.isDone)
       todo.isDone = !todo.isDone
+      await todoService.updateTodoStatus(localStorage.getItem('userId'), todo.id, todo.isDone)
     },
   },
 }

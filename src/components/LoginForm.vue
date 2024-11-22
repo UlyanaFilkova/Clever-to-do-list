@@ -37,7 +37,8 @@ export default {
       inputFields: [
         {
           model: '',
-          type: 'email',
+          // type: 'email',
+          type: 'text',
           placeholder: 'Email',
           name: 'username',
           autocomplete: 'username',
@@ -59,8 +60,8 @@ export default {
   validations() {
     return {
       validationFields: {
-        username: { required, email },
-        password: { required, minLength: minLength(6) },
+        // username: { required, email },
+        // password: { required, minLength: minLength(6) },
       },
     }
   },

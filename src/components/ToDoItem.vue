@@ -2,13 +2,11 @@
   <div class="todo__container">
     <div
       class="todo__indicator"
-      :class="{ todo__indicator_done: todo.isDone || isHovered }"
-      @mouseover="isHovered = true"
-      @mouseleave="isHovered = false"
+      :class="{ todo__indicator_done: todo.isDone }"
       @click="$emit('toggle-todo', todo)"
     >
       <svg
-        v-if="todo.isDone || isHovered"
+        v-if="todo.isDone"
         class="todo__indicator-svg"
         xmlns="http://www.w3.org/2000/svg"
         x="0px"
@@ -30,11 +28,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      isHovered: false,
-    }
-  },
 }
 </script>
 
@@ -43,6 +36,12 @@ export default {
   display: flex;
   gap: 15px;
   align-items: center;
+  padding: 12px 10px 12px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.todo__container:hover {
+  background-color: #ffebdf;
 }
 .todo__indicator {
   width: 24px;
@@ -50,6 +49,7 @@ export default {
   border: 1.5px solid #fb6914;
   border-radius: 12px;
   cursor: pointer;
+  background-color: #fff;
 }
 .todo__indicator_done {
   background-color: #fb6914;
@@ -62,8 +62,5 @@ export default {
 }
 .todo__title {
   cursor: pointer;
-}
-.todo__title:hover {
-  text-decoration: underline;
 }
 </style>

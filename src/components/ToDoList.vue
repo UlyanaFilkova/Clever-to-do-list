@@ -1,6 +1,6 @@
 <template>
   <div class="todo-list__container">
-    <h2>{{ filteredTodos.length }} Tasks Today</h2>
+    <h2>{{ filteredTodos.length }} Tasks</h2>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"
       :key="index"
@@ -46,6 +46,6 @@ export default {
 .todo-list__container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 </style>

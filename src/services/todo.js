@@ -1,4 +1,4 @@
-import { firebase } from '@/firebase.config.js'
+import { firebase } from '@/services/firebase.config.js'
 import {
   collection,
   query,

@@ -1,8 +1,12 @@
 <template>
   <div class="container">
     <HomeHeader />
-    <CalendarList :todos="todos" />
-    <ToDoList @toggle-todo="handleToggleTodo" :todos="todos" />
+    <CalendarList
+      :todos="todos"
+      :activeDayIndex
+      @changeActiveDay="(index) => (activeDayIndex = index)"
+    />
+    <ToDoList @toggle-todo="handleToggleTodo" :todos="todos" :activeDayIndex />
   </div>
 </template>
 
@@ -21,11 +25,13 @@ export default {
   data() {
     return {
       todos: [],
+      activeDayIndex: 0,
     }
   },
   async beforeCreate() {
     const userId = localStorage.getItem('userId')
     this.todos = await todoService.getTodos(userId)
+    // console.log(this.activeDate)
   },
   methods: {
     async handleToggleTodo(todo) {

@@ -15,7 +15,13 @@ export const todoService = {
   async getTodos(userId) {
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
-    const querySnapshot = await getDocs(todosCollection)
+
+   
+    const today = new Date()  // today's date
+    today.setHours(0, 0, 0, 0) // set time to 00:00
+
+    const todosQuery = query(todosCollection, where('date', '>=', today))
+    const querySnapshot = await getDocs(todosQuery)
 
     const tasks = []
     querySnapshot.forEach((doc) => {

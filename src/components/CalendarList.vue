@@ -8,7 +8,7 @@
       :hasUndone="day.hasUndone"
       :isCurrent="index === currentDayIndex"
       :isActive="index === activeDayIndex"
-      @click="setActiveDayIndex(index)"
+      @click="this.$emit('changeActiveDay', index)"
     />
   </div>
 </template>
@@ -25,19 +25,21 @@ export default {
       type: Array,
       required: true,
     },
+    activeDayIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
       //массив объектов {date, hasDone, hasUndone}
       days: [],
       currentDayIndex: 0,
-      activeDayIndex: null,
     }
   },
   watch: {
     todos: {
       handler() {
-        console.log(this.days)
         if (this.days.length === 0) {
           this.getDays()
         } else {
@@ -87,10 +89,6 @@ export default {
         day.hasDone = todosByDate[dayDateString]?.hasDone || false
         day.hasUndone = todosByDate[dayDateString]?.hasUndone || false
       })
-    },
-
-    setActiveDayIndex(index) {
-      this.activeDayIndex = index
     },
 
     handleWheel(event) {

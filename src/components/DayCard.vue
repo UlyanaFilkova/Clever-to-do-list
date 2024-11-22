@@ -75,7 +75,11 @@ export default {
   border: 1.5px solid #fb6914;
   color: #fff;
 }
-.day__card_current .day__dayOfWeek {
+.day__card_current.day__card_active {
+  color: #fff;
+}
+.day__card_current .day__dayOfWeek,
+.day__card_current.day__card_active .day__dayOfWeek {
   color: #eaeaea;
 }
 .day__card_active {

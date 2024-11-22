@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      //массив объектов {date, hasDone, hasUndone}
+      // array of objects: {date, hasDone, hasUndone}
       days: [],
     }
   },

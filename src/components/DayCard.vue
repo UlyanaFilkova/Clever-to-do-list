@@ -70,34 +70,37 @@ export default {
   justify-content: space-between;
   margin-bottom: 5px;
 }
-.day__card_current {
-  background: #fb6914;
+.day__card_active,
+.day__card_current.day__card_active{
+  background-color: #fb6914;
   border: 1.5px solid #fb6914;
   color: #fff;
 }
 .day__card_current.day__card_active {
   color: #fff;
 }
-.day__card_current .day__dayOfWeek,
+.day__card_active .day__dayOfWeek,
 .day__card_current.day__card_active .day__dayOfWeek {
   color: #eaeaea;
 }
-.day__card_active {
-  border: 1.5px solid #fb6914;
+.day__card_current {
+  border: 1.5px solid #ffa876;
   color: #fb6914;
+  background-color: #ffefe6;
 }
-.day__card_active .day__dayOfWeek {
+.day__card_current .day__dayOfWeek {
   color: #fb6914;
 }
 .day__card:hover {
   cursor: pointer;
 }
-.day__card:not(.day__card_current):hover {
-  border: 1.5px solid #fb6914;
-  color: #fb6914;
+.day__card:not(.day__card_active):hover {
+  border: 1.5px solid #ffa876;
+  /* color: #fb6914; */
+  background-color: #ffefe6;
 }
-.day__card:not(.day__card_current):hover .day__dayOfWeek {
-  color: #fb6914;
+.day__card:not(.day__card_active):hover .day__dayOfWeek {
+  /* color: #fb6914; */
 }
 
 .day__dayOfWeek {

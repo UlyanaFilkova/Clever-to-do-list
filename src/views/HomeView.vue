@@ -13,6 +13,7 @@
       :registrationDate="registrationDate"
       @toggle-todo="handleToggleTodo"
     />
+    <BigButton />
   </div>
 </template>
 
@@ -20,6 +21,7 @@
 import CalendarList from '@/components/CalendarList.vue'
 import HomeHeader from '@/components/HomeHeader.vue'
 import ToDoList from '@/components/ToDoList.vue'
+import BigButton from '@/components/BigButton.vue'
 import todoService from '@/services/todo.js'
 
 export default {
@@ -27,6 +29,7 @@ export default {
     HomeHeader,
     CalendarList,
     ToDoList,
+    BigButton,
   },
   data() {
     return {

@@ -1,0 +1,35 @@
+<template>
+  <header class="header">
+    <h2>To-do List</h2>
+    <button @click="logout" class="exit-button">Logout</button>
+  </header>
+</template>
+
+<script>
+export default {
+  methods: {
+    logout() {
+      localStorage.removeItem('userId')
+      this.$router.push({ name: 'login' })
+    },
+  },
+}
+</script>
+<style scoped>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0 20px 0;
+  padding-top: 0px;
+}
+
+.exit-button {
+  padding: 7px 10px;
+  border-radius: 5px;
+  background: #ffae80;
+}
+.exit-button:hover {
+  background: #ff8a47;
+}
+</style>

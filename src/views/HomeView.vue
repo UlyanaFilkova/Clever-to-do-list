@@ -1,15 +1,60 @@
 <template>
   <div class="container">
-    <button @click="logout" class="exit-button">Logout</button>
+    <HomeHeader />
+    <CalendarList
+      :todos="todos"
+      :activeDayIndex="activeDayIndex"
+      :registrationDate="registrationDate"
+      @changeActiveDay="(index) => (activeDayIndex = index)"
+    />
+    <ToDoList
+      :todos="todos"
+      :activeDayIndex="activeDayIndex"
+      :registrationDate="registrationDate"
+      @toggle-todo="handleToggleTodo"
+    />
+    <BigButton />
   </div>
 </template>
 
 <script>
+import CalendarList from '@/components/CalendarList.vue'
+import HomeHeader from '@/components/HomeHeader.vue'
+import ToDoList from '@/components/ToDoList.vue'
+import BigButton from '@/components/BigButton.vue'
+import todoService from '@/services/todo.js'
+
 export default {
+  components: {
+    HomeHeader,
+    CalendarList,
+    ToDoList,
+    BigButton,
+  },
+  data() {
+    return {
+      todos: [],
+      activeDayIndex: 0,
+      registrationDate: null,
+    }
+  },
+  async beforeCreate() {
+    this.registrationDate = await todoService.getRegistrationDate()
+    this.todos = await todoService.getTodos()
+
+    // Устанавливаем activeDayIndex как разницу между текущим днем и днем регистрации
+    const today = new Date()
+    const registrationDate = new Date(this.registrationDate)
+    const differenceInTime = today.getTime() - registrationDate.getTime()
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // Конвертируем миллисекунды в дни
+
+    // Убедитесь, что разница не меньше 0
+    this.activeDayIndex = Math.max(differenceInDays, 0)
+  },
   methods: {
-    logout() {
-      localStorage.removeItem('userId')
-      this.$router.push({ name: 'login' })
+    async handleToggleTodo(todo) {
+      todo.isDone = !todo.isDone
+      await todoService.updateTodoStatus(todo.id, todo.isDone)
     },
   },
 }
@@ -18,11 +63,11 @@ export default {
 <style scoped>
 .container {
   height: 100vh;
-  padding-top: 30px;
+  margin: 0 20px;
 }
-.exit-button {
-  padding: 5px;
-  margin-left: 100px;
-  background: #c1f7ce;
+@media (max-width: 576px) {
+  .container {
+    margin: 0 15px;
+  }
 }
 </style>

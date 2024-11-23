@@ -1,59 +1,69 @@
-import { firebase } from '@/firebase.config.js'
+import { firebase } from '@/services/firebase.config.js'
 import {
   collection,
   addDoc,
   query,
   where,
   getDocs,
-  doc,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 
 const usersCollection = collection(firebase, 'users')
 
-export const authService = {
-  async checkUser(username, password) {
+export const checkUser = async (username, password) => {
+  try {
     const q = query(usersCollection, where('username', '==', username))
     const querySnapshot = await getDocs(q)
+
     if (!querySnapshot.empty) {
       const userData = querySnapshot.docs[0].data()
-      return userData.password === password // Compare passwords
+      // if passwords match
+      if (userData.password === password) {
+        localStorage.setItem('userId', querySnapshot.docs[0].id)
+        return true
+      }
     }
-    return false // User not found
-  },
+    // If the user is not found or the passwords do not match
+    return 'Invalid email or password'
+  } catch (error) {
+    console.error('Error checking user:', error)
+    return ''
+  }
+}
 
-  async registerUser(username, password) {
-    const docRef = await addDoc(usersCollection, {
-      username,
-      password,
-    })
+export const registerUser = async (username, password) => {
+  const registrationDate = new Date()
+  const docRef = await addDoc(usersCollection, {
+    username,
+    password,
+    registrationDate,
+  })
+  if (!docRef) {
+    return false
+  }
 
-    // Добавление первой задачи в подколлекцию todos
-    const todosCollection = collection(docRef, 'todos') // Получаем ссылку на подколлекцию todos
-    await addDoc(todosCollection, {
-      title: 'Welcome to your task list!', // Заголовок задачи
-      description: 'description', // Статус задачи
-      date: new Date(), // Дата создания задачи
-    })
+  // Adding the first tasks to the todos subcollection
+  const todosCollection = collection(docRef, 'todos')
 
-    return docRef.id
-  },
+  await addDoc(todosCollection, {
+    title: 'Register on Clever To-do App',
+    description: 'Welcome to your task list!',
+    isDone: true,
+    date: new Date(),
+  })
+  await addDoc(todosCollection, {
+    title: 'Create you first to-do',
+    description:
+      'Click "Add a new task" button and create your first to-do! Then mark this task as completed',
+    isDone: false,
+    date: new Date(),
+  })
 
-  async checkUsernameExists(username) {
-    const q = query(usersCollection, where('username', '==', username))
-    const querySnapshot = await getDocs(q)
-    return !querySnapshot.empty // true if user exists
-  },
+  localStorage.setItem('userId', docRef.id)
+  return true
+}
 
-  async getUserTasks(userId) {
-    const userDocRef = doc(usersCollection, userId) // Получаем ссылку на документ пользователя
-    const todosCollection = collection(userDocRef, 'todos') // Получаем ссылку на подколлекцию todos
-    const querySnapshot = await getDocs(todosCollection) // Получаем все документы из подколлекции
-
-    const tasks = []
-    querySnapshot.forEach((doc) => {
-      tasks.push({ id: doc.id, ...doc.data() }) // Добавляем данные задачи в массив
-    })
-    console.dir(tasks)
-    return tasks // Возвращаем массив задач
-  },
+export const checkUsernameExists = async (username) => {
+  const q = query(usersCollection, where('username', '==', username))
+  const querySnapshot = await getDocs(q)
+  return !querySnapshot.empty // true if user exists
 }

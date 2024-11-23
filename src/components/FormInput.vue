@@ -1,7 +1,7 @@
 <template>
   <div class="input-group">
     <input :type="type" :value="modelValue" @input="handleInput" :placeholder="placeholder" />
-    <div v-if="showErrors" class="invalid-input">
+    <div class="invalid-input">
       {{ errorMessage }}
     </div>
   </div>
@@ -22,10 +22,7 @@ export default {
       type: String,
       default: 'text',
     },
-    showErrors: {
-      type: Boolean,
-      default: false,
-    },
+   
     errorMessage: {
       type: String,
       default: '',

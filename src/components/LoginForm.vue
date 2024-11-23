@@ -2,28 +2,19 @@
   <form @submit.prevent="handleSubmit">
     <h1>Login</h1>
     <FormInput
-      v-model="username"
-      type="text"
-      placeholder="Username"
-      name="username"
-      autocomplete="username"
-      required
-      :showErrors="showErrors"
-      :errorMessage="usernameErrorMessage"
+      v-for="(field, index) in inputFields"
+      :key="index"
+      :modelValue="field.model"
+      :type="field.type"
+      :placeholder="field.placeholder"
+      :name="field.name"
+      :autocomplete="field.autocomplete"
+      :required="field.required"
+      :errorMessage="field.errorMessage"
+      @update:modelValue="(value) => (field.model = value)"
     />
-
-    <FormInput
-      v-model="password"
-      type="password"
-      placeholder="Password"
-      name="password"
-      autocomplete="current-password"
-      required
-      :showErrors="showErrors"
-      :errorMessage="passwordErrorMessage"
-    />
-    <div v-if="showErrors" class="invalid-input">
-      {{ dbError }}
+    <div class="invalid-input">
+      {{ errorMessage }}
     </div>
     <button type="submit">Login</button>
   </form>
@@ -31,9 +22,9 @@
 
 <script>
 import FormInput from '@/components/FormInput.vue'
-import { required } from '@vuelidate/validators'
+import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
-import { authService } from '@/services/auth.js'
+import { checkUser } from '@/services/auth.js'
 
 export default {
   components: {
@@ -41,62 +32,74 @@ export default {
   },
   data() {
     return {
-      username: '',
-      password: '',
-      showErrors: false,
-      dbError: '',
+      v$: useVuelidate(),
+      errorMessage: '',
+      inputFields: [
+        {
+          model: '',
+          // type: 'email',
+          type: 'text',
+          placeholder: 'Email',
+          name: 'username',
+          autocomplete: 'username',
+          required: true,
+          errorMessage: '',
+        },
+        {
+          model: '',
+          type: 'password',
+          placeholder: 'Password',
+          name: 'password',
+          autocomplete: 'current-password',
+          required: true,
+          errorMessage: '',
+        },
+      ],
     }
   },
   validations() {
     return {
-      username: { required },
-      password: { required },
+      validationFields: {
+        // username: { required, email },
+        // password: { required, minLength: minLength(6) },
+      },
     }
   },
-  setup() {
-    const v$ = useVuelidate()
-    return { v$ }
-  },
   computed: {
-    usernameErrorMessage() {
-      return this.v$.username.$invalid && this.showErrors ? 'Username is required' : ''
-    },
-    passwordErrorMessage() {
-      return this.v$.password.$invalid && this.showErrors ? 'Password is required' : ''
+    validationFields() {
+      return {
+        username: this.inputFields[0].model,
+        password: this.inputFields[1].model,
+      }
     },
   },
   methods: {
-    validateLoginForm() {
-      this.showErrors = true
-      if (this.usernameError || this.passwordError) {
-        return false
-      }
-      return true
-    },
-
     async handleSubmit() {
-      this.showErrors = true
+      this.errorMessage = ''
+      this.v$.validationFields.$touch()
 
-      // validation
-      this.v$.$touch() // Mark all fields as touched
-      if (this.v$.$invalid) {
-        return
+      if (this.v$.validationFields.$invalid) {
+        if (this.v$.validationFields.username.required.$invalid) {
+          this.errorMessage = 'Email is required'
+        } else if (this.v$.validationFields.username.email.$invalid) {
+          this.errorMessage = 'Invalid email'
+        } else if (this.v$.validationFields.password.required.$invalid) {
+          this.errorMessage = 'Password is required'
+        } else if (this.v$.validationFields.password.minLength.$invalid) {
+          this.errorMessage = 'Password must be at least 6 characters long'
+        }
+      } else {
+        const result = await checkUser(this.inputFields[0].model, this.inputFields[1].model)
+        if (result === true) {
+          this.$router.push({ name: 'home' })
+          // Clear form after successful login
+          this.inputFields[0].model = ''
+          this.inputFields[1].model = ''
+          return
+        } else {
+          this.errorMessage = result
+        }
       }
-
-      const credentialsValid = await authService.checkUser(this.username, this.password)
-      if (!credentialsValid) {
-        this.dbError = 'Invalid username or password'
-        return
-      }
-
-      this.$router.push({ name: 'home' })
-
-      // Clear form after successful login
-      this.username = ''
-      this.password = ''
-      this.showErrors = false
-
-      
     },
   },
 }

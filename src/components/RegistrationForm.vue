@@ -16,7 +16,7 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit">Register</button>
+    <button type="submit" :disabled="submitButtonDisabled">Register</button>
   </form>
 </template>
 
@@ -82,6 +82,13 @@ export default {
         repeatPassword: this.inputFields[2].model,
       }
     },
+    submitButtonDisabled() {
+      return (
+        this.v$.validationFields.username.required.$invalid ||
+        this.v$.validationFields.password.required.$invalid ||
+        this.v$.validationFields.repeatPassword.required.$invalid
+      )
+    },
   },
   methods: {
     async handleSubmit() {
@@ -118,7 +125,7 @@ export default {
           this.inputFields[1].model = ''
           this.inputFields[2].model = ''
           return
-        } 
+        }
       }
     },
   },

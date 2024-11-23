@@ -5,9 +5,10 @@
       :key="index"
       :date="day.date"
       :dayTaskState="day.dayTaskState"
-      :isCurrent="index === 0"
+      :isCurrent="index === currentDayIndex"
       :isActive="index === activeDayIndex"
       @click="this.$emit('changeActiveDay', index)"
+      ref="dayCards"
     />
   </div>
 </template>
@@ -31,8 +32,9 @@ export default {
   },
   data() {
     return {
-      // array of objects: {date, hasDone, hasUndone}
+      // array of objects: {date, dayTaskState}
       days: [],
+      currentDayIndex: 0,
     }
   },
   watch: {
@@ -47,18 +49,28 @@ export default {
     getDays() {
       this.calculateDays()
       this.updateDays()
+      this.$nextTick(() => {
+        this.scrollToCurrentDay()
+      })
     },
-    // returns days from the current day to the end of the month
+
     calculateDays() {
       const today = new Date()
-      const currentMonth = today.getMonth()
-      const currentYear = today.getFullYear()
-      const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
+      const registrationDate = new Date('2024-11-12T15:15:26+03:00')
 
-      for (let day = today.getDate(); day <= lastDayOfMonth; day++) {
-        const date = new Date(currentYear, currentMonth, day)
-        this.days.push({ date })
+      // Generate days from registration date to current date
+      for (let d = new Date(registrationDate); d <= today; d.setDate(d.getDate() + 1)) {
+        this.days.push({ date: new Date(d) })
       }
+      // Generate days from current date to 30 days later
+      for (let i = 0; i < 30; i++) {
+        const nextDay = new Date(today)
+        nextDay.setDate(today.getDate() + i)
+        this.days.push({ date: nextDay })
+      }
+      this.currentDayIndex = this.days.findIndex(
+        (day) => day.date.toDateString() === today.toDateString(),
+      )
     },
 
     updateDays() {
@@ -80,7 +92,6 @@ export default {
       this.days.forEach((day) => {
         const dayDateString = day.date.toDateString()
         day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
-       
       })
     },
 
@@ -109,6 +120,14 @@ export default {
       }
 
       requestAnimationFrame(animateScroll) // Запускаем анимацию
+    },
+    scrollToCurrentDay() {
+      const currentDayCard = this.$refs.dayCards[this.currentDayIndex]
+      if (currentDayCard) {
+        currentDayCard.$el.scrollIntoView({
+          inline: 'center',
+        })
+      }
     },
   },
 }

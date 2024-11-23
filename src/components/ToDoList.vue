@@ -25,12 +25,16 @@ export default {
       type: Number,
       default: 0,
     },
+    registrationDate: {
+      type: Date,
+      default: new Date(),
+    },
   },
   computed: {
     filteredTodos() {
-      const today = new Date()
-      const targetDate = new Date(today)
-      targetDate.setDate(today.getDate() + this.activeDayIndex)
+      const targetDate = new Date(this.registrationDate) 
+      targetDate.setDate(targetDate.getDate() + this.activeDayIndex) 
+
       const targetDateString = targetDate.toDateString()
 
       return this.todos.filter((todo) => {

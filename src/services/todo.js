@@ -2,8 +2,8 @@ import { firebase } from '@/services/firebase.config.js'
 import {
   collection,
   query,
-  where,
   getDocs,
+  getDoc,
   updateDoc,
   doc,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
@@ -16,10 +16,7 @@ export default {
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
 
-    const today = new Date() // today's date
-    today.setHours(0, 0, 0, 0) // set time to 00:00
-
-    const todosQuery = query(todosCollection, where('date', '>=', today))
+    const todosQuery = query(todosCollection)
     try {
       const querySnapshot = await getDocs(todosQuery)
 
@@ -43,5 +40,14 @@ export default {
     } catch {
       return false
     }
+  },
+  async getRegistrationDate() {
+    const userDocRef = doc(usersCollection, userId)
+    const userDoc = await getDoc(userDocRef)
+    if (!userDoc.exists()) {
+      throw new Error('User not found')
+    }
+
+    return userDoc.data().registrationDate.toDate()
   },
 }

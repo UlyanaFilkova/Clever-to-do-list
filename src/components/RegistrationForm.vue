@@ -16,7 +16,7 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit">Login</button>
+    <button type="submit">Register</button>
   </form>
 </template>
 

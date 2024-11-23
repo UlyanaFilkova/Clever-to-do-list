@@ -29,6 +29,10 @@ export default {
       type: Number,
       default: 0,
     },
+    registrationDate: {
+      type: Date,
+      default: new Date(),
+    },
   },
   data() {
     return {
@@ -46,24 +50,23 @@ export default {
     },
   },
   methods: {
-    getDays() {
-      this.calculateDays()
+    async getDays() {
+      await this.calculateDays()
       this.updateDays()
       this.$nextTick(() => {
         this.scrollToCurrentDay()
       })
     },
 
-    calculateDays() {
+    async calculateDays() {
       const today = new Date()
-      const registrationDate = new Date('2024-11-12T15:15:26+03:00')
 
       // Generate days from registration date to current date
-      for (let d = new Date(registrationDate); d <= today; d.setDate(d.getDate() + 1)) {
+      for (let d = new Date(this.registrationDate); d < today; d.setDate(d.getDate() + 1)) {
         this.days.push({ date: new Date(d) })
       }
       // Generate days from current date to 30 days later
-      for (let i = 0; i < 30; i++) {
+      for (let i = 1; i < 30; i++) {
         const nextDay = new Date(today)
         nextDay.setDate(today.getDate() + i)
         this.days.push({ date: nextDay })
@@ -149,21 +152,21 @@ export default {
 }
 
 .calendar__container::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #aaaaaa;
   border-radius: 4px;
 }
 
 .calendar__container::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+  background-color: #888;
 }
 
 /* For Firefox */
 .calendar__container {
   scrollbar-width: thin;
-  scrollbar-color: #888 transparent;
+  scrollbar-color: #aaaaaa transparent;
 }
 
 .calendar__container:hover {
-  scrollbar-color: #555 transparent;
+  scrollbar-color: #888 transparent;
 }
 </style>

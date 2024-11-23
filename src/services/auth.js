@@ -31,9 +31,11 @@ export const checkUser = async (username, password) => {
 }
 
 export const registerUser = async (username, password) => {
+  const registrationDate = new Date()
   const docRef = await addDoc(usersCollection, {
     username,
     password,
+    registrationDate,
   })
   if (!docRef) {
     return false

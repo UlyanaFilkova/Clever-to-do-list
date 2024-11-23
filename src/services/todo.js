@@ -20,13 +20,17 @@ export default {
     today.setHours(0, 0, 0, 0) // set time to 00:00
 
     const todosQuery = query(todosCollection, where('date', '>=', today))
-    const querySnapshot = await getDocs(todosQuery)
+    try {
+      const querySnapshot = await getDocs(todosQuery)
 
-    const tasks = []
-    querySnapshot.forEach((doc) => {
-      tasks.push({ id: doc.id, ...doc.data() })
-    })
-    return tasks
+      const tasks = []
+      querySnapshot.forEach((doc) => {
+        tasks.push({ id: doc.id, ...doc.data() })
+      })
+      return tasks
+    } catch (error) {
+      console.error(error)
+    }
   },
   async updateTodoStatus(todoId, isDone) {
     const userDocRef = doc(usersCollection, userId)

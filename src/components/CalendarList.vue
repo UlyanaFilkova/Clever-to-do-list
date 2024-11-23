@@ -4,8 +4,7 @@
       v-for="(day, index) in days"
       :key="index"
       :date="day.date"
-      :hasDone="day.hasDone"
-      :hasUndone="day.hasUndone"
+      :dayTaskState="day.dayTaskState"
       :isCurrent="index === 0"
       :isActive="index === activeDayIndex"
       @click="this.$emit('changeActiveDay', index)"
@@ -68,20 +67,20 @@ export default {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
 
         if (!todosByDate[todoDate]) {
-          todosByDate[todoDate] = { hasDone: false, hasUndone: false }
+          todosByDate[todoDate] = { dayTaskState: '' }
         }
 
         if (todo.isDone) {
-          todosByDate[todoDate].hasDone = true
+          todosByDate[todoDate].dayTaskState += 'd'
         } else {
-          todosByDate[todoDate].hasUndone = true
+          todosByDate[todoDate].dayTaskState += 'u'
         }
       })
 
       this.days.forEach((day) => {
         const dayDateString = day.date.toDateString()
-        day.hasDone = todosByDate[dayDateString]?.hasDone || false
-        day.hasUndone = todosByDate[dayDateString]?.hasUndone || false
+        day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
+       
       })
     },
 

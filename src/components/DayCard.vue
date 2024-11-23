@@ -9,8 +9,8 @@
       <div class="day__date">{{ day }}</div>
     </div>
     <div class="day__points">
-      <div v-if="hasDone" class="day__point day__done"></div>
-      <div v-if="hasUndone" class="day__point day__undone"></div>
+      <div v-if="dayTaskState.includes('d')" class="day__point day__done"></div>
+      <div v-if="dayTaskState.includes('u')" class="day__point day__undone"></div>
     </div>
   </div>
 </template>
@@ -22,14 +22,9 @@ export default {
       type: Date,
       required: true,
     },
-
-    hasDone: {
-      type: Boolean,
-      default: false,
-    },
-    hasUndone: {
-      type: Boolean,
-      default: false,
+    dayTaskState: {
+      type: String,
+      default: '',
     },
     isCurrent: {
       type: Boolean,

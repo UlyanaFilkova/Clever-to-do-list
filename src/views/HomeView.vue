@@ -13,7 +13,7 @@
       :registrationDate="registrationDate"
       @toggle-todo="handleToggleTodo"
     />
-    <BigButton />
+    <BigButton v-if="activeDayInThePast" />
   </div>
 </template>
 
@@ -38,6 +38,21 @@ export default {
       registrationDate: null,
     }
   },
+  computed: {
+    activeDayInThePast() {
+      if (!this.registrationDate) return false
+
+      const registrationDate = new Date(this.registrationDate)
+      const activeDayDate = new Date(registrationDate)
+      activeDayDate.setDate(activeDayDate.getDate() + this.activeDayIndex) // Прибавляем activeDayIndex к дате регистрации
+
+      const today = new Date()
+      today.setHours(0, 0, 0, 0) // Убираем время из сегодняшней даты
+      activeDayDate.setHours(0, 0, 0, 0) // Убираем время из даты активного дня
+
+      return activeDayDate >= today // Сравниваем даты
+    },
+  },
   async beforeCreate() {
     this.registrationDate = await todoService.getRegistrationDate()
     this.todos = await todoService.getTodos()
@@ -47,7 +62,9 @@ export default {
     const registrationDate = new Date(this.registrationDate)
     const differenceInTime = today.getTime() - registrationDate.getTime()
     const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // Конвертируем миллисекунды в дни
-
+    console.log(today)
+    console.log(registrationDate)
+    console.log(differenceInDays)
     // Убедитесь, что разница не меньше 0
     this.activeDayIndex = Math.max(differenceInDays, 0)
   },

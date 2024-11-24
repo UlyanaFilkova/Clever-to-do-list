@@ -1,21 +1,23 @@
 <template>
-  <div class="container">
-    <HomeHeader />
-    <CalendarList
-      :todos="todos"
-      :activeDayIndex="activeDayIndex"
-      :registrationDate="registrationDate"
-      @changeActiveDay="(index) => (activeDayIndex = index)"
-    />
-    <ToDoList
-      :todos="todos"
-      :activeDayIndex="activeDayIndex"
-      :registrationDate="registrationDate"
-      @toggle-todo="handleToggleTodo"
-      @delete-todo="handleDeleteTodo"
-    />
-    <BigButton v-if="activeDayInThePast" />
-  </div>
+  <keep-alive>
+    <div class="container">
+      <HomeHeader />
+      <CalendarList
+        :todos="todos"
+        :activeDayIndex="activeDayIndex"
+        :registrationDate="registrationDate"
+        @changeActiveDay="(index) => (activeDayIndex = index)"
+      />
+      <ToDoList
+        :todos="todos"
+        :activeDayIndex="activeDayIndex"
+        :registrationDate="registrationDate"
+        @toggle-todo="handleToggleTodo"
+        @delete-todo="handleDeleteTodo"
+      />
+      <BigButton v-if="activeDayInThePast" />
+    </div>
+  </keep-alive>
 </template>
 
 <script>
@@ -42,14 +44,6 @@ export default {
   async beforeCreate() {
     this.registrationDate = await todoService.getRegistrationDate()
     this.todos = await todoService.getTodos()
-
-    // set activeDayIndex to the difference between the current day and the registration day
-    // const today = new Date()
-    // const registrationDate = new Date(this.registrationDate)
-    // const differenceInTime = today.getTime() - registrationDate.getTime()
-    // const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // convert milliseconds into days
-
-    // this.activeDayIndex = Math.max(differenceInDays, 0)
   },
   computed: {
     activeDayInThePast() {

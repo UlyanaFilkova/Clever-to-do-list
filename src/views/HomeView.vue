@@ -6,7 +6,7 @@
         :todos="todos"
         :activeDayIndex="activeDayIndex"
         :registrationDate="registrationDate"
-        @changeActiveDay="(index) => (activeDayIndex = index)"
+        @changeActiveDay="changeActiveDay"
       />
       <ToDoList
         :todos="todos"
@@ -25,7 +25,7 @@ import CalendarList from '@/components/CalendarList.vue'
 import HomeHeader from '@/components/HomeHeader.vue'
 import ToDoList from '@/components/ToDoList.vue'
 import BigButton from '@/components/BigButton.vue'
-import todoService from '@/services/todo.js'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -34,18 +34,23 @@ export default {
     ToDoList,
     BigButton,
   },
-  data() {
-    return {
-      todos: [],
-      activeDayIndex: 0,
-      registrationDate: null,
-    }
-  },
-  async beforeCreate() {
-    this.registrationDate = await todoService.getRegistrationDate()
-    this.todos = await todoService.getTodos()
+  // data() {
+  //   return {
+  //     todos: [],
+  //     activeDayIndex: 0,
+  //     registrationDate: null,
+  //   }
+  // },
+  // async beforeCreate() {
+  //   this.registrationDate = await todoService.getRegistrationDate()
+  //   this.todos = await todoService.getTodos()
+  // },
+  async created() {
+    await this.fetchRegistrationDate()
+    await this.fetchTodos()
   },
   computed: {
+    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
     activeDayInThePast() {
       if (!this.registrationDate) return false
 
@@ -62,14 +67,26 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'fetchTodos',
+      'fetchRegistrationDate',
+      'updateTodoStatus',
+      'removeTodo',
+      'setActiveDayIndex',
+    ]),
+    changeActiveDay(index) {
+      this.setActiveDayIndex(index)
+    },
     async handleToggleTodo(todo) {
-      todo.isDone = !todo.isDone
-      await todoService.updateTodoStatus(todo.id, todo.isDone)
+   
+      await this.updateTodoStatus(todo)
+      // todo.isDone = !todo.isDone
+      // await todoService.updateTodoStatus(todo.id, todo.isDone)
     },
     async handleDeleteTodo(todo) {
-      this.todos = this.todos.filter((t) => t.id !== todo.id)
-
-      await todoService.deleteTodo(todo.id)
+      // this.todos = this.todos.filter((t) => t.id !== todo.id)
+      // await todoService.deleteTodo(todo.id)
+      await this.removeTodo(todo.id)
     },
   },
 }

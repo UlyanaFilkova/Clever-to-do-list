@@ -72,9 +72,11 @@ export default {
         this.days.push({ date: nextDay })
       }
 
+      // set currentDayIndex and activeDayIndex
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
+      this.$emit('changeActiveDay', this.currentDayIndex)
     },
 
     updateDays() {

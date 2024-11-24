@@ -39,6 +39,18 @@ export default {
       registrationDate: null,
     }
   },
+  async beforeCreate() {
+    this.registrationDate = await todoService.getRegistrationDate()
+    this.todos = await todoService.getTodos()
+
+    // set activeDayIndex to the difference between the current day and the registration day
+    // const today = new Date()
+    // const registrationDate = new Date(this.registrationDate)
+    // const differenceInTime = today.getTime() - registrationDate.getTime()
+    // const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // convert milliseconds into days
+
+    // this.activeDayIndex = Math.max(differenceInDays, 0)
+  },
   computed: {
     activeDayInThePast() {
       if (!this.registrationDate) return false
@@ -54,18 +66,7 @@ export default {
       return activeDayDate >= today
     },
   },
-  async beforeCreate() {
-    this.registrationDate = await todoService.getRegistrationDate()
-    this.todos = await todoService.getTodos()
 
-    // set activeDayIndex to the difference between the current day and the registration day
-    const today = new Date()
-    const registrationDate = new Date(this.registrationDate)
-    const differenceInTime = today.getTime() - registrationDate.getTime()
-    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // convert milliseconds into days
-
-    this.activeDayIndex = Math.max(differenceInDays, 0)
-  },
   methods: {
     async handleToggleTodo(todo) {
       todo.isDone = !todo.isDone

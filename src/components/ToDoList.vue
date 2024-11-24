@@ -6,6 +6,7 @@
       :key="index"
       :todo="todo"
       @toggle-todo="$emit('toggle-todo', todo)"
+      @delete-todo="$emit('delete-todo', todo)"
     />
   </div>
 </template>

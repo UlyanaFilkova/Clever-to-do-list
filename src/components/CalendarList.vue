@@ -66,11 +66,12 @@ export default {
         this.days.push({ date: new Date(d) })
       }
       // Generate days from current date to 30 days later
-      for (let i = 1; i < 30; i++) {
+      for (let i = 0; i < 30; i++) {
         const nextDay = new Date(today)
         nextDay.setDate(today.getDate() + i)
         this.days.push({ date: nextDay })
       }
+
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )

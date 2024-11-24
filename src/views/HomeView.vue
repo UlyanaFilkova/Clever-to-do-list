@@ -12,6 +12,7 @@
       :activeDayIndex="activeDayIndex"
       :registrationDate="registrationDate"
       @toggle-todo="handleToggleTodo"
+      @delete-todo="handleDeleteTodo"
     />
     <BigButton v-if="activeDayInThePast" />
   </div>
@@ -44,34 +45,36 @@ export default {
 
       const registrationDate = new Date(this.registrationDate)
       const activeDayDate = new Date(registrationDate)
-      activeDayDate.setDate(activeDayDate.getDate() + this.activeDayIndex) // Прибавляем activeDayIndex к дате регистрации
+      activeDayDate.setDate(activeDayDate.getDate() + this.activeDayIndex)
 
       const today = new Date()
-      today.setHours(0, 0, 0, 0) // Убираем время из сегодняшней даты
-      activeDayDate.setHours(0, 0, 0, 0) // Убираем время из даты активного дня
+      today.setHours(0, 0, 0, 0)
+      activeDayDate.setHours(0, 0, 0, 0)
 
-      return activeDayDate >= today // Сравниваем даты
+      return activeDayDate >= today
     },
   },
   async beforeCreate() {
     this.registrationDate = await todoService.getRegistrationDate()
     this.todos = await todoService.getTodos()
 
-    // Устанавливаем activeDayIndex как разницу между текущим днем и днем регистрации
+    // set activeDayIndex to the difference between the current day and the registration day
     const today = new Date()
     const registrationDate = new Date(this.registrationDate)
     const differenceInTime = today.getTime() - registrationDate.getTime()
-    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // Конвертируем миллисекунды в дни
-    console.log(today)
-    console.log(registrationDate)
-    console.log(differenceInDays)
-    // Убедитесь, что разница не меньше 0
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // convert milliseconds into days
+
     this.activeDayIndex = Math.max(differenceInDays, 0)
   },
   methods: {
     async handleToggleTodo(todo) {
       todo.isDone = !todo.isDone
       await todoService.updateTodoStatus(todo.id, todo.isDone)
+    },
+    async handleDeleteTodo(todo) {
+      this.todos = this.todos.filter((t) => t.id !== todo.id)
+
+      await todoService.deleteTodo(todo.id)
     },
   },
 }

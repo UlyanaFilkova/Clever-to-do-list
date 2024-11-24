@@ -5,6 +5,7 @@ import {
   getDocs,
   getDoc,
   updateDoc,
+  deleteDoc,
   doc,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 
@@ -26,7 +27,7 @@ export default {
       })
       return tasks
     } catch (error) {
-      console.error(error)
+      console.error('Error getting todos: ', error)
     }
   },
   async updateTodoStatus(todoId, isDone) {
@@ -37,7 +38,21 @@ export default {
     try {
       await updateDoc(todoDocRef, { isDone })
       return true
-    } catch {
+    } catch (error) {
+      console.error('Error updating todo status: ', error)
+      return false
+    }
+  },
+  async deleteTodo(todoId) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+    const todoDocRef = doc(todosCollection, todoId)
+
+    try {
+      await deleteDoc(todoDocRef)
+      return true
+    } catch (error) {
+      console.error('Error deleting todo: ', error)
       return false
     }
   },

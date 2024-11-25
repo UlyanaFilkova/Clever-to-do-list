@@ -71,6 +71,19 @@ export default {
       return null
     }
   },
+  async updateTodo(todoId, newTodo) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+    const todoDocRef = doc(todosCollection, todoId)
+
+    try {
+      await updateDoc(todoDocRef, {
+        ...newTodo,
+      })
+    } catch (error) {
+      console.error('Error updating todo: ', error)
+    }
+  },
   async getRegistrationDate() {
     const userDocRef = doc(usersCollection, userId)
     const userDoc = await getDoc(userDocRef)

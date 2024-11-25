@@ -8,10 +8,12 @@
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
-    <input type="checkbox" :name="checkboxInput.name" v-model="checkboxInput.value" />
+    <input type="checkbox" :name="checkboxInput.name" v-model="checkboxInput.model" />
     <label for="isDone">is Done</label><br /><br />
 
-    <button @click="handleAddTodo" :disabled="isAddButtonDisabled">Add Todo</button>
+    <button @click="handleAddTodo" :disabled="isAddButtonDisabled">
+      {{ this.currentTodo ? 'Update Todo' : 'Add new Todo' }}
+    </button>
   </div>
 </template>
 <script>
@@ -32,7 +34,7 @@ export default {
     inputFields() {
       return [
         {
-          model: this.currentTodo ? this.currentTodo.title : 'New Todo',
+          model: this.currentTodo ? this.currentTodo.title : '',
           placeholder: 'Title',
           name: 'title',
         },
@@ -44,27 +46,34 @@ export default {
       ]
     },
     checkboxInput() {
-      return { name: 'isDone', value: this.currentTodo ? this.currentTodo.isDone : false }
+      return { name: 'isDone', model: this.currentTodo ? this.currentTodo.isDone : false }
     },
   },
 
   methods: {
-    ...mapActions(['addTodo, clearCurrentTodo']),
-    handleAddTodo() {
+    ...mapActions(['addTodo', 'updateTodo', 'clearCurrentTodo']),
+    async handleAddTodo() {
       const newTodo = {
         title: this.inputFields[0].model,
         description: this.inputFields[1].model,
-        date: new Date(),
-        isDone: false,
+        isDone: this.checkboxInput.model,
       }
-      this.addTodo(newTodo)
-
+      if (this.currentTodo) {
+        // edit current todo
+        newTodo.date = this.currentTodo.date
+        await this.updateTodo(newTodo)
+      } else {
+        // add new todo
+        newTodo.date = new Date()
+        await this.addTodo(newTodo)
+      }
       // Reset input fields after adding
       this.inputFields.forEach((field) => {
         field.model = ''
       })
 
       this.clearCurrentTodo()
+     
       this.$router.push({ name: 'home' })
     },
   },

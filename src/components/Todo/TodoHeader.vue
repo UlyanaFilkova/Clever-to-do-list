@@ -1,5 +1,5 @@
 <template>
-  <router-link to="home" class="back-button">
+  <router-link to="home" class="back-button" @click="this.clearCurrentTodo()">
     <div class="back-button__icon">
       <svg
         version="1.1"
@@ -38,7 +38,14 @@
     Back
   </router-link>
 </template>
-<script></script>
+<script>
+import { mapActions } from 'vuex'
+export default {
+  methods: {
+    ...mapActions(['clearCurrentTodo']),
+  },
+}
+</script>
 
 <style scoped>
 .back-button {

@@ -40,7 +40,7 @@ export default {
       await this.removeTodo(todo.id)
     },
     async openTodo(todo) {
-      this.setCurrentTodo(todo)
+      await this.setCurrentTodo(todo)
       this.$router.push({ name: 'todo' })
     },
   },

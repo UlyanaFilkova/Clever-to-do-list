@@ -35,6 +35,12 @@ const store = createStore({
     addTodo(state, todo) {
       state.todos.push(todo)
     },
+    updateTodo(state, newTodo) {
+      const oldTodo = state.todos.find((t) => t.id === newTodo.id)
+      if (oldTodo) {
+        Object.assign(oldTodo, newTodo)
+      }
+    },
     setCurrentTodo(state, todo) {
       state.currentTodo = todo
       localStorage.setItem('currentTodo', JSON.stringify(todo))
@@ -65,11 +71,17 @@ const store = createStore({
       commit('addTodo', todo)
       await todoService.addTodo(todo)
     },
+    async updateTodo({ commit, state }, newTodo) {
+      commit('updateTodo', newTodo)
+      await todoService.updateTodo(state.currentTodo.id, newTodo)
+    },
     setActiveDate({ commit }, date) {
       commit('setActiveDate', date)
     },
-    setCurrentTodo({ commit }, todo) {
+    setCurrentTodo({ commit, state }, todo) {
+      console.log('before clearing:', state.currentTodo)
       commit('setCurrentTodo', todo)
+      console.log('Current Todo after clearing:', state.currentTodo)
     },
     clearCurrentTodo({ commit }) {
       commit('clearCurrentTodo')

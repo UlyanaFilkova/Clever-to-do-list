@@ -52,16 +52,20 @@ export default {
 
     async calculateDays() {
       const today = new Date()
+      today.setHours(0, 0, 0, 0)
 
       // Generate days from registration date to current date
       for (let d = new Date(this.registrationDate); d < today; d.setDate(d.getDate() + 1)) {
         this.days.push({ date: new Date(d) })
+        console.log(new Date(d))
       }
+      console.log('today:')
       // Generate days from current date to 30 days later
       for (let i = 0; i < 30; i++) {
         const nextDay = new Date(today)
         nextDay.setDate(today.getDate() + i)
         this.days.push({ date: nextDay })
+        console.log(nextDay)
       }
 
       // set currentDayIndex and activeDayIndex

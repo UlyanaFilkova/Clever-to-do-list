@@ -92,6 +92,10 @@ export default {
 .todo__title {
   cursor: pointer;
 }
+.todo__delete {
+  width: 16px;
+  height: 16px;
+}
 .todo__delete svg {
   display: none;
   width: 16px;

@@ -49,6 +49,24 @@ const store = createStore({
       state.currentTodo = null
       localStorage.removeItem('currentTodo')
     },
+    moveTasksToToday(state, { goalTodo, today }) {
+      // const index = state.todos.findIndex((t) => t.id === goalTodo.id)
+      // console.log(state.todos[index])
+      // if (index !== -1) {
+      //   // Создаем новый объект задачи с обновленной датой
+      //   const updatedTodo = {
+      //     ...state.todos[index],
+      //     date: today,
+      //   }
+      //   console.log(updatedTodo)
+      //   // Заменяем старую задачу на новую
+      //   state.todos.splice(index, 1, updatedTodo)
+      // }
+      state.todos.find((todo) => todo.id === goalTodo.id).date = new Date(today)
+      // if (todo) {
+      //   todo.date = today
+      // }
+    },
   },
   actions: {
     async fetchTodos({ commit }) {
@@ -83,6 +101,26 @@ const store = createStore({
     },
     clearCurrentTodo({ commit }) {
       commit('clearCurrentTodo')
+    },
+    async moveTasksToToday({ commit, state }) {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+
+      await Promise.all(
+        state.todos.map(async (todo) => {
+          if (
+            new Date(todo.date.seconds * 1000).toDateString() === state.activeDate.toDateString()
+          ) {
+            commit('moveTasksToToday', { goalTodo: todo, today })
+            try {
+              await todoService.updateTodo(todo.id, { ...todo, date: today })
+            } catch (error) {
+              console.error(`Error updating task with ID ${todo.id}:`, error)
+            }
+          }
+        }),
+      )
+      commit('setActiveDate', today)
     },
   },
 })

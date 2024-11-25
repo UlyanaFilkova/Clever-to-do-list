@@ -1,6 +1,9 @@
 <template>
   <div class="todo-list__container">
-    <h2>{{ filteredTodos.length }} Tasks</h2>
+    <div class="todo-list__header">
+      <h2>{{ filteredTodos.length }} Tasks</h2>
+      <button class="todo-list__move-tasks" @click="moveTasksToToday()">Move tasks to today</button>
+    </div>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"
       :key="index"
@@ -23,6 +26,8 @@ export default {
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate']),
     filteredTodos() {
+      // console.log(this.todos)
+      // console.log(this.activeDate)
       const targetDateString = this.activeDate?.toDateString()
       return this.todos.filter((todo) => {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString()
@@ -30,8 +35,9 @@ export default {
       })
     },
   },
+
   methods: {
-    ...mapActions(['updateTodoStatus', 'removeTodo', 'setCurrentTodo']),
+    ...mapActions(['updateTodoStatus', 'removeTodo', 'setCurrentTodo', 'moveTasksToToday']),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },
@@ -52,5 +58,9 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.todo-list__header {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

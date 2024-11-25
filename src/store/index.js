@@ -4,9 +4,9 @@ import todoService from '@/services/todo.js'
 const store = createStore({
   state: {
     todos: [],
-    // activeDayIndex: 0,
     activeDate: null,
     registrationDate: null,
+    currentTodo: null,
   },
   mutations: {
     setTodos(state, todos) {
@@ -30,6 +30,12 @@ const store = createStore({
     addTodo(state, todo) {
       state.todos.push(todo)
     },
+    setCurrentTodo(state, todo) {
+      state.currentTodo = todo
+    },
+    clearCurrentTodo(state) {
+      state.currentTodo = null
+    },
   },
   actions: {
     async fetchTodos({ commit }) {
@@ -52,11 +58,14 @@ const store = createStore({
       commit('addTodo', todo)
       await todoService.addTodo(todo)
     },
-    // setActiveDayIndex({ commit }, index) {
-    //   commit('setActiveDayIndex', index)
-    // },
     setActiveDate({ commit }, date) {
       commit('setActiveDate', date)
+    },
+    setCurrentTodo({ commit }, todo) {
+      commit('setCurrentTodo', todo)
+    },
+    clearCurrentTodo({ commit }) {
+      commit('clearCurrentTodo')
     },
   },
 })

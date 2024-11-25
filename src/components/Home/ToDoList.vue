@@ -7,6 +7,7 @@
       :todo="todo"
       @toggle-todo="toggleTodo(todo)"
       @delete-todo="deleteTodo(todo)"
+      @click="openTodo(todo)"
     />
   </div>
 </template>
@@ -30,13 +31,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['updateTodoStatus', 'removeTodo']),
+    ...mapActions(['updateTodoStatus', 'removeTodo', 'setCurrentTodo']),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },
 
     async deleteTodo(todo) {
       await this.removeTodo(todo.id)
+    },
+    async openTodo(todo) {
+      this.setCurrentTodo(todo)
+      this.$router.push({ name: 'todo' })
     },
   },
 }

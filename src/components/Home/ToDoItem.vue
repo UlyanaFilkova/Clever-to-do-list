@@ -4,7 +4,7 @@
       <div
         class="todo__indicator"
         :class="{ todo__indicator_done: todo.isDone }"
-        @click="$emit('toggle-todo', todo)"
+        @click.stop="$emit('toggle-todo', todo)"
       >
         <svg
           v-if="todo.isDone"
@@ -19,7 +19,7 @@
       </div>
       <div class="todo__title">{{ todo.title }}</div>
     </div>
-    <button class="todo__delete" @click="$emit('delete-todo', todo)">
+    <button class="todo__delete" @click.stop="$emit('delete-todo', todo)">
       <svg
         version="1.1"
         id="Capa_1"
@@ -67,7 +67,7 @@ export default {
 .todo__container:hover {
   background-color: #ffebdf;
 }
-.todo__main-part{
+.todo__main-part {
   display: flex;
   gap: 15px;
   align-items: center;
@@ -92,18 +92,18 @@ export default {
 .todo__title {
   cursor: pointer;
 }
-.todo__delete svg{
+.todo__delete svg {
   display: none;
   width: 16px;
   height: 16px;
   fill: #fe2d2d;
   stroke: #fe2d2d;
 }
-.todo__delete:hover svg{
+.todo__delete:hover svg {
   fill: #d80000;
   stroke: #d80000;
 }
-.todo__container:hover .todo__delete svg{
+.todo__container:hover .todo__delete svg {
   display: block;
 }
 </style>

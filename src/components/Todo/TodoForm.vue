@@ -8,6 +8,9 @@
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
+    <input type="checkbox" name="isDone" v-model="checkboxInput.isDone" />
+    <label for="isDone">is Done</label><br /><br />
+
     <button @click="handleAddTodo" :disabled="isAddButtonDisabled">Add Todo</button>
   </div>
 </template>
@@ -19,44 +22,52 @@ export default {
   components: {
     CustomInput,
   },
-  // props: {
-  //   todo: {
-  //     type: Object,
-  //     default: () => ({
-  //       title: '',
-  //       description: '',
-  //       date: new Date(),
-  //       isDone: false,
-  //     }),
-  //   },
-  // },
   computed: {
-    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
+    ...mapState(['todos', 'activeDate', 'registrationDate', 'currentTodo']),
     isAddButtonDisabled() {
       // if both fields are empty
       return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
     },
-  },
 
-  data() {
-    return {
-      inputFields: [
+    inputFields() {
+      return [
         {
-          model: '',
+          model: this.currentTodo ? this.currentTodo.title : 'New Todo',
           placeholder: 'Title',
           name: 'title',
         },
         {
-          model: '',
+          model: this.currentTodo ? this.currentTodo.description : '',
           placeholder: 'Description',
           name: 'description',
         },
-      ],
-    }
+      ]
+    },
+    checkboxInput() {
+      return { isDone: this.currentTodo ? this.currentTodo.isDone : false }
+    },
   },
-  
+
+  data() {
+    // console.log(this.currentTodo)
+    // return {
+    //   inputFields: [
+    //     {
+    //       model: this.currentTodo ? this.currentTodo.title : 'New Todo',
+    //       placeholder: 'Title',
+    //       name: 'title',
+    //     },
+    //     {
+    //       model: this.currentTodo ? this.currentTodo.title : '',
+    //       placeholder: 'Description',
+    //       name: 'description',
+    //     },
+    //   ],
+    // }
+  },
+
   methods: {
-    ...mapActions(['addTodo']),
+    ...mapActions(['addTodo, clearCurrentTodo']),
     handleAddTodo() {
       const newTodo = {
         title: this.inputFields[0].model,
@@ -70,6 +81,9 @@ export default {
       this.inputFields.forEach((field) => {
         field.model = ''
       })
+
+      this.clearCurrentTodo()
+      this.$router.push({ name: 'home' })
     },
   },
 }

@@ -1,51 +1,17 @@
 <template>
   <div class="container">
     <TodoHeader />
-    <CustomInput
-      v-for="(field, index) in inputFields"
-      :key="index"
-      :modelValue="field.model"
-      :placeholder="field.placeholder"
-      :name="field.name"
-      @update:modelValue="(value) => (field.model = value)"
-    ></CustomInput>
+    <TodoForm />
   </div>
 </template>
 <script>
 import TodoHeader from '@/components/Todo/TodoHeader.vue'
-import CustomInput from '@/components/Todo/CustomInput.vue'
+import TodoForm from '@/components/Todo/TodoForm.vue'
 
 export default {
   components: {
     TodoHeader,
-    CustomInput,
-  },
-  props: {
-    todo: {
-      type: Object,
-      default: () => ({
-        title: '',
-        description: '',
-        date: new Date(),
-        isDone: false,
-      }),
-    },
-  },
-  data() {
-    return {
-      inputFields: [
-        {
-          model: '',
-          placeholder: 'Title',
-          name: 'title',
-        },
-        {
-          model: '',
-          placeholder: 'Description',
-          name: 'description',
-        },
-      ],
-    }
+    TodoForm,
   },
 }
 </script>

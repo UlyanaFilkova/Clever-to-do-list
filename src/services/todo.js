@@ -2,6 +2,7 @@ import { firebase } from '@/services/firebase.config.js'
 import {
   collection,
   query,
+  addDoc,
   getDocs,
   getDoc,
   updateDoc,
@@ -54,6 +55,20 @@ export default {
     } catch (error) {
       console.error('Error deleting todo: ', error)
       return false
+    }
+  },
+  async addTodo(todo) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+
+    try {
+      const docRef = await addDoc(todosCollection, {
+        ...todo,
+      })
+      return docRef.id
+    } catch (error) {
+      console.error('Error adding todo: ', error)
+      return null
     }
   },
   async getRegistrationDate() {

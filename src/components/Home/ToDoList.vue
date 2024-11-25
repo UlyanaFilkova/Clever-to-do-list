@@ -20,13 +20,9 @@ export default {
   },
 
   computed: {
-    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
+    ...mapState(['todos', 'activeDate', 'registrationDate']),
     filteredTodos() {
-      const targetDate = new Date(this.registrationDate)
-      targetDate.setDate(targetDate.getDate() + this.activeDayIndex)
-
-      const targetDateString = targetDate.toDateString()
-
+      const targetDateString = this.activeDate?.toDateString()
       return this.todos.filter((todo) => {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString()
         return todoDate === targetDateString

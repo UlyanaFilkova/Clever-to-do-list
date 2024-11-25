@@ -28,20 +28,16 @@ export default {
     await this.fetchTodos()
   },
   computed: {
-    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
+    ...mapState(['todos', 'activeDate', 'registrationDate']),
 
     // determined if add-new-task button should be shown
     activeDayInThePast() {
-      if (!this.registrationDate) return false
-
-      const registrationDate = new Date(this.registrationDate)
-      const activeDayDate = new Date(registrationDate)
-      activeDayDate.setDate(activeDayDate.getDate() + this.activeDayIndex)
-
+      if (!this.activeDate) return false
       const today = new Date()
+      const activeDayDate = new Date(this.activeDate)
+
       today.setHours(0, 0, 0, 0)
       activeDayDate.setHours(0, 0, 0, 0)
-
       return activeDayDate >= today
     },
   },

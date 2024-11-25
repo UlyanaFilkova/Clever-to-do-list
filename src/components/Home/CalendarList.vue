@@ -6,8 +6,8 @@
       :date="day.date"
       :dayTaskState="day.dayTaskState"
       :isCurrent="index === currentDayIndex"
-      :isActive="index === activeDayIndex"
-      @click="changeActiveDay(index)"
+      :isActive="day.date.toDateString() === activeDate.toDateString()"
+      @click="changeActiveDate(day.date)"
       ref="dayCards"
     />
   </div>
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
+    ...mapState(['todos', 'activeDate', 'registrationDate']),
   },
   watch: {
     todos: {
@@ -41,7 +41,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchTodos', 'setActiveDayIndex']),
+    ...mapActions(['fetchTodos', 'setActiveDate']),
     async getDays() {
       await this.calculateDays()
       this.updateDays()
@@ -57,23 +57,21 @@ export default {
       // Generate days from registration date to current date
       for (let d = new Date(this.registrationDate); d < today; d.setDate(d.getDate() + 1)) {
         this.days.push({ date: new Date(d) })
-        console.log(new Date(d))
       }
-      console.log('today:')
+
       // Generate days from current date to 30 days later
       for (let i = 0; i < 30; i++) {
         const nextDay = new Date(today)
         nextDay.setDate(today.getDate() + i)
         this.days.push({ date: nextDay })
-        console.log(nextDay)
       }
 
       // set currentDayIndex and activeDayIndex
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
+      this.setActiveDate(today)
 
-      this.setActiveDayIndex(this.currentDayIndex)
     },
 
     updateDays() {
@@ -98,8 +96,8 @@ export default {
       })
     },
 
-    changeActiveDay(index) {
-      this.setActiveDayIndex(index)
+    changeActiveDate(date) {
+      this.setActiveDate(date)
     },
 
     handleWheel(event) {

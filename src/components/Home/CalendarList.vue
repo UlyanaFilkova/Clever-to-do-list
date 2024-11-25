@@ -53,9 +53,11 @@ export default {
     async calculateDays() {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
+      const registDayWithoutTime = new Date(this.registrationDate)
+      registDayWithoutTime.setHours(0, 0, 0, 0)
 
       // Generate days from registration date to current date
-      for (let d = new Date(this.registrationDate); d < today; d.setDate(d.getDate() + 1)) {
+      for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
         this.days.push({ date: new Date(d) })
       }
 
@@ -70,8 +72,7 @@ export default {
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
-      this.setActiveDate(today)
-
+      if (!this.activeDate) this.setActiveDate(today)
     },
 
     updateDays() {
@@ -127,9 +128,13 @@ export default {
       requestAnimationFrame(animateScroll) // Запускаем анимацию
     },
     scrollToCurrentDay() {
-      const currentDayCard = this.$refs.dayCards[this.currentDayIndex]
-      if (currentDayCard) {
-        currentDayCard.$el.scrollIntoView({
+      const activeDateIndex = this.days.findIndex(
+        (day) => day.date.toDateString() === this.activeDate.toDateString(),
+      )
+
+      const activeDayCard = this.$refs.dayCards[activeDateIndex]
+      if (activeDayCard) {
+        activeDayCard.$el.scrollIntoView({
           inline: 'center',
         })
       }

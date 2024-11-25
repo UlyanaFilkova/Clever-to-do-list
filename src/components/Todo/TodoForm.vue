@@ -64,7 +64,7 @@ export default {
     ...mapActions(['addTodo', 'updateTodo', 'clearCurrentTodo']),
     async handleAddTodo() {
       const newTodo = {
-        title: this.inputFields[0].model,
+        title: this.inputFields[0].model ? this.inputFields[0].model: 'New task',
         description: this.inputFields[1].model,
         isDone: this.checkboxInput.model,
       }
@@ -74,7 +74,7 @@ export default {
         await this.updateTodo(newTodo)
       } else {
         // add new todo
-        newTodo.date = new Date()
+        newTodo.date = this.activeDate
         await this.addTodo(newTodo)
       }
       // Reset input fields after adding

@@ -78,10 +78,8 @@ const store = createStore({
     setActiveDate({ commit }, date) {
       commit('setActiveDate', date)
     },
-    setCurrentTodo({ commit, state }, todo) {
-      console.log('before clearing:', state.currentTodo)
+    setCurrentTodo({ commit }, todo) {
       commit('setCurrentTodo', todo)
-      console.log('Current Todo after clearing:', state.currentTodo)
     },
     clearCurrentTodo({ commit }) {
       commit('clearCurrentTodo')

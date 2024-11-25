@@ -1,5 +1,5 @@
 <template>
-  <router-link to="home" class="back-button" @click="this.clearCurrentTodo()">
+  <router-link to="home" class="back-button" @click="clearCurrentTodo()">
     <div class="back-button__icon">
       <svg
         version="1.1"
@@ -37,12 +37,22 @@
     </div>
     Back
   </router-link>
+  <button class="delete-button" @click="handleDeleteTodo()">Delete</button>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['currentTodo']),
+  },
   methods: {
-    ...mapActions(['clearCurrentTodo']),
+    ...mapActions(['removeTodo', 'clearCurrentTodo']),
+    async handleDeleteTodo() {
+      console.log(this.currentTodo)
+      await this.removeTodo(this.currentTodo.id)
+      this.clearCurrentTodo()
+      this.$router.push({ name: 'home' })
+    },
   },
 }
 </script>

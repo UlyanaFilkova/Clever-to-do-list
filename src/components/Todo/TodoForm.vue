@@ -8,7 +8,7 @@
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
-    <input type="checkbox" name="isDone" v-model="checkboxInput.isDone" />
+    <input type="checkbox" :name="checkboxInput.name" v-model="checkboxInput.value" />
     <label for="isDone">is Done</label><br /><br />
 
     <button @click="handleAddTodo" :disabled="isAddButtonDisabled">Add Todo</button>
@@ -44,26 +44,8 @@ export default {
       ]
     },
     checkboxInput() {
-      return { isDone: this.currentTodo ? this.currentTodo.isDone : false }
+      return { name: 'isDone', value: this.currentTodo ? this.currentTodo.isDone : false }
     },
-  },
-
-  data() {
-    // console.log(this.currentTodo)
-    // return {
-    //   inputFields: [
-    //     {
-    //       model: this.currentTodo ? this.currentTodo.title : 'New Todo',
-    //       placeholder: 'Title',
-    //       name: 'title',
-    //     },
-    //     {
-    //       model: this.currentTodo ? this.currentTodo.title : '',
-    //       placeholder: 'Description',
-    //       name: 'description',
-    //     },
-    //   ],
-    // }
   },
 
   methods: {

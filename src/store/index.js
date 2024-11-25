@@ -1,12 +1,17 @@
 import { createStore } from 'vuex'
 import todoService from '@/services/todo.js'
 
+const getInitialState = () => {
+  const savedTodo = localStorage.getItem('currentTodo')
+  return savedTodo ? JSON.parse(savedTodo) : null
+}
+
 const store = createStore({
   state: {
     todos: [],
     activeDate: null,
     registrationDate: null,
-    currentTodo: null,
+    currentTodo: getInitialState(),
   },
   mutations: {
     setTodos(state, todos) {
@@ -32,9 +37,11 @@ const store = createStore({
     },
     setCurrentTodo(state, todo) {
       state.currentTodo = todo
+      localStorage.setItem('currentTodo', JSON.stringify(todo))
     },
     clearCurrentTodo(state) {
       state.currentTodo = null
+      localStorage.removeItem('currentTodo')
     },
   },
   actions: {

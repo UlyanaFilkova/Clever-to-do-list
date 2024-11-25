@@ -11,27 +11,14 @@
   </div>
 </template>
 <script>
-import ToDoItem from '@/components/ToDoItem.vue'
+import ToDoItem from './ToDoItem.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
     ToDoItem,
   },
-  // props: {
-  //   todos: {
-  //     type: Array,
-  //     required: true,
-  //   },
-  //   activeDayIndex: {
-  //     type: Number,
-  //     default: 0,
-  //   },
-  //   registrationDate: {
-  //     type: Date,
-  //     default: new Date(),
-  //   },
-  // },
+
   computed: {
     ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
     filteredTodos() {

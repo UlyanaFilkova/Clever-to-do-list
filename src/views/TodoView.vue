@@ -12,8 +12,8 @@
   </div>
 </template>
 <script>
-import TodoHeader from '@/components/TodoHeader.vue'
-import CustomInput from '@/components/CustomInput.vue'
+import TodoHeader from '@/components/Todo/TodoHeader.vue'
+import CustomInput from '@/components/Todo/CustomInput.vue'
 
 export default {
   components: {

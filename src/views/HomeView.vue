@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import CalendarList from '@/components/CalendarList.vue'
-import HomeHeader from '@/components/HomeHeader.vue'
-import ToDoList from '@/components/ToDoList.vue'
-import BigButton from '@/components/BigButton.vue'
+import CalendarList from '@/components/Home/CalendarList.vue'
+import HomeHeader from '@/components/Home/HomeHeader.vue'
+import ToDoList from '@/components/Home/ToDoList.vue'
+import BigButton from '@/components/Home/BigButton.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -23,17 +23,6 @@ export default {
     ToDoList,
     BigButton,
   },
-  // data() {
-  //   return {
-  //     todos: [],
-  //     activeDayIndex: 0,
-  //     registrationDate: null,
-  //   }
-  // },
-  // async beforeCreate() {
-  //   this.registrationDate = await todoService.getRegistrationDate()
-  //   this.todos = await todoService.getTodos()
-  // },
   async created() {
     await this.fetchRegistrationDate()
     await this.fetchTodos()
@@ -58,27 +47,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'fetchTodos',
-      'fetchRegistrationDate',
-      // 'updateTodoStatus',
-      // 'removeTodo',
-      // 'setActiveDayIndex',
-    ]),
-    // changeActiveDay(index) {
-    //   this.setActiveDayIndex(index)
-    // },
-    // async handleToggleTodo(todo) {
-
-    //   await this.updateTodoStatus(todo)
-    //   // todo.isDone = !todo.isDone
-    //   // await todoService.updateTodoStatus(todo.id, todo.isDone)
-    // },
-    // async handleDeleteTodo(todo) {
-    //   // this.todos = this.todos.filter((t) => t.id !== todo.id)
-    //   // await todoService.deleteTodo(todo.id)
-    //   await this.removeTodo(todo.id)
-    // },
+    ...mapActions(['fetchTodos', 'fetchRegistrationDate']),
   },
 }
 </script>

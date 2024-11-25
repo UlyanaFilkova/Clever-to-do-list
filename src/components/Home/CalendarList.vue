@@ -15,26 +15,13 @@
 
 <script>
 import DayCard from './DayCard.vue'
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
     DayCard,
   },
-  // props: {
-  //   todos: {
-  //     type: Array,
-  //     required: true,
-  //   },
-  //   activeDayIndex: {
-  //     type: Number,
-  //     default: 0,
-  //   },
-  //   registrationDate: {
-  //     type: Date,
-  //     default: new Date(),
-  //   },
-  // },
+
   data() {
     return {
       // array of objects: {date, dayTaskState}
@@ -81,8 +68,8 @@ export default {
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
-      // this.$emit('changeActiveDay', this.currentDayIndex)
-      this.setActiveDayIndex(this.currentDayIndex);
+
+      this.setActiveDayIndex(this.currentDayIndex)
     },
 
     updateDays() {
@@ -108,7 +95,7 @@ export default {
     },
 
     changeActiveDay(index) {
-      this.setActiveDayIndex(index); 
+      this.setActiveDayIndex(index)
     },
 
     handleWheel(event) {

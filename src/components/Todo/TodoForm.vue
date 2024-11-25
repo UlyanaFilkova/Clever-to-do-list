@@ -24,30 +24,69 @@ export default {
   components: {
     CustomInput,
   },
+  data() {
+    return {
+      inputFields: [
+        {
+          model: '',
+          placeholder: 'Title',
+          name: 'title',
+        },
+        {
+          model: '',
+          placeholder: 'Description',
+          name: 'description',
+        },
+      ],
+      checkboxInput: {
+        name: 'isDone',
+        model: false,
+      },
+    }
+  },
+  mounted() {
+    if (this.currentTodo) {
+      this.inputFields[0].model = this.currentTodo.title
+      this.inputFields[1].model = this.currentTodo.description
+      this.checkboxInput.model = this.currentTodo.isDone
+    }
+  },
+
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate', 'currentTodo']),
+    // watch:{
+    //   currentTodo: {
+    //     this.inputFields.model[0] = this.currentTodo.title
+    //   }
+    // },
+    // currentFields() {
+    //   return {
+    //     title: this.currentTodo ? this.currentTodo.title : '',
+    //     description: this.currentTodo ? this.currentTodo.description : '',
+    //   }
+    // },
     isAddButtonDisabled() {
       // if both fields are empty
       return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
     },
 
-    inputFields() {
-      return [
-        {
-          model: this.currentTodo ? this.currentTodo.title : '',
-          placeholder: 'Title',
-          name: 'title',
-        },
-        {
-          model: this.currentTodo ? this.currentTodo.description : '',
-          placeholder: 'Description',
-          name: 'description',
-        },
-      ]
-    },
-    checkboxInput() {
-      return { name: 'isDone', model: this.currentTodo ? this.currentTodo.isDone : false }
-    },
+    // inputFields() {
+    //   return [
+    //     {
+    //       model: this.currentTodo ? this.currentTodo.title : '',
+    //       placeholder: 'Title',
+    //       name: 'title',
+    //     },
+    //     {
+    //       model: this.currentTodo ? this.currentTodo.description : '',
+    //       placeholder: 'Description',
+    //       name: 'description',
+    //     },
+    //   ]
+    // },
+    // checkboxInput() {
+    //   return { name: 'isDone', model: this.currentTodo ? this.currentTodo.isDone : false }
+    // },
   },
 
   methods: {
@@ -73,7 +112,7 @@ export default {
       })
 
       this.clearCurrentTodo()
-     
+
       this.$router.push({ name: 'home' })
     },
   },

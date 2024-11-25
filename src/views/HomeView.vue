@@ -1,12 +1,10 @@
 <template>
-  <keep-alive>
-    <div class="container">
-      <HomeHeader />
-      <CalendarList />
-      <ToDoList />
-      <BigButton v-if="activeDayInThePast" />
-    </div>
-  </keep-alive>
+  <div class="container">
+    <HomeHeader />
+    <CalendarList />
+    <ToDoList />
+    <BigButton v-if="activeDayInThePast" />
+  </div>
 </template>
 
 <script>
@@ -25,6 +23,9 @@ export default {
   },
   async created() {
     await this.fetchRegistrationDate()
+    await this.fetchTodos()
+  },
+  async activated() {
     await this.fetchTodos()
   },
   computed: {

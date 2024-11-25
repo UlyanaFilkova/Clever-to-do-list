@@ -7,7 +7,7 @@
       :dayTaskState="day.dayTaskState"
       :isCurrent="index === currentDayIndex"
       :isActive="index === activeDayIndex"
-      @click="this.$emit('changeActiveDay', index)"
+      @click="changeActiveDay(index)"
       ref="dayCards"
     />
   </div>
@@ -15,31 +15,35 @@
 
 <script>
 import DayCard from './DayCard.vue'
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
     DayCard,
   },
-  props: {
-    todos: {
-      type: Array,
-      required: true,
-    },
-    activeDayIndex: {
-      type: Number,
-      default: 0,
-    },
-    registrationDate: {
-      type: Date,
-      default: new Date(),
-    },
-  },
+  // props: {
+  //   todos: {
+  //     type: Array,
+  //     required: true,
+  //   },
+  //   activeDayIndex: {
+  //     type: Number,
+  //     default: 0,
+  //   },
+  //   registrationDate: {
+  //     type: Date,
+  //     default: new Date(),
+  //   },
+  // },
   data() {
     return {
       // array of objects: {date, dayTaskState}
       days: [],
       currentDayIndex: 0,
     }
+  },
+  computed: {
+    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
   },
   watch: {
     todos: {
@@ -50,6 +54,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['fetchTodos', 'setActiveDayIndex']),
     async getDays() {
       await this.calculateDays()
       this.updateDays()
@@ -76,7 +81,8 @@ export default {
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
-      this.$emit('changeActiveDay', this.currentDayIndex)
+      // this.$emit('changeActiveDay', this.currentDayIndex)
+      this.setActiveDayIndex(this.currentDayIndex);
     },
 
     updateDays() {
@@ -99,6 +105,10 @@ export default {
         const dayDateString = day.date.toDateString()
         day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
       })
+    },
+
+    changeActiveDay(index) {
+      this.setActiveDayIndex(index); 
     },
 
     handleWheel(event) {

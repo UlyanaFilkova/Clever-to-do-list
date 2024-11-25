@@ -5,36 +5,38 @@
       v-for="(todo, index) in filteredTodos"
       :key="index"
       :todo="todo"
-      @toggle-todo="$emit('toggle-todo', todo)"
-      @delete-todo="$emit('delete-todo', todo)"
+      @toggle-todo="toggleTodo(todo)"
+      @delete-todo="deleteTodo(todo)"
     />
   </div>
 </template>
 <script>
 import ToDoItem from '@/components/ToDoItem.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
     ToDoItem,
   },
-  props: {
-    todos: {
-      type: Array,
-      required: true,
-    },
-    activeDayIndex: {
-      type: Number,
-      default: 0,
-    },
-    registrationDate: {
-      type: Date,
-      default: new Date(),
-    },
-  },
+  // props: {
+  //   todos: {
+  //     type: Array,
+  //     required: true,
+  //   },
+  //   activeDayIndex: {
+  //     type: Number,
+  //     default: 0,
+  //   },
+  //   registrationDate: {
+  //     type: Date,
+  //     default: new Date(),
+  //   },
+  // },
   computed: {
+    ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
     filteredTodos() {
-      const targetDate = new Date(this.registrationDate) 
-      targetDate.setDate(targetDate.getDate() + this.activeDayIndex) 
+      const targetDate = new Date(this.registrationDate)
+      targetDate.setDate(targetDate.getDate() + this.activeDayIndex)
 
       const targetDateString = targetDate.toDateString()
 
@@ -42,6 +44,16 @@ export default {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString()
         return todoDate === targetDateString
       })
+    },
+  },
+  methods: {
+    ...mapActions(['updateTodoStatus', 'removeTodo']),
+    async toggleTodo(todo) {
+      await this.updateTodoStatus(todo)
+    },
+
+    async deleteTodo(todo) {
+      await this.removeTodo(todo.id)
     },
   },
 }

@@ -2,19 +2,8 @@
   <keep-alive>
     <div class="container">
       <HomeHeader />
-      <CalendarList
-        :todos="todos"
-        :activeDayIndex="activeDayIndex"
-        :registrationDate="registrationDate"
-        @changeActiveDay="changeActiveDay"
-      />
-      <ToDoList
-        :todos="todos"
-        :activeDayIndex="activeDayIndex"
-        :registrationDate="registrationDate"
-        @toggle-todo="handleToggleTodo"
-        @delete-todo="handleDeleteTodo"
-      />
+      <CalendarList />
+      <ToDoList />
       <BigButton v-if="activeDayInThePast" />
     </div>
   </keep-alive>
@@ -51,6 +40,8 @@ export default {
   },
   computed: {
     ...mapState(['todos', 'activeDayIndex', 'registrationDate']),
+
+    // determined if add-new-task button should be shown
     activeDayInThePast() {
       if (!this.registrationDate) return false
 
@@ -70,24 +61,24 @@ export default {
     ...mapActions([
       'fetchTodos',
       'fetchRegistrationDate',
-      'updateTodoStatus',
-      'removeTodo',
-      'setActiveDayIndex',
+      // 'updateTodoStatus',
+      // 'removeTodo',
+      // 'setActiveDayIndex',
     ]),
-    changeActiveDay(index) {
-      this.setActiveDayIndex(index)
-    },
-    async handleToggleTodo(todo) {
-   
-      await this.updateTodoStatus(todo)
-      // todo.isDone = !todo.isDone
-      // await todoService.updateTodoStatus(todo.id, todo.isDone)
-    },
-    async handleDeleteTodo(todo) {
-      // this.todos = this.todos.filter((t) => t.id !== todo.id)
-      // await todoService.deleteTodo(todo.id)
-      await this.removeTodo(todo.id)
-    },
+    // changeActiveDay(index) {
+    //   this.setActiveDayIndex(index)
+    // },
+    // async handleToggleTodo(todo) {
+
+    //   await this.updateTodoStatus(todo)
+    //   // todo.isDone = !todo.isDone
+    //   // await todoService.updateTodoStatus(todo.id, todo.isDone)
+    // },
+    // async handleDeleteTodo(todo) {
+    //   // this.todos = this.todos.filter((t) => t.id !== todo.id)
+    //   // await todoService.deleteTodo(todo.id)
+    //   await this.removeTodo(todo.id)
+    // },
   },
 }
 </script>

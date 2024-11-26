@@ -55,8 +55,16 @@ export default {
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate', 'currentTodo']),
     isAddButtonDisabled() {
-      // if both fields are empty
-      return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
+      if (this.currentTodo) {
+        return (
+          this.inputFields[0].model.trim() === this.currentTodo.title &&
+          this.inputFields[1].model.trim() === this.currentTodo.description &&
+          this.checkboxInput.model === this.currentTodo.isDone
+        )
+      } else {
+        // if both fields are empty
+        return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
+      }
     },
   },
 
@@ -64,7 +72,7 @@ export default {
     ...mapActions(['addTodo', 'updateTodo', 'clearCurrentTodo']),
     async handleAddTodo() {
       const newTodo = {
-        title: this.inputFields[0].model ? this.inputFields[0].model: 'New task',
+        title: this.inputFields[0].model ? this.inputFields[0].model : 'New task',
         description: this.inputFields[1].model,
         isDone: this.checkboxInput.model,
       }

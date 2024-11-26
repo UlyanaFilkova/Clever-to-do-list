@@ -2,7 +2,9 @@
   <div class="todo-list__container">
     <div class="todo-list__header">
       <h2>{{ filteredTodos.length }} Tasks</h2>
-      <button class="todo-list__move-tasks" @click="moveTasksToToday()">Move tasks to today</button>
+      <button class="todo-list__move-tasks" @click="moveTasksToToday()" v-if="activeDayInThePast">
+        Move tasks to today
+      </button>
     </div>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"
@@ -16,7 +18,7 @@
 </template>
 <script>
 import ToDoItem from './ToDoItem.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -25,6 +27,7 @@ export default {
 
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate']),
+    ...mapGetters(['activeDayInThePast']),
     filteredTodos() {
       // console.log(this.todos)
       // console.log(this.activeDate)

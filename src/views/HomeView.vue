@@ -3,7 +3,7 @@
     <HomeHeader />
     <CalendarList />
     <ToDoList />
-    <BigButton v-if="activeDayInThePast" />
+    <BigButton v-if="!activeDayInThePast" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import CalendarList from '@/components/Home/CalendarList.vue'
 import HomeHeader from '@/components/Home/HomeHeader.vue'
 import ToDoList from '@/components/Home/ToDoList.vue'
 import BigButton from '@/components/Home/BigButton.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -30,17 +30,7 @@ export default {
   },
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate']),
-
-    // determined if add-new-task button should be shown
-    activeDayInThePast() {
-      if (!this.activeDate) return false
-      const today = new Date()
-      const activeDayDate = new Date(this.activeDate)
-
-      today.setHours(0, 0, 0, 0)
-      activeDayDate.setHours(0, 0, 0, 0)
-      return activeDayDate >= today
-    },
+    ...mapGetters(['activeDayInThePast']),
   },
 
   methods: {

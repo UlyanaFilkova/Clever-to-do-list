@@ -121,6 +121,18 @@ const store = createStore({
         }),
       )
       commit('setActiveDate', today)
+      this.$router.push({ name: 'home' })
+    },
+  },
+  getters: {
+    activeDayInThePast(state) {
+      if (!state.activeDate) return false
+      const today = new Date()
+      const activeDayDate = new Date(state.activeDate)
+
+      today.setHours(0, 0, 0, 0)
+      activeDayDate.setHours(0, 0, 0, 0)
+      return activeDayDate < today
     },
   },
 })

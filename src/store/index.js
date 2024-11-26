@@ -120,8 +120,7 @@ const store = createStore({
           }
         }),
       )
-      commit('setActiveDate', today)
-      this.$router.push({ name: 'home' })
+      // commit('setActiveDate', today)
     },
   },
   getters: {

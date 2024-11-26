@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import todoService from '@/services/todo.js'
 
-const getInitialState = () => {
+const getCurrentTodo = () => {
   const savedTodo = localStorage.getItem('currentTodo')
   return savedTodo ? JSON.parse(savedTodo) : null
 }
@@ -9,9 +9,9 @@ const getInitialState = () => {
 const store = createStore({
   state: {
     todos: [],
+    currentTodo: getCurrentTodo(),
     activeDate: null,
     registrationDate: null,
-    currentTodo: getInitialState(),
   },
   mutations: {
     setTodos(state, todos) {
@@ -50,22 +50,7 @@ const store = createStore({
       localStorage.removeItem('currentTodo')
     },
     moveTasksToToday(state, { goalTodo, today }) {
-      // const index = state.todos.findIndex((t) => t.id === goalTodo.id)
-      // console.log(state.todos[index])
-      // if (index !== -1) {
-      //   // Создаем новый объект задачи с обновленной датой
-      //   const updatedTodo = {
-      //     ...state.todos[index],
-      //     date: today,
-      //   }
-      //   console.log(updatedTodo)
-      //   // Заменяем старую задачу на новую
-      //   state.todos.splice(index, 1, updatedTodo)
-      // }
       state.todos.find((todo) => todo.id === goalTodo.id).date = new Date(today)
-      // if (todo) {
-      //   todo.date = today
-      // }
     },
   },
   actions: {

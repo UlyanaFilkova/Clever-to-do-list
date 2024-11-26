@@ -1,12 +1,16 @@
 <template>
   <header class="header">
     <h2>To-do List</h2>
-    <button @click="logout" class="exit-button">Logout</button>
+    <SmallButton @click="logout" text="Logout"></SmallButton>
   </header>
 </template>
 
 <script>
+import SmallButton from '@/components/SmallButton.vue'
 export default {
+  components: {
+    SmallButton,
+  },
   methods: {
     logout() {
       localStorage.removeItem('userId')
@@ -22,14 +26,5 @@ export default {
   align-items: center;
   margin: 30px 0 20px 0;
   padding-top: 0px;
-}
-
-.exit-button {
-  padding: 7px 10px;
-  border-radius: 5px;
-  background: #ffae80;
-}
-.exit-button:hover {
-  background: #ff8a47;
 }
 </style>

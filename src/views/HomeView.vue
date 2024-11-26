@@ -3,7 +3,7 @@
     <HomeHeader />
     <CalendarList />
     <ToDoList />
-    <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task"/>
+    <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task" />
   </div>
 </template>
 
@@ -21,23 +21,19 @@ export default {
     ToDoList,
     BigButton,
   },
-  async created() {
-    await this.fetchRegistrationDate()
-    await this.fetchTodos()
-  },
-  async activated() {
-    await this.fetchTodos()
-  },
   computed: {
     ...mapState(['todos', 'activeDate', 'registrationDate']),
     ...mapGetters(['activeDayInThePast']),
   },
-
   methods: {
     ...mapActions(['fetchTodos', 'fetchRegistrationDate']),
     handleAddClick() {
       this.$router.push({ name: 'todo' })
     },
+  },
+  created() {
+    this.fetchRegistrationDate()
+    this.fetchTodos()
   },
 }
 </script>

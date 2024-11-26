@@ -35,8 +35,6 @@ export default {
     ...mapState(['todos', 'activeDate', 'registrationDate']),
     ...mapGetters(['activeDayInThePast']),
     filteredTodos() {
-      // console.log(this.todos)
-      // console.log(this.activeDate)
       const targetDateString = this.activeDate?.toDateString()
       return this.todos.filter((todo) => {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString()

@@ -24,7 +24,6 @@ export default {
 
   data() {
     return {
-      // array of objects: {date, dayTaskState}
       days: [],
       currentDayIndex: 0,
     }

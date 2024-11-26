@@ -1,5 +1,5 @@
 <template>
-  <button class="medium-button">{{ text }}</button>
+  <button class="medium-button" :disabled="disabled">{{ text }}</button>
 </template>
 
 <script>
@@ -8,6 +8,10 @@ export default {
     text: {
       type: String,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 }
@@ -26,5 +30,9 @@ export default {
 }
 .medium-button:hover {
   background-color: #d74f00;
+}
+.medium-button:disabled {
+  background-color: #808080;
+  cursor: auto;
 }
 </style>

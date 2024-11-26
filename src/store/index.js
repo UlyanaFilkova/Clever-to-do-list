@@ -1,17 +1,26 @@
 import { createStore } from 'vuex'
 import todoService from '@/services/todo.js'
 
-const getCurrentTodo = () => {
-  const savedTodo = localStorage.getItem('currentTodo')
-  return savedTodo ? JSON.parse(savedTodo) : null
-}
-
 const store = createStore({
   state: {
     todos: [],
-    currentTodo: getCurrentTodo(),
     activeDate: null,
     registrationDate: null,
+  },
+  getters: {
+    currentTodo() {
+      const savedTodo = localStorage.getItem('currentTodo')
+      return savedTodo ? JSON.parse(savedTodo) : null
+    },
+    activeDayInThePast(state) {
+      if (!state.activeDate) return false
+      const today = new Date()
+      const activeDayDate = new Date(state.activeDate)
+
+      today.setHours(0, 0, 0, 0)
+      activeDayDate.setHours(0, 0, 0, 0)
+      return activeDayDate < today
+    },
   },
   mutations: {
     setTodos(state, todos) {
@@ -107,18 +116,7 @@ const store = createStore({
       )
       // commit('setActiveDate', today)
     },
-  },
-  getters: {
-    activeDayInThePast(state) {
-      if (!state.activeDate) return false
-      const today = new Date()
-      const activeDayDate = new Date(state.activeDate)
-
-      today.setHours(0, 0, 0, 0)
-      activeDayDate.setHours(0, 0, 0, 0)
-      return activeDayDate < today
-    },
-  },
+  }
 })
 
 export default store

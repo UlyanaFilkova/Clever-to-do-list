@@ -39,7 +39,7 @@ export default {
 
 <style scoped>
 .input-group {
-  margin: 15px 0 15px 0;
+  margin: 15px 0 20px 0;
 }
 input {
   width: 100%;

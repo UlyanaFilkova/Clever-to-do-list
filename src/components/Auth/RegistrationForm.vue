@@ -141,16 +141,20 @@ h1 {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #fb6914;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d74f00;
+}
+button:disabled {
+  background-color: #808080;
+  cursor: auto;
 }
 .invalid-input {
   font-size: 12px;

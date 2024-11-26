@@ -42,14 +42,14 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import SmallButton from '@/components/SmallButton.vue'
 export default {
   components: {
     SmallButton,
   },
   computed: {
-    ...mapState(['currentTodo']),
+    ...mapGetters(['currentTodo']),
   },
   methods: {
     ...mapActions(['removeTodo', 'clearCurrentTodo']),

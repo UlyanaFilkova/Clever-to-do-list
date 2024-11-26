@@ -38,7 +38,6 @@ export default {
         {
           model: '',
           type: 'email',
-          // type: 'text',
           placeholder: 'Email',
           name: 'username',
           autocomplete: 'username',

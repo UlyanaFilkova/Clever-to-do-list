@@ -5,12 +5,10 @@
       :key="index"
       :modelValue="field.model"
       :placeholder="field.placeholder"
+      :type="field.type"
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
-    <input type="checkbox" :name="checkboxInput.name" v-model="checkboxInput.model" />
-    <label for="isDone">is Done</label><br /><br />
-
     <button @click="handleAddTodo" :disabled="isAddButtonDisabled">
       {{ this.currentTodo ? 'Update Todo' : 'Add new Todo' }}
     </button>
@@ -31,24 +29,28 @@ export default {
           model: '',
           placeholder: 'Title',
           name: 'title',
+          type: 'text',
         },
         {
           model: '',
           placeholder: 'Description',
           name: 'description',
+          type: 'textarea',
+        },
+        {
+          model: false,
+          placeholder: 'is done',
+          name: 'isDone',
+          type: 'checkbox',
         },
       ],
-      checkboxInput: {
-        name: 'isDone',
-        model: false,
-      },
     }
   },
   mounted() {
     if (this.currentTodo) {
       this.inputFields[0].model = this.currentTodo.title
       this.inputFields[1].model = this.currentTodo.description
-      this.checkboxInput.model = this.currentTodo.isDone
+      this.inputFields[2].model = this.currentTodo.isDone
     }
   },
 
@@ -59,7 +61,7 @@ export default {
         return (
           this.inputFields[0].model.trim() === this.currentTodo.title &&
           this.inputFields[1].model.trim() === this.currentTodo.description &&
-          this.checkboxInput.model === this.currentTodo.isDone
+          this.inputFields[2].model === this.currentTodo.isDone
         )
       } else {
         // if both fields are empty
@@ -74,7 +76,7 @@ export default {
       const newTodo = {
         title: this.inputFields[0].model ? this.inputFields[0].model : 'New task',
         description: this.inputFields[1].model,
-        isDone: this.checkboxInput.model,
+        isDone: this.inputFields[2].model,
       }
       if (this.currentTodo) {
         // edit current todo
@@ -89,6 +91,7 @@ export default {
       this.inputFields.forEach((field) => {
         field.model = ''
       })
+      this.inputFields[2].model = false
 
       this.clearCurrentTodo()
 

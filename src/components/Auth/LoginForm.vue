@@ -16,12 +16,12 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit">Login</button>
+    <button type="submit" :disabled="submitButtonDisabled">Login</button>
   </form>
 </template>
 
 <script>
-import FormInput from '@/components/FormInput.vue'
+import FormInput from '@/components/Auth/FormInput.vue'
 import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { checkUser } from '@/services/auth.js'
@@ -37,8 +37,8 @@ export default {
       inputFields: [
         {
           model: '',
-          // type: 'email',
-          type: 'text',
+          type: 'email',
+          // type: 'text',
           placeholder: 'Email',
           name: 'username',
           autocomplete: 'username',
@@ -60,8 +60,8 @@ export default {
   validations() {
     return {
       validationFields: {
-        // username: { required, email },
-        // password: { required, minLength: minLength(6) },
+        username: { required, email },
+        password: { required, minLength: minLength(6) },
       },
     }
   },
@@ -71,6 +71,12 @@ export default {
         username: this.inputFields[0].model,
         password: this.inputFields[1].model,
       }
+    },
+    submitButtonDisabled() {
+      return (
+        this.v$.validationFields.username.required.$invalid ||
+        this.v$.validationFields.password.required.$invalid
+      )
     },
   },
   methods: {

@@ -1,28 +1,18 @@
 <template>
   <div class="container">
     <HomeHeader />
-    <CalendarList
-      :todos="todos"
-      :activeDayIndex="activeDayIndex"
-      :registrationDate="registrationDate"
-      @changeActiveDay="(index) => (activeDayIndex = index)"
-    />
-    <ToDoList
-      :todos="todos"
-      :activeDayIndex="activeDayIndex"
-      :registrationDate="registrationDate"
-      @toggle-todo="handleToggleTodo"
-    />
-    <BigButton />
+    <CalendarList />
+    <ToDoList />
+    <BigButton v-if="!activeDayInThePast" />
   </div>
 </template>
 
 <script>
-import CalendarList from '@/components/CalendarList.vue'
-import HomeHeader from '@/components/HomeHeader.vue'
-import ToDoList from '@/components/ToDoList.vue'
-import BigButton from '@/components/BigButton.vue'
-import todoService from '@/services/todo.js'
+import CalendarList from '@/components/Home/CalendarList.vue'
+import HomeHeader from '@/components/Home/HomeHeader.vue'
+import ToDoList from '@/components/Home/ToDoList.vue'
+import BigButton from '@/components/Home/BigButton.vue'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -31,31 +21,20 @@ export default {
     ToDoList,
     BigButton,
   },
-  data() {
-    return {
-      todos: [],
-      activeDayIndex: 0,
-      registrationDate: null,
-    }
+  async created() {
+    await this.fetchRegistrationDate()
+    await this.fetchTodos()
   },
-  async beforeCreate() {
-    this.registrationDate = await todoService.getRegistrationDate()
-    this.todos = await todoService.getTodos()
-
-    // Устанавливаем activeDayIndex как разницу между текущим днем и днем регистрации
-    const today = new Date()
-    const registrationDate = new Date(this.registrationDate)
-    const differenceInTime = today.getTime() - registrationDate.getTime()
-    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24)) // Конвертируем миллисекунды в дни
-
-    // Убедитесь, что разница не меньше 0
-    this.activeDayIndex = Math.max(differenceInDays, 0)
+  async activated() {
+    await this.fetchTodos()
   },
+  computed: {
+    ...mapState(['todos', 'activeDate', 'registrationDate']),
+    ...mapGetters(['activeDayInThePast']),
+  },
+
   methods: {
-    async handleToggleTodo(todo) {
-      todo.isDone = !todo.isDone
-      await todoService.updateTodoStatus(todo.id, todo.isDone)
-    },
+    ...mapActions(['fetchTodos', 'fetchRegistrationDate']),
   },
 }
 </script>

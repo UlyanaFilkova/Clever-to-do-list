@@ -16,12 +16,12 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit">Register</button>
+    <button type="submit" :disabled="submitButtonDisabled">Register</button>
   </form>
 </template>
 
 <script>
-import FormInput from '@/components/FormInput.vue'
+import FormInput from '@/components/Auth/FormInput.vue'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { registerUser, checkUsernameExists } from '@/services/auth.js'
@@ -82,6 +82,13 @@ export default {
         repeatPassword: this.inputFields[2].model,
       }
     },
+    submitButtonDisabled() {
+      return (
+        this.v$.validationFields.username.required.$invalid ||
+        this.v$.validationFields.password.required.$invalid ||
+        this.v$.validationFields.repeatPassword.required.$invalid
+      )
+    },
   },
   methods: {
     async handleSubmit() {
@@ -118,7 +125,7 @@ export default {
           this.inputFields[1].model = ''
           this.inputFields[2].model = ''
           return
-        } 
+        }
       }
     },
   },

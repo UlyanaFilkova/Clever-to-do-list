@@ -6,8 +6,8 @@
       :date="day.date"
       :dayTaskState="day.dayTaskState"
       :isCurrent="index === currentDayIndex"
-      :isActive="index === activeDayIndex"
-      @click="this.$emit('changeActiveDay', index)"
+      :isActive="day.date.toDateString() === activeDate.toDateString()"
+      @click="changeActiveDate(day.date)"
       ref="dayCards"
     />
   </div>
@@ -15,31 +15,22 @@
 
 <script>
 import DayCard from './DayCard.vue'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
     DayCard,
   },
-  props: {
-    todos: {
-      type: Array,
-      required: true,
-    },
-    activeDayIndex: {
-      type: Number,
-      default: 0,
-    },
-    registrationDate: {
-      type: Date,
-      default: new Date(),
-    },
-  },
+
   data() {
     return {
       // array of objects: {date, dayTaskState}
       days: [],
       currentDayIndex: 0,
     }
+  },
+  computed: {
+    ...mapState(['todos', 'activeDate', 'registrationDate']),
   },
   watch: {
     todos: {
@@ -50,6 +41,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['fetchTodos', 'setActiveDate']),
     async getDays() {
       await this.calculateDays()
       this.updateDays()
@@ -60,20 +52,27 @@ export default {
 
     async calculateDays() {
       const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const registDayWithoutTime = new Date(this.registrationDate)
+      registDayWithoutTime.setHours(0, 0, 0, 0)
 
       // Generate days from registration date to current date
-      for (let d = new Date(this.registrationDate); d < today; d.setDate(d.getDate() + 1)) {
+      for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
         this.days.push({ date: new Date(d) })
       }
+
       // Generate days from current date to 30 days later
-      for (let i = 1; i < 30; i++) {
+      for (let i = 0; i < 30; i++) {
         const nextDay = new Date(today)
         nextDay.setDate(today.getDate() + i)
         this.days.push({ date: nextDay })
       }
+
+      // set currentDayIndex and activeDayIndex
       this.currentDayIndex = this.days.findIndex(
         (day) => day.date.toDateString() === today.toDateString(),
       )
+      if (!this.activeDate) this.setActiveDate(today)
     },
 
     updateDays() {
@@ -96,6 +95,10 @@ export default {
         const dayDateString = day.date.toDateString()
         day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
       })
+    },
+
+    changeActiveDate(date) {
+      this.setActiveDate(date)
     },
 
     handleWheel(event) {
@@ -125,9 +128,13 @@ export default {
       requestAnimationFrame(animateScroll) // Запускаем анимацию
     },
     scrollToCurrentDay() {
-      const currentDayCard = this.$refs.dayCards[this.currentDayIndex]
-      if (currentDayCard) {
-        currentDayCard.$el.scrollIntoView({
+      const activeDateIndex = this.days.findIndex(
+        (day) => day.date.toDateString() === this.activeDate.toDateString(),
+      )
+
+      const activeDayCard = this.$refs.dayCards[activeDateIndex]
+      if (activeDayCard) {
+        activeDayCard.$el.scrollIntoView({
           inline: 'center',
         })
       }

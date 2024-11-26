@@ -2,9 +2,11 @@ import { firebase } from '@/services/firebase.config.js'
 import {
   collection,
   query,
+  addDoc,
   getDocs,
   getDoc,
   updateDoc,
+  deleteDoc,
   doc,
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 
@@ -26,7 +28,7 @@ export default {
       })
       return tasks
     } catch (error) {
-      console.error(error)
+      console.error('Error getting todos: ', error)
     }
   },
   async updateTodoStatus(todoId, isDone) {
@@ -37,8 +39,49 @@ export default {
     try {
       await updateDoc(todoDocRef, { isDone })
       return true
-    } catch {
+    } catch (error) {
+      console.error('Error updating todo status: ', error)
       return false
+    }
+  },
+  async deleteTodo(todoId) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+    const todoDocRef = doc(todosCollection, todoId)
+
+    try {
+      await deleteDoc(todoDocRef)
+      return true
+    } catch (error) {
+      console.error('Error deleting todo: ', error)
+      return false
+    }
+  },
+  async addTodo(todo) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+
+    try {
+      const docRef = await addDoc(todosCollection, {
+        ...todo,
+      })
+      return docRef.id
+    } catch (error) {
+      console.error('Error adding todo: ', error)
+      return null
+    }
+  },
+  async updateTodo(todoId, newTodo) {
+    const userDocRef = doc(usersCollection, userId)
+    const todosCollection = collection(userDocRef, 'todos')
+    const todoDocRef = doc(todosCollection, todoId)
+
+    try {
+      await updateDoc(todoDocRef, {
+        ...newTodo,
+      })
+    } catch (error) {
+      console.error('Error updating todo: ', error)
     }
   },
   async getRegistrationDate() {

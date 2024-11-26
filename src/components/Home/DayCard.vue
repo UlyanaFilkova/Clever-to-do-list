@@ -79,19 +79,22 @@ export default {
   color: #eaeaea;
 }
 .day__card_current {
-  border: 1.5px solid #ffa876;
-  color: #fb6914;
-  background-color: #ffefe6;
+   border: 1.5px solid #d8d8d8;
+  background-color: #e2e2e2;
 }
 .day__card_current .day__dayOfWeek {
-  color: #fb6914;
+  color: #818181;
 }
 .day__card:hover {
   cursor: pointer;
 }
 .day__card:not(.day__card_active):hover {
   border: 1.5px solid #ffa876;
-  background-color: #ffefe6;
+  background-color: #ffebdf;
+}
+
+.day__card:not(.day__card_active):hover .day__dayOfWeek{
+  color:#fd5d00;;
 }
 
 .day__dayOfWeek {

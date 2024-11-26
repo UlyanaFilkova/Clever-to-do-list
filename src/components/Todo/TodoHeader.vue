@@ -38,15 +38,27 @@
       </div>
       Back
     </router-link>
-    <SmallButton v-if="currentTodo" @click="handleDeleteTodo()" text="Delete"></SmallButton>
+    <SmallButton v-if="currentTodo" @click="showModal = true" text="Delete"></SmallButton>
+    <ModalConfirmWindow
+      :isVisible="showModal"
+      @confirm="handleDeleteTodo"
+      @cancel="showModal = false"
+    />
   </div>
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import SmallButton from '@/components/SmallButton.vue'
+import ModalConfirmWindow from '@/components/ModalConfirmWindow.vue'
 export default {
   components: {
     SmallButton,
+    ModalConfirmWindow,
+  },
+  data() {
+    return {
+      showModal: false,
+    }
   },
   computed: {
     ...mapGetters(['currentTodo']),
@@ -74,12 +86,13 @@ export default {
   align-items: center;
   gap: 12px;
   font-size: 18px;
+  color: #652a00;
 }
 
 .back-button__icon svg {
   height: 24px;
   width: 24px;
-  fill: #000;
+  fill: #652a00;
 }
 .back-button:hover {
   color: #818181;

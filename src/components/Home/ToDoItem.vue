@@ -19,7 +19,7 @@
       </div>
       <div class="todo__title">{{ todo.title }}</div>
     </div>
-    <button class="todo__delete" @click.stop="$emit('delete-todo', todo)">
+    <button class="todo__delete" @click.stop="this.showModal = true">
       <svg
         version="1.1"
         id="Capa_1"
@@ -40,10 +40,16 @@
         </g>
       </svg>
     </button>
+    <ModalConfirmWindow
+      :isVisible="showModal"
+      @cancel="showModal = false"
+      @confirm="$emit('delete-todo', todo)"
+    />
   </div>
 </template>
 
 <script>
+import ModalConfirmWindow from '@/components/ModalConfirmWindow.vue'
 export default {
   props: {
     todo: {
@@ -51,6 +57,15 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showModal: false,
+    }
+  },
+  components: {
+    ModalConfirmWindow,
+  },
+  methods: {},
 }
 </script>
 

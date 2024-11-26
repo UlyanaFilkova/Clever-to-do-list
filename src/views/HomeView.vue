@@ -3,7 +3,7 @@
     <HomeHeader />
     <CalendarList />
     <ToDoList />
-    <BigButton v-if="!activeDayInThePast" />
+    <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task"/>
   </div>
 </template>
 
@@ -35,6 +35,9 @@ export default {
 
   methods: {
     ...mapActions(['fetchTodos', 'fetchRegistrationDate']),
+    handleAddClick() {
+      this.$router.push({ name: 'todo' })
+    },
   },
 }
 </script>

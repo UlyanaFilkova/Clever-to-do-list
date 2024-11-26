@@ -9,18 +9,24 @@
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
-    <button @click="handleAddTodo" :disabled="isAddButtonDisabled">
-      {{ this.currentTodo ? 'Update Todo' : 'Add new Todo' }}
-    </button>
+    <MediumButton
+      @click="handleAddTodo"
+      :disabled="isAddButtonDisabled"
+      :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
+    >
+      <!-- {{ this.currentTodo ? 'Update Todo' : 'Add new Todo' }} -->
+    </MediumButton>
   </div>
 </template>
 <script>
 import CustomInput from '@/components/Todo/CustomInput.vue'
+import MediumButton from '@/components/Todo/MediumButton.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
     CustomInput,
+    MediumButton,
   },
   data() {
     return {

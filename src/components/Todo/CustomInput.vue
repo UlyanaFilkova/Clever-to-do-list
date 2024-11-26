@@ -32,7 +32,6 @@
 export default {
   props: {
     modelValue: {
-      type: String,
       default: '',
     },
     placeholder: {
@@ -72,7 +71,7 @@ export default {
 }
 .input-group input[type='text']:focus,
 .input-group textarea:focus {
-  outline: 1.5px solid #bd9171;
+  outline: 1.5px solid #d7b7a0;
 }
 .checkbox-container {
   display: flex;

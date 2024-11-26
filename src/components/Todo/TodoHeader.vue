@@ -38,11 +38,7 @@
       </div>
       Back
     </router-link>
-    <SmallButton
-      v-if="currentTodo"
-      @click="handleDeleteTodo()"
-      text="Delete"
-    ></SmallButton>
+    <SmallButton v-if="currentTodo" @click="handleDeleteTodo()" text="Delete"></SmallButton>
   </div>
 </template>
 <script>
@@ -68,7 +64,7 @@ export default {
 
 <style scoped>
 .todo-header__container {
-  margin: 30px 0 20px 0;
+  margin: 30px 0 30px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

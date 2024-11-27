@@ -42,7 +42,7 @@
     </button>
     <ModalConfirmWindow
       :isVisible="showModal"
-      @cancel="showModal = false"
+      @cancel="this.showModal = false"
       @confirm="$emit('delete-todo', todo)"
     />
   </div>

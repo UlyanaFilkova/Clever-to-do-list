@@ -7,6 +7,7 @@
     >
       <div class="day__dayOfWeek">{{ dayOfWeek }}</div>
       <div class="day__date">{{ day }}</div>
+      <div class="day__month">{{ month }}</div>
     </div>
     <div class="day__points">
       <div v-if="dayTaskState.includes('d')" class="day__point day__done"></div>
@@ -42,6 +43,9 @@ export default {
     day() {
       return this.date.getDate()
     },
+    month() {
+      return this.date.toLocaleString('en-US', { month: 'short' })
+    },
   },
 }
 </script>
@@ -49,7 +53,7 @@ export default {
 <style scoped>
 .day__container {
   min-width: 50px;
-  width: 50px;
+  width: 60px;
   flex-shrink: 0;
 }
 .day__card {
@@ -59,11 +63,10 @@ export default {
   min-width: 50px;
   padding: 5px 7px;
   display: flex;
-  gap: 8px;
+  gap: 5px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 5px;
 }
 .day__card_active,
 .day__card_current.day__card_active {
@@ -75,14 +78,17 @@ export default {
   color: #fff;
 }
 .day__card_active .day__dayOfWeek,
-.day__card_current.day__card_active .day__dayOfWeek {
+.day__card_active .day__month,
+.day__card_current.day__card_active .day__dayOfWeek,
+.day__card_current.day__card_active .day__month {
   color: #eaeaea;
 }
 .day__card_current {
-   border: 1.5px solid #d8d8d8;
+  border: 1.5px solid #d8d8d8;
   background-color: #e2e2e2;
 }
-.day__card_current .day__dayOfWeek {
+.day__card_current .day__dayOfWeek,
+.day__card_current .day__month {
   color: #818181;
 }
 .day__card:hover {
@@ -93,15 +99,21 @@ export default {
   background-color: #ffebdf;
 }
 
-.day__card:not(.day__card_active):hover .day__dayOfWeek{
-  color:#fd5d00;;
+.day__card:not(.day__card_active):hover .day__dayOfWeek,
+.day__card:not(.day__card_active):hover .day__month {
+  color: #fd5d00;
 }
 
 .day__dayOfWeek {
   color: #a0a0a0;
+  font-size: 15px;
+}
+.day__month{
+  font-size: 14px;
+  color: #a0a0a0;
 }
 .day__date {
-  font-size: 20px;
+  font-size: 22px;
 }
 .day__points {
   display: flex;

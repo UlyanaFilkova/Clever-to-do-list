@@ -1,5 +1,6 @@
 <template>
   <div class="calendar__container" @wheel.prevent="handleWheel">
+    
     <DayCard
       v-for="(day, index) in days"
       :key="index"
@@ -99,13 +100,14 @@ export default {
       )
 
       const activeDayCard = this.$refs.dayCards[activeDateIndex]
+
       if (activeDayCard && activeDayCard.$el) {
         activeDayCard.$el.scrollIntoView({
           inline: 'center',
           behavior: 'auto',
         })
       }
-      this.setLoading(false)
+      // this.setLoading(false)
     },
   },
 }

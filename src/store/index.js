@@ -131,7 +131,7 @@ const store = createStore({
     },
     fetchDays({ commit, state }) {
       const days = []
-      const today = new Date(2024, 11, 25)
+      const today = new Date(2024, 25, 12)
       today.setHours(0, 0, 0, 0)
       const registDayWithoutTime = new Date(state.registrationDate)
 

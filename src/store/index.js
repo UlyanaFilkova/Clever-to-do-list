@@ -83,6 +83,12 @@ const store = createStore({
         day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
       })
     },
+    addDays(state, days) {
+      state.days.push(...days)
+    },
+    addPreviousDays(state, days) {
+      state.days.unshift(...days)
+    },
     setTodos(state, todos) {
       state.todos = todos
     },
@@ -131,14 +137,26 @@ const store = createStore({
     },
     fetchDays({ commit, state }) {
       const days = []
-      const today = new Date(2024, 25, 12)
+      const today = new Date()
       today.setHours(0, 0, 0, 0)
       const registDayWithoutTime = new Date(state.registrationDate)
-
       registDayWithoutTime.setHours(0, 0, 0, 0)
 
+      // Determine the start date of loading
+      let startDate
+      const thirtyDaysAgo = new Date(today)
+      thirtyDaysAgo.setDate(today.getDate() - 30)
+      thirtyDaysAgo.setHours(0, 0, 0, 0)
+
+      // If the registration date is not earlier than 30 days earlier than today's date
+      if (registDayWithoutTime >= thirtyDaysAgo) {
+        startDate = registDayWithoutTime
+      } else {
+        startDate = thirtyDaysAgo
+      }
+
       // Generate days from registration date to current date
-      for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
+      for (let d = startDate; d < today; d.setDate(d.getDate() + 1)) {
         days.push({ date: new Date(d) })
       }
 
@@ -161,8 +179,51 @@ const store = createStore({
       commit('setDays', days)
       commit('fetchDays')
     },
+
     setDays({ commit }) {
       commit('setDays')
+    },
+    loadNextDays({ commit, state }) {
+      const daysToAdd = []
+      let lastDay = state.days[state.days.length - 1].date
+      lastDay = new Date(lastDay)
+
+      // Генерируем 30 новых дней, начиная с следующего дня после последнего
+      for (let i = 1; i <= 30; i++) {
+        const nextDay = new Date(lastDay)
+        nextDay.setDate(lastDay.getDate() + i)
+        daysToAdd.push({ date: nextDay })
+      }
+
+      commit('addDays', daysToAdd) // Вызываем мутацию для добавления новых дней
+      commit('fetchDays')
+    },
+    loadPreviousDays({ commit, state }) {
+      const daysToAdd = []
+      let lastDay = state.days[0].date // Получаем первый день в массиве
+      lastDay = new Date(lastDay)
+      const registrationDate = new Date(state.registrationDate) // Дата регистрации
+
+      // Генерируем 30 новых дней, начиная с даты, которая на месяц раньше
+      for (let i = 30; i >= 1; i--) {
+        const previousDay = new Date(lastDay)
+        previousDay.setDate(lastDay.getDate() - i)
+
+        // Проверяем, не превышает ли день дату регистрации
+        if (previousDay >= registrationDate) {
+          daysToAdd.push({ date: previousDay, dayTaskState: '' }) // Инициализируем dayTaskState
+        }
+      }
+
+      commit('addPreviousDays', daysToAdd) // Вызываем мутацию для добавления новых дней
+      // change currentDayIndex
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const currentDayIndex = state.days.findIndex(
+        (day) => day.date.toDateString() === today.toDateString(),
+      )
+      commit('setCurrentDayIndex', currentDayIndex)
+      commit('fetchDays')
     },
     async fetchTodos({ commit }) {
       const todos = await todoService.getTodos()

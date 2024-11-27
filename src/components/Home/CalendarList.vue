@@ -1,6 +1,5 @@
 <template>
-  <div class="calendar__container" @wheel.prevent="handleWheel">
-    
+  <div class="calendar__container" @wheel.prevent="handleWheel" @scroll="handleScroll">
     <DayCard
       v-for="(day, index) in days"
       :key="index"
@@ -51,20 +50,42 @@ export default {
         }
       },
     },
-    activeDate: {
-      handler() {
-        this.$nextTick(() => {
-          this.scrollToCurrentDay()
-        })
-      },
-    },
+    // activeDate: {
+    //   handler() {
+    //     this.$nextTick(() => {
+    //       this.scrollToCurrentDay()
+    //     })
+    //   },
+    // },
   },
 
   methods: {
-    ...mapActions(['fetchTodos', 'setActiveDate', 'fetchDays', 'setLoading']),
+    ...mapActions([
+      'fetchTodos',
+      'setActiveDate',
+      'fetchDays',
+      'setLoading',
+      'loadNextDays',
+      'loadPreviousDays',
+    ]),
 
     changeActiveDate(date) {
       this.setActiveDate(date)
+    },
+    handleScroll(event) {
+      const container = event.target
+      const scrollLeft = container.scrollLeft
+      const scrollWidth = container.scrollWidth
+      const clientWidth = container.clientWidth
+
+      // Checking if the end of the container has been reached
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        this.loadNextDays()
+      }
+
+      if (scrollLeft <= 10) {
+        this.loadPreviousDays() // Call the method to load previous days
+      }
     },
 
     // for smooth scrolling of the calendar list using the mouse wheel

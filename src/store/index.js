@@ -38,22 +38,46 @@ const store = createStore({
       state.currentDayIndex = index
     },
     updateDay(state, todo) {
-      const todoDate = new Date(todo.date.seconds * 1000)
-
+      console.log(todo)
+      const todoDate = todo.date.seconds ? new Date(todo.date.seconds * 1000) : todo.date
+      console.log(todoDate)
+      const todosForDate = state.todos.filter(
+        (t) => new Date(t.date.seconds * 1000).toDateString() === todoDate.toDateString(),
+      )
       const dayToUpdate = state.days.find(
         (day) => day.date.toDateString() === todoDate.toDateString(),
       )
 
+      // const dayToUpdate = state.days.find(
+      //   (day) => day.date.toDateString() === todoDate.toDateString(),
+      // )
+
       if (dayToUpdate) {
-        if (!dayToUpdate.dayTaskState) {
-          dayToUpdate.dayTaskState = ''
-        }
+        // Перезаписываем dayTaskState, инициализируя его
+        dayToUpdate.dayTaskState = ''
+
+        // Обновляем состояние дня в зависимости от состояния всех задач
+        todosForDate.forEach((t) => {
+          if (t.isDone) {
+            dayToUpdate.dayTaskState += 'd' // задача завершена
+          } else {
+            dayToUpdate.dayTaskState += 'u' // задача не завершена
+          }
+        })
       }
-      if (todo.isDone) {
-        dayToUpdate.dayTaskState += 'd'
-      } else {
-        dayToUpdate.dayTaskState += 'u'
-      }
+      console.log(todosForDate)
+      console.log(dayToUpdate)
+
+      // if (dayToUpdate) {
+      //   if (!dayToUpdate.dayTaskState) {
+      //     dayToUpdate.dayTaskState = ''
+      //   }
+      // }
+      // if (todo.isDone) {
+      //   dayToUpdate.dayTaskState += 'd'
+      // } else {
+      //   dayToUpdate.dayTaskState += 'u'
+      // }
     },
     fetchDays(state) {
       const todosByDate = {}
@@ -91,8 +115,8 @@ const store = createStore({
         todo.isDone = !todo.isDone
       }
     },
-    deleteTodo(state, todoId) {
-      state.todos = state.todos.filter((t) => t.id !== todoId)
+    deleteTodo(state, todo) {
+      state.todos = state.todos.filter((t) => t.id !== todo.id)
     },
     addTodo(state, todo) {
       state.todos.push(todo)
@@ -170,9 +194,10 @@ const store = createStore({
       await todoService.updateTodoStatus(todo.id, todo.isDone)
       commit('updateDay', todo)
     },
-    async removeTodo({ commit }, todoId) {
-      commit('deleteTodo', todoId)
-      await todoService.deleteTodo(todoId)
+    async removeTodo({ commit }, todo) {
+      commit('deleteTodo', todo)
+      await todoService.deleteTodo(todo.id)
+      commit('updateDay', todo)
     },
     async addTodo({ commit }, todo) {
       commit('addTodo', todo)

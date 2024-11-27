@@ -50,7 +50,7 @@ export default {
     },
 
     async deleteTodo(todo) {
-      await this.removeTodo(todo.id)
+      await this.removeTodo(todo)
     },
     async openTodo(todo) {
       await this.setCurrentTodo(todo)

@@ -67,6 +67,7 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 5px;
 }
 .day__card_active,
 .day__card_current.day__card_active {
@@ -108,7 +109,7 @@ export default {
   color: #a0a0a0;
   font-size: 15px;
 }
-.day__month{
+.day__month {
   font-size: 14px;
   color: #a0a0a0;
 }

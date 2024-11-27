@@ -24,77 +24,100 @@ export default {
 
   data() {
     return {
-      days: [],
-      currentDayIndex: 0,
+      // days: [],
+      // currentDayIndex: 0,
     }
   },
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
+    ...mapState(['todos', 'days', 'activeDate', 'registrationDate', 'currentDayIndex']),
   },
   watch: {
-    todos: {
+    registrationDate: {
       handler() {
-        this.days.length === 0 ? this.getDays() : this.updateDays()
+        if (this.registrationDate) {
+          this.fetchDays()
+          // this.setDays()
+          // this.$nextTick(() => {
+          //   this.scrollToCurrentDay()
+          // })
+        }
       },
       deep: true,
     },
+    days: {
+      handler() {
+        if (this.days.length > 0) {
+          this.$nextTick(() => {
+            this.scrollToCurrentDay()
+          })
+        }
+      },
+    },
   },
+  // mounted() {
+  //   this.fetchDays()
+  //   this.setDays()
+  //   this.$nextTick(() => {
+  //     this.scrollToCurrentDay()
+  //   })
+  // },
   methods: {
-    ...mapActions(['fetchTodos', 'setActiveDate']),
-    async getDays() {
-      await this.calculateDays()
-      this.updateDays()
-      this.$nextTick(() => {
-        this.scrollToCurrentDay()
-      })
-    },
+    ...mapActions(['fetchTodos', 'setActiveDate', 'fetchDays']),
 
-    async calculateDays() {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const registDayWithoutTime = new Date(this.registrationDate)
-      registDayWithoutTime.setHours(0, 0, 0, 0)
+    // async getDays() {
+    //   // await this.calculateDays()
+    //   this.setDays()
+    //   this.$nextTick(() => {
+    //     this.scrollToCurrentDay()
+    //   })
+    // },
 
-      // Generate days from registration date to current date
-      for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
-        this.days.push({ date: new Date(d) })
-      }
+    // async calculateDays() {
+    // const today = new Date()
+    // today.setHours(0, 0, 0, 0)
+    // const registDayWithoutTime = new Date(this.registrationDate)
+    // registDayWithoutTime.setHours(0, 0, 0, 0)
 
-      // Generate days from current date to 30 days later
-      for (let i = 0; i < 30; i++) {
-        const nextDay = new Date(today)
-        nextDay.setDate(today.getDate() + i)
-        this.days.push({ date: nextDay })
-      }
+    // // Generate days from registration date to current date
+    // for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
+    //   this.days.push({ date: new Date(d) })
+    // }
 
-      // set currentDayIndex and activeDayIndex
-      this.currentDayIndex = this.days.findIndex(
-        (day) => day.date.toDateString() === today.toDateString(),
-      )
-      if (!this.activeDate) this.setActiveDate(today)
-    },
+    // // Generate days from current date to 30 days later
+    // for (let i = 0; i < 30; i++) {
+    //   const nextDay = new Date(today)
+    //   nextDay.setDate(today.getDate() + i)
+    //   this.days.push({ date: nextDay })
+    // }
 
-    updateDays() {
-      const todosByDate = {}
-      this.todos.forEach((todo) => {
-        const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
+    // // set currentDayIndex and activeDayIndex
+    // this.currentDayIndex = this.days.findIndex(
+    //   (day) => day.date.toDateString() === today.toDateString(),
+    // )
+    // if (!this.activeDate) this.setActiveDate(today)
+    // },
 
-        if (!todosByDate[todoDate]) {
-          todosByDate[todoDate] = { dayTaskState: '' }
-        }
+    // setDays() {
+    //   const todosByDate = {}
+    //   this.todos.forEach((todo) => {
+    //     const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
 
-        if (todo.isDone) {
-          todosByDate[todoDate].dayTaskState += 'd'
-        } else {
-          todosByDate[todoDate].dayTaskState += 'u'
-        }
-      })
+    //     if (!todosByDate[todoDate]) {
+    //       todosByDate[todoDate] = { dayTaskState: '' }
+    //     }
 
-      this.days.forEach((day) => {
-        const dayDateString = day.date.toDateString()
-        day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
-      })
-    },
+    //     if (todo.isDone) {
+    //       todosByDate[todoDate].dayTaskState += 'd'
+    //     } else {
+    //       todosByDate[todoDate].dayTaskState += 'u'
+    //     }
+    //   })
+
+    //   this.days.forEach((day) => {
+    //     const dayDateString = day.date.toDateString()
+    //     day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
+    //   })
+    // },
 
     changeActiveDate(date) {
       this.setActiveDate(date)

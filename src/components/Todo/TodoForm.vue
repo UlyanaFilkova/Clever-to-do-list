@@ -14,7 +14,6 @@
       :disabled="isAddButtonDisabled"
       :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
     >
-      <!-- {{ this.currentTodo ? 'Update Todo' : 'Add new Todo' }} -->
     </MediumButton>
   </div>
 </template>

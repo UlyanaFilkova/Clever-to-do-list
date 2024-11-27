@@ -96,7 +96,7 @@ export default {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
-        console.log('errors')
+    
         if (this.v$.validationFields.username.required.$invalid) {
           this.errorMessage = 'Email is required'
         } else if (this.v$.validationFields.username.email.$invalid) {
@@ -111,7 +111,7 @@ export default {
           this.errorMessage = 'Passwords must match'
         }
       } else {
-        console.log('success')
+        
         const userExists = await checkUsernameExists(this.inputFields[0].model)
         if (userExists) {
           this.errorMessage = 'This username is already taken'

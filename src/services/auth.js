@@ -31,6 +31,7 @@ export const checkUser = async (username, password) => {
 
 export const registerUser = async (username, password) => {
   const registrationDate = new Date()
+  registrationDate.setHours(0, 0, 0, 0)
   const docRef = await addDoc(usersCollection, {
     username,
     password,

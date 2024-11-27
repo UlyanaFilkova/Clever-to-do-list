@@ -16,8 +16,9 @@ export const checkUser = async (username, password) => {
 
     if (!querySnapshot.empty) {
       const userData = querySnapshot.docs[0].data()
-      // if passwords match
+
       if (userData.password === password) {
+        // if passwords match
         localStorage.setItem('userId', querySnapshot.docs[0].id)
         return true
       }
@@ -41,7 +42,7 @@ export const registerUser = async (username, password) => {
     return false
   }
 
-  // Adding the first tasks to the todos subcollection
+  // Add the first tasks to the todos subcollection
   const todosCollection = collection(docRef, 'todos')
 
   await addDoc(todosCollection, {

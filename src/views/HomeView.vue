@@ -7,7 +7,8 @@
       <HomeHeader />
       <CalendarList />
       <ToDoList />
-      <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task" />
+      <BigButton @click="handleAddClick" text="+ Add a New Task" />
+      <!-- v-if="!activeDayInThePast"  -->
     </div>
   </div>
 </template>
@@ -55,21 +56,20 @@ export default {
 }
 
 .loader-overlay {
-  position: fixed; /* Фиксируем на весь экран */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 1); /* Полупрозрачный фон */
+  background-color: rgba(255, 255, 255, 1);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; /* Убедитесь, что overlay выше других элементов */
+  z-index: 999;
 }
 
 .loader {
   width: 100px;
   height: 100px;
 }
-
 </style>

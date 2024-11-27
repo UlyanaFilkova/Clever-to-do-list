@@ -1,11 +1,10 @@
 <template>
   <div class="input-group">
     <label :for="name" v-if="type !== 'checkbox'">{{ placeholder }}:</label>
-    <!-- <input :name="name" :type="type" :value="modelValue" @input="handleInput" /> -->
     <input
       v-if="type === 'text'"
       :name="name"
-      :type="type"
+      type="text"
       :value="modelValue"
       @input="handleInput"
     />

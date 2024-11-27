@@ -220,7 +220,6 @@ const store = createStore({
           }
         }),
       )
-      // commit('setActiveDate', today)
     },
   },
 })

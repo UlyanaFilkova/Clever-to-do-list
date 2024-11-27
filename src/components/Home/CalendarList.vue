@@ -35,7 +35,6 @@ export default {
   watch: {
     registrationDate: {
       handler() {
-        // this.setLoading(true)
         if (this.registrationDate) {
           this.fetchDays()
         }
@@ -60,6 +59,7 @@ export default {
       this.setActiveDate(date)
     },
 
+    // for smooth scrolling of the calendar list using the mouse wheel
     handleWheel(event) {
       this.smoothScroll(event.deltaY)
     },
@@ -73,18 +73,18 @@ export default {
 
       const animateScroll = (currentTime) => {
         const timeElapsed = currentTime - startTime
-        const progress = Math.min(timeElapsed / duration, 1) // Нормализуем прогресс от 0 до 1
+        const progress = Math.min(timeElapsed / duration, 1) // Normalize progress from 0 to 1
         const easeInOut =
-          progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress // Функция easing
+          progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress // easing function
 
-        container.scrollLeft = start + (end - start) * easeInOut // Обновляем scrollLeft
+        container.scrollLeft = start + (end - start) * easeInOut
 
         if (progress < 1) {
-          requestAnimationFrame(animateScroll) // Запрашиваем следующий кадр анимации
+          requestAnimationFrame(animateScroll) // Request the next frame of animation
         }
       }
 
-      requestAnimationFrame(animateScroll) // Запускаем анимацию
+      requestAnimationFrame(animateScroll) // start the animation
     },
     scrollToCurrentDay() {
       const activeDateIndex = this.days.findIndex(
@@ -113,7 +113,7 @@ export default {
   padding-bottom: 8px;
   margin-bottom: 20px;
 }
-/* For WebKit browsers (Chrome, Safari) */
+
 .calendar__container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -128,7 +128,6 @@ export default {
   background-color: #888;
 }
 
-/* For Firefox */
 .calendar__container {
   scrollbar-width: thin;
   scrollbar-color: #aaaaaa transparent;

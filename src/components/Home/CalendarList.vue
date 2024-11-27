@@ -50,6 +50,13 @@ export default {
         }
       },
     },
+    activeDate: {
+      handler() {
+        this.$nextTick(() => {
+          this.scrollToCurrentDay()
+        })
+      },
+    },
   },
 
   methods: {
@@ -92,7 +99,7 @@ export default {
       )
 
       const activeDayCard = this.$refs.dayCards[activeDateIndex]
-      if (activeDayCard) {
+      if (activeDayCard && activeDayCard.$el) {
         activeDayCard.$el.scrollIntoView({
           inline: 'center',
           behavior: 'auto',

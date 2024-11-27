@@ -1,4 +1,5 @@
 <template>
+  <div v-if="isNewYear" class="day__new-year">{{ year }}</div>
   <div class="day__container">
     <div
       class="day__card"
@@ -45,6 +46,12 @@ export default {
     },
     month() {
       return this.date.toLocaleString('en-US', { month: 'short' })
+    },
+    year() {
+      return this.date.getFullYear()
+    },
+    isNewYear() {
+      return this.day === 1 && this.month === 'Jan'
     },
   },
 }
@@ -131,5 +138,14 @@ export default {
 }
 .day__done {
   background-color: #ffc258;
+}
+.day__new-year {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #fd5d00;
+  font-weight: 500;
 }
 </style>

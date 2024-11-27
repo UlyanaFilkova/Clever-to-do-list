@@ -131,7 +131,7 @@ const store = createStore({
     },
     fetchDays({ commit, state }) {
       const days = []
-      const today = new Date()
+      const today = new Date(2024, 11, 25)
       today.setHours(0, 0, 0, 0)
       const registDayWithoutTime = new Date(state.registrationDate)
 
@@ -169,7 +169,7 @@ const store = createStore({
       commit('setTodos', todos)
     },
     async fetchRegistrationDate({ commit }) {
-      commit('setLoading', true)
+      // commit('setLoading', true)
       const date = await todoService.getRegistrationDate()
       commit('setRegistrationDate', date)
     },

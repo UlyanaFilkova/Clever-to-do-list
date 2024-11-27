@@ -16,6 +16,7 @@
       :todo="todo"
       @toggle-todo="toggleTodo(todo)"
       @delete-todo="handleDeleteTodo(todo)"
+      @open-todo="openTodo(todo)"
       @click.self="openTodo(todo)"
     />
   </div>

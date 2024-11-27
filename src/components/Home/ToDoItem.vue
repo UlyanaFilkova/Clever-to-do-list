@@ -17,7 +17,7 @@
           <path d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"></path>
         </svg>
       </div>
-      <div class="todo__title">{{ todo.title }}</div>
+      <div class="todo__title" @click.stop="$emit('open-todo', todo)">{{ todo.title }}</div>
     </div>
     <button class="todo__delete" @click.stop="this.showModal = true">
       <svg

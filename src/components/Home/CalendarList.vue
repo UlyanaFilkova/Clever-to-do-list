@@ -22,24 +22,22 @@ export default {
     DayCard,
   },
 
-  data() {
-    return {
-      // days: [],
-      // currentDayIndex: 0,
-    }
-  },
   computed: {
-    ...mapState(['todos', 'days', 'activeDate', 'registrationDate', 'currentDayIndex']),
+    ...mapState([
+      'todos',
+      'days',
+      'activeDate',
+      'registrationDate',
+      'currentDayIndex',
+      'isLoading',
+    ]),
   },
   watch: {
     registrationDate: {
       handler() {
+        // this.setLoading(true)
         if (this.registrationDate) {
           this.fetchDays()
-          // this.setDays()
-          // this.$nextTick(() => {
-          //   this.scrollToCurrentDay()
-          // })
         }
       },
       deep: true,
@@ -54,70 +52,9 @@ export default {
       },
     },
   },
-  // mounted() {
-  //   this.fetchDays()
-  //   this.setDays()
-  //   this.$nextTick(() => {
-  //     this.scrollToCurrentDay()
-  //   })
-  // },
+
   methods: {
-    ...mapActions(['fetchTodos', 'setActiveDate', 'fetchDays']),
-
-    // async getDays() {
-    //   // await this.calculateDays()
-    //   this.setDays()
-    //   this.$nextTick(() => {
-    //     this.scrollToCurrentDay()
-    //   })
-    // },
-
-    // async calculateDays() {
-    // const today = new Date()
-    // today.setHours(0, 0, 0, 0)
-    // const registDayWithoutTime = new Date(this.registrationDate)
-    // registDayWithoutTime.setHours(0, 0, 0, 0)
-
-    // // Generate days from registration date to current date
-    // for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
-    //   this.days.push({ date: new Date(d) })
-    // }
-
-    // // Generate days from current date to 30 days later
-    // for (let i = 0; i < 30; i++) {
-    //   const nextDay = new Date(today)
-    //   nextDay.setDate(today.getDate() + i)
-    //   this.days.push({ date: nextDay })
-    // }
-
-    // // set currentDayIndex and activeDayIndex
-    // this.currentDayIndex = this.days.findIndex(
-    //   (day) => day.date.toDateString() === today.toDateString(),
-    // )
-    // if (!this.activeDate) this.setActiveDate(today)
-    // },
-
-    // setDays() {
-    //   const todosByDate = {}
-    //   this.todos.forEach((todo) => {
-    //     const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
-
-    //     if (!todosByDate[todoDate]) {
-    //       todosByDate[todoDate] = { dayTaskState: '' }
-    //     }
-
-    //     if (todo.isDone) {
-    //       todosByDate[todoDate].dayTaskState += 'd'
-    //     } else {
-    //       todosByDate[todoDate].dayTaskState += 'u'
-    //     }
-    //   })
-
-    //   this.days.forEach((day) => {
-    //     const dayDateString = day.date.toDateString()
-    //     day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
-    //   })
-    // },
+    ...mapActions(['fetchTodos', 'setActiveDate', 'fetchDays', 'setLoading']),
 
     changeActiveDate(date) {
       this.setActiveDate(date)
@@ -161,6 +98,7 @@ export default {
           behavior: 'auto',
         })
       }
+      this.setLoading(false)
     },
   },
 }

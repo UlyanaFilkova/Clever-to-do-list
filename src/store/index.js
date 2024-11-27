@@ -38,9 +38,7 @@ const store = createStore({
       state.currentDayIndex = index
     },
     updateDay(state, todo) {
-      console.log(todo)
       const todoDate = todo.date.seconds ? new Date(todo.date.seconds * 1000) : todo.date
-      console.log(todoDate)
       const todosForDate = state.todos.filter(
         (t) => new Date(t.date.seconds * 1000).toDateString() === todoDate.toDateString(),
       )
@@ -48,36 +46,17 @@ const store = createStore({
         (day) => day.date.toDateString() === todoDate.toDateString(),
       )
 
-      // const dayToUpdate = state.days.find(
-      //   (day) => day.date.toDateString() === todoDate.toDateString(),
-      // )
-
       if (dayToUpdate) {
-        // Перезаписываем dayTaskState, инициализируя его
         dayToUpdate.dayTaskState = ''
 
-        // Обновляем состояние дня в зависимости от состояния всех задач
         todosForDate.forEach((t) => {
           if (t.isDone) {
-            dayToUpdate.dayTaskState += 'd' // задача завершена
+            dayToUpdate.dayTaskState += 'd'
           } else {
-            dayToUpdate.dayTaskState += 'u' // задача не завершена
+            dayToUpdate.dayTaskState += 'u'
           }
         })
       }
-      console.log(todosForDate)
-      console.log(dayToUpdate)
-
-      // if (dayToUpdate) {
-      //   if (!dayToUpdate.dayTaskState) {
-      //     dayToUpdate.dayTaskState = ''
-      //   }
-      // }
-      // if (todo.isDone) {
-      //   dayToUpdate.dayTaskState += 'd'
-      // } else {
-      //   dayToUpdate.dayTaskState += 'u'
-      // }
     },
     fetchDays(state) {
       const todosByDate = {}
@@ -178,9 +157,6 @@ const store = createStore({
     setDays({ commit }) {
       commit('setDays')
     },
-    // updateDay({ commit }, todo) {
-    //   commit('updateDay', todo)
-    // },
     async fetchTodos({ commit }) {
       const todos = await todoService.getTodos()
       commit('setTodos', todos)
@@ -194,7 +170,7 @@ const store = createStore({
       await todoService.updateTodoStatus(todo.id, todo.isDone)
       commit('updateDay', todo)
     },
-    async removeTodo({ commit }, todo) {
+    async deleteTodo({ commit }, todo) {
       commit('deleteTodo', todo)
       await todoService.deleteTodo(todo.id)
       commit('updateDay', todo)

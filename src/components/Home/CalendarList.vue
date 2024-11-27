@@ -158,6 +158,7 @@ export default {
       if (activeDayCard) {
         activeDayCard.$el.scrollIntoView({
           inline: 'center',
+          behavior: 'auto',
         })
       }
     },

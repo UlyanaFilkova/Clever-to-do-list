@@ -64,9 +64,9 @@ export default {
     ...mapGetters(['currentTodo']),
   },
   methods: {
-    ...mapActions(['removeTodo', 'clearCurrentTodo']),
+    ...mapActions(['deleteTodo', 'clearCurrentTodo']),
     async handleDeleteTodo() {
-      await this.removeTodo(this.currentTodo)
+      await this.deleteTodo(this.currentTodo)
       this.clearCurrentTodo()
       this.$router.push({ name: 'home' })
     },

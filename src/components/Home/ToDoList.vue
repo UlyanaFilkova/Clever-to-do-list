@@ -15,7 +15,7 @@
       :key="index"
       :todo="todo"
       @toggle-todo="toggleTodo(todo)"
-      @delete-todo="deleteTodo(todo)"
+      @delete-todo="handleDeleteTodo(todo)"
       @click.self="openTodo(todo)"
     />
   </div>
@@ -44,13 +44,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateTodoStatus', 'removeTodo', 'setCurrentTodo', 'moveTasksToToday']),
+    ...mapActions(['updateTodoStatus', 'deleteTodo', 'setCurrentTodo', 'moveTasksToToday']),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },
 
-    async deleteTodo(todo) {
-      await this.removeTodo(todo)
+    async handleDeleteTodo(todo) {
+      await this.deleteTodo(todo)
     },
     async openTodo(todo) {
       await this.setCurrentTodo(todo)

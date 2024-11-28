@@ -34,7 +34,7 @@ export default {
     ]),
   },
   watch: {
-    registrationDate: {
+    todos: {
       handler() {
         if (this.registrationDate) {
           this.fetchDays()

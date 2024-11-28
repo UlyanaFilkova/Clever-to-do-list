@@ -31,6 +31,7 @@
 export default {
   props: {
     modelValue: {
+      type: [String, Boolean],
       default: '',
     },
     placeholder: {
@@ -47,6 +48,9 @@ export default {
   methods: {
     handleInput(event) {
       this.$emit('update:modelValue', event.target.value)
+    },
+    handleCheckboxChange(event) {
+      this.$emit('update:modelValue', event.target.checked) 
     },
   },
 }

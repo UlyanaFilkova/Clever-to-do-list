@@ -9,6 +9,7 @@ const store = createStore({
     days: [],
     currentDayIndex: 0,
     isLoading: false,
+    // currentTodo: null,
   },
   getters: {
     days(state) {
@@ -118,6 +119,7 @@ const store = createStore({
     },
     setCurrentTodo(state, todo) {
       state.currentTodo = todo
+      
       localStorage.setItem('currentTodo', JSON.stringify(todo))
     },
     clearCurrentTodo(state) {

@@ -50,13 +50,6 @@ export default {
         }
       },
     },
-    // activeDate: {
-    //   handler() {
-    //     this.$nextTick(() => {
-    //       this.scrollToCurrentDay()
-    //     })
-    //   },
-    // },
   },
 
   methods: {

@@ -64,7 +64,7 @@ export default {
     ...mapGetters(['currentTodo']),
     isAddButtonDisabled() {
       if (this.currentTodo) {
-        return (
+        return  (
           this.inputFields[0].model.trim() === this.currentTodo.title &&
           this.inputFields[1].model.trim() === this.currentTodo.description &&
           this.inputFields[2].model === this.currentTodo.isDone

@@ -7,8 +7,7 @@
       <HomeHeader />
       <CalendarList />
       <ToDoList />
-      <BigButton  @click="handleAddClick" text="+ Add a New Task" />
-      <!-- v-if="!activeDayInThePast" -->
+      <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task" />
     </div>
   </div>
 </template>
@@ -40,7 +39,7 @@ export default {
     await this.fetchRegistrationDate()
     await this.fetchTodos()
     await this.fetchDays()
-
+    window.scrollTo({ top: 0 })
   },
 }
 </script>

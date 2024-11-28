@@ -39,7 +39,7 @@ export default {
     await this.fetchRegistrationDate()
     await this.fetchTodos()
     await this.fetchDays()
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0 })
   },
 }
 </script>

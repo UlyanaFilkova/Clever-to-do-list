@@ -46,12 +46,12 @@ export default {
 
 <style scoped>
 .container {
-  height: 100vh;
-  margin: 0 20px;
+  min-height: 100vh;
+  margin: 0 20px 70px 20px;
 }
 @media (max-width: 576px) {
   .container {
-    margin: 0 15px;
+    margin: 0 15px 70px 15px;
   }
 }
 

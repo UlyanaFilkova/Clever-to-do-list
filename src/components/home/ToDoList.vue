@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import ToDoItem from './ToDoItem.vue'
+import ToDoItem from '@/components/home/ToDoItem.vue'
 import SmallButton from '@/components/SmallButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 

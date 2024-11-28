@@ -54,7 +54,6 @@ const store = createStore({
       state.days = []
       state.currentDayIndex = 0
       state.isLoading = false
-      console.log(state)
     },
     setCurrentDayIndex(state, index) {
       state.currentDayIndex = index
@@ -254,7 +253,6 @@ const store = createStore({
       commit('setTodos', todos)
     },
     async fetchRegistrationDate({ commit }) {
-      console.log(localStorage.getItem('userId'))
       commit('setLoading', true)
       const date = await todoService.getRegistrationDate()
       commit('setRegistrationDate', date)
@@ -288,7 +286,7 @@ const store = createStore({
     clearCurrentTodo({ commit }) {
       commit('clearCurrentTodo')
     },
-    async moveTasksToToday({ commit, state }) {
+    async moveTasksToToday({ commit, dispatch, state }) {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
 
@@ -298,14 +296,17 @@ const store = createStore({
             new Date(todo.date.seconds * 1000).toDateString() === state.activeDate.toDateString()
           ) {
             commit('moveTasksToToday', { goalTodo: todo, today })
+
             try {
               await todoService.updateTodo(todo.id, { ...todo, date: today })
+              
             } catch (error) {
               console.error(`Error updating task with ID ${todo.id}:`, error)
             }
           }
         }),
       )
+      await dispatch('fetchTodos')
     },
   },
 })

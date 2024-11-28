@@ -7,7 +7,8 @@
       <HomeHeader />
       <CalendarList />
       <ToDoList />
-      <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task" />
+      <BigButton  @click="handleAddClick" text="+ Add a New Task" />
+      <!-- v-if="!activeDayInThePast" -->
     </div>
   </div>
 </template>

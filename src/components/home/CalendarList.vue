@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import DayCard from './DayCard.vue'
+import DayCard from '@/components/home/DayCard.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {

@@ -28,4 +28,9 @@ export default {
   margin: 30px 0 20px 0;
   padding-top: 0px;
 }
+@media(max-width: 576px){
+  h2{
+    font-size: 20px;
+  }
+}
 </style>

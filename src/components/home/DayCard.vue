@@ -63,7 +63,6 @@ export default {
 </script>
 
 <style scoped>
-
 .day__container {
   min-width: 50px;
   width: 60px;
@@ -72,12 +71,10 @@ export default {
 .day__container:has(.day__new-year) {
   width: fit-content;
   display: flex;
-  /* justify-content: space-between; */
 }
 .day__card {
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
-  width: 100%;
   min-width: 50px;
   width: 60px;
   padding: 5px 7px;
@@ -163,5 +160,33 @@ export default {
   text-align: center;
   color: #fd5d00;
   font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .day__container {
+    min-width: 50px;
+    width: 50px;
+    flex-shrink: 0;
+  }
+  .day__container:has(.day__new-year) {
+    width: fit-content;
+    display: flex;
+  }
+  .day__card {
+    min-width: 50px;
+    width: 50px;
+    padding: 5px 5px;
+    display: flex;
+    gap: 3px;
+  }
+  .day__dayOfWeek {
+    font-size: 14px;
+  }
+  .day__month {
+    font-size: 12px;
+  }
+  .day__date {
+    font-size: 20px;
+  }
 }
 </style>

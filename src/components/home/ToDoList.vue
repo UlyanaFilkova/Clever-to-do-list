@@ -31,10 +31,8 @@ export default {
     ToDoItem,
     SmallButton,
   },
-  
 
   computed: {
-
     ...mapGetters(['activeDayInThePast', 'todos', 'activeDate', 'registrationDate']),
     filteredTodos() {
       const targetDateString = this.activeDate?.toDateString()
@@ -46,7 +44,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateTodoStatus', 'deleteTodo', 'setCurrentTodo', 'setLoading','moveTasksToToday']),
+    ...mapActions([
+      'updateTodoStatus',
+      'deleteTodo',
+      'setCurrentTodo',
+      'setLoading',
+      'moveTasksToToday',
+    ]),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },

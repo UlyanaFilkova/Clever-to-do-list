@@ -5,8 +5,8 @@
   </div>
 </template>
 <script>
-import TodoHeader from '@/components/Todo/TodoHeader.vue'
-import TodoForm from '@/components/Todo/TodoForm.vue'
+import TodoHeader from '@/components/todo/TodoHeader.vue'
+import TodoForm from '@/components/todo/TodoForm.vue'
 
 export default {
   components: {

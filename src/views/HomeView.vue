@@ -1,9 +1,14 @@
 <template>
   <div class="container">
-    <HomeHeader />
-    <CalendarList />
-    <ToDoList />
-    <BigButton v-if="!activeDayInThePast" />
+    <div v-if="isLoading" class="loader-overlay">
+      <img src="@/assets/200w.webp" alt="Loading..." class="loader" />
+    </div>
+    <div>
+      <HomeHeader />
+      <CalendarList />
+      <ToDoList />
+      <BigButton v-if="!activeDayInThePast" @click="handleAddClick" text="+ Add a New Task" />
+    </div>
   </div>
 </template>
 
@@ -12,7 +17,7 @@ import CalendarList from '@/components/Home/CalendarList.vue'
 import HomeHeader from '@/components/Home/HomeHeader.vue'
 import ToDoList from '@/components/Home/ToDoList.vue'
 import BigButton from '@/components/Home/BigButton.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -21,20 +26,20 @@ export default {
     ToDoList,
     BigButton,
   },
+  computed: {
+    ...mapGetters(['todos', 'activeDate', 'registrationDate', 'isLoading', 'activeDayInThePast']),
+  },
+  methods: {
+    ...mapActions(['fetchTodos', 'fetchRegistrationDate', 'fetchDays']),
+    handleAddClick() {
+      this.$router.push({ name: 'todo' })
+    },
+  },
   async created() {
     await this.fetchRegistrationDate()
     await this.fetchTodos()
-  },
-  async activated() {
-    await this.fetchTodos()
-  },
-  computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
-    ...mapGetters(['activeDayInThePast']),
-  },
+    await this.fetchDays()
 
-  methods: {
-    ...mapActions(['fetchTodos', 'fetchRegistrationDate']),
   },
 }
 </script>
@@ -48,5 +53,23 @@ export default {
   .container {
     margin: 0 15px;
   }
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.loader {
+  width: 100px;
+  height: 100px;
 }
 </style>

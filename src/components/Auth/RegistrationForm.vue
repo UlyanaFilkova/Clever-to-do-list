@@ -96,7 +96,7 @@ export default {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
-        console.log('errors')
+    
         if (this.v$.validationFields.username.required.$invalid) {
           this.errorMessage = 'Email is required'
         } else if (this.v$.validationFields.username.email.$invalid) {
@@ -111,7 +111,7 @@ export default {
           this.errorMessage = 'Passwords must match'
         }
       } else {
-        console.log('success')
+        
         const userExists = await checkUsernameExists(this.inputFields[0].model)
         if (userExists) {
           this.errorMessage = 'This username is already taken'
@@ -141,16 +141,20 @@ h1 {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #fb6914;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d74f00;
+}
+button:disabled {
+  background-color: #808080;
+  cursor: auto;
 }
 .invalid-input {
   font-size: 12px;

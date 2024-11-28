@@ -18,5 +18,6 @@ export default {
 <style scoped>
 .container {
   height: 100vh;
+  margin: 0 20px;
 }
 </style>

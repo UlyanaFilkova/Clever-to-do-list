@@ -1,16 +1,22 @@
 <template>
   <div class="day__container">
-    <div
-      class="day__card"
-      :class="{ day__card_current: isCurrent, day__card_active: isActive }"
-      @click="$emit('click')"
-    >
-      <div class="day__dayOfWeek">{{ dayOfWeek }}</div>
-      <div class="day__date">{{ day }}</div>
+    <div v-if="isNewYear" class="day__new-year">
+      <p>{{ year }}</p>
     </div>
-    <div class="day__points">
-      <div v-if="dayTaskState.includes('d')" class="day__point day__done"></div>
-      <div v-if="dayTaskState.includes('u')" class="day__point day__undone"></div>
+    <div class="day__container">
+      <div
+        class="day__card"
+        :class="{ day__card_current: isCurrent, day__card_active: isActive }"
+        @click="$emit('click')"
+      >
+        <div class="day__dayOfWeek">{{ dayOfWeek }}</div>
+        <div class="day__date">{{ day }}</div>
+        <div class="day__month">{{ month }}</div>
+      </div>
+      <div class="day__points">
+        <div v-if="dayTaskState.includes('d')" class="day__point day__done"></div>
+        <div v-if="dayTaskState.includes('u')" class="day__point day__undone"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +41,7 @@ export default {
       default: false,
     },
   },
+  emits: ['click'],
   computed: {
     dayOfWeek() {
       return this.date.toLocaleString('en-US', { weekday: 'short' })
@@ -42,24 +49,40 @@ export default {
     day() {
       return this.date.getDate()
     },
+    month() {
+      return this.date.toLocaleString('en-US', { month: 'short' })
+    },
+    year() {
+      return this.date.getFullYear()
+    },
+    isNewYear() {
+      return this.day === 1 && this.month === 'Jan'
+    },
   },
 }
 </script>
 
 <style scoped>
+
 .day__container {
   min-width: 50px;
-  width: 50px;
+  width: 60px;
   flex-shrink: 0;
+}
+.day__container:has(.day__new-year) {
+  width: fit-content;
+  display: flex;
+  /* justify-content: space-between; */
 }
 .day__card {
   border: 1.5px solid #e0e0e0;
   border-radius: 8px;
   width: 100%;
   min-width: 50px;
+  width: 60px;
   padding: 5px 7px;
   display: flex;
-  gap: 8px;
+  gap: 5px;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -75,14 +98,17 @@ export default {
   color: #fff;
 }
 .day__card_active .day__dayOfWeek,
-.day__card_current.day__card_active .day__dayOfWeek {
+.day__card_active .day__month,
+.day__card_current.day__card_active .day__dayOfWeek,
+.day__card_current.day__card_active .day__month {
   color: #eaeaea;
 }
 .day__card_current {
-   border: 1.5px solid #d8d8d8;
+  border: 1.5px solid #d8d8d8;
   background-color: #e2e2e2;
 }
-.day__card_current .day__dayOfWeek {
+.day__card_current .day__dayOfWeek,
+.day__card_current .day__month {
   color: #818181;
 }
 .day__card:hover {
@@ -93,15 +119,21 @@ export default {
   background-color: #ffebdf;
 }
 
-.day__card:not(.day__card_active):hover .day__dayOfWeek{
-  color:#fd5d00;;
+.day__card:not(.day__card_active):hover .day__dayOfWeek,
+.day__card:not(.day__card_active):hover .day__month {
+  color: #fd5d00;
 }
 
 .day__dayOfWeek {
   color: #a0a0a0;
+  font-size: 15px;
+}
+.day__month {
+  font-size: 14px;
+  color: #a0a0a0;
 }
 .day__date {
-  font-size: 20px;
+  font-size: 22px;
 }
 .day__points {
   display: flex;
@@ -118,5 +150,18 @@ export default {
 }
 .day__done {
   background-color: #ffc258;
+}
+.day__new-year {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.day__new-year p {
+  font-size: 20px;
+  text-align: center;
+  color: #fd5d00;
+  font-weight: 500;
 }
 </style>

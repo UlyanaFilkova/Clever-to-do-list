@@ -44,8 +44,6 @@ router.beforeEach((to, from, next) => {
     // If the user tries to get to the login or registration page, redirect to the home page
     if (to.name === 'login' || to.name === 'registration') {
       next({ name: 'home' })
-    } else {
-      next()
     }
   }
 

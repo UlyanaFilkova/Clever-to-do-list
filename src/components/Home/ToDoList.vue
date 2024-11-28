@@ -2,35 +2,41 @@
   <div class="todo-list__container">
     <div class="todo-list__header">
       <h2>{{ filteredTodos.length }} Tasks</h2>
-      <button class="todo-list__move-tasks" @click="moveTasksToToday()" v-if="activeDayInThePast">
-        Move tasks to today
-      </button>
+      <SmallButton
+        class="todo-list__move-tasks"
+        @click="moveTasksToToday()"
+        v-if="activeDayInThePast"
+        text="Move tasks to today"
+      >
+      </SmallButton>
     </div>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"
       :key="index"
       :todo="todo"
       @toggle-todo="toggleTodo(todo)"
-      @delete-todo="deleteTodo(todo)"
-      @click="openTodo(todo)"
+      @delete-todo="handleDeleteTodo(todo)"
+      @open-todo="openTodo(todo)"
+      @click.self="openTodo(todo)"
     />
   </div>
 </template>
 <script>
 import ToDoItem from './ToDoItem.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import SmallButton from '@/components/SmallButton.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     ToDoItem,
+    SmallButton,
   },
+  
 
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
-    ...mapGetters(['activeDayInThePast']),
+
+    ...mapGetters(['activeDayInThePast', 'todos', 'activeDate', 'registrationDate']),
     filteredTodos() {
-      // console.log(this.todos)
-      // console.log(this.activeDate)
       const targetDateString = this.activeDate?.toDateString()
       return this.todos.filter((todo) => {
         const todoDate = new Date(todo.date.seconds * 1000).toDateString()
@@ -40,13 +46,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateTodoStatus', 'removeTodo', 'setCurrentTodo', 'moveTasksToToday']),
+    ...mapActions(['updateTodoStatus', 'deleteTodo', 'setCurrentTodo', 'setLoading','moveTasksToToday']),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },
 
-    async deleteTodo(todo) {
-      await this.removeTodo(todo.id)
+    async handleDeleteTodo(todo) {
+      await this.deleteTodo(todo)
     },
     async openTodo(todo) {
       await this.setCurrentTodo(todo)
@@ -65,5 +71,6 @@ export default {
 .todo-list__header {
   display: flex;
   justify-content: space-between;
+  min-height: 33px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar__container" @wheel.prevent="handleWheel">
+  <div class="calendar__container" @wheel.prevent="handleWheel" @scroll="handleScroll">
     <DayCard
       v-for="(day, index) in days"
       :key="index"
@@ -15,92 +15,74 @@
 
 <script>
 import DayCard from './DayCard.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
     DayCard,
   },
 
-  data() {
-    return {
-      // array of objects: {date, dayTaskState}
-      days: [],
-      currentDayIndex: 0,
-    }
-  },
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
+    ...mapGetters([
+      'currentTodo',
+      'days',
+      'todos',
+      'activeDate',
+      'registrationDate',
+      'currentDayIndex',
+      'isLoading',
+    ]),
   },
   watch: {
-    todos: {
+    registrationDate: {
       handler() {
-        this.days.length === 0 ? this.getDays() : this.updateDays()
+        if (this.registrationDate) {
+          this.fetchDays()
+        }
       },
       deep: true,
     },
+    days: {
+      handler() {
+        if (this.days.length > 0) {
+          this.$nextTick(() => {
+            this.scrollToCurrentDay()
+          })
+        }
+      },
+    },
   },
+
   methods: {
-    ...mapActions(['fetchTodos', 'setActiveDate']),
-    async getDays() {
-      await this.calculateDays()
-      this.updateDays()
-      this.$nextTick(() => {
-        this.scrollToCurrentDay()
-      })
-    },
-
-    async calculateDays() {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      const registDayWithoutTime = new Date(this.registrationDate)
-      registDayWithoutTime.setHours(0, 0, 0, 0)
-
-      // Generate days from registration date to current date
-      for (let d = registDayWithoutTime; d < today; d.setDate(d.getDate() + 1)) {
-        this.days.push({ date: new Date(d) })
-      }
-
-      // Generate days from current date to 30 days later
-      for (let i = 0; i < 30; i++) {
-        const nextDay = new Date(today)
-        nextDay.setDate(today.getDate() + i)
-        this.days.push({ date: nextDay })
-      }
-
-      // set currentDayIndex and activeDayIndex
-      this.currentDayIndex = this.days.findIndex(
-        (day) => day.date.toDateString() === today.toDateString(),
-      )
-      if (!this.activeDate) this.setActiveDate(today)
-    },
-
-    updateDays() {
-      const todosByDate = {}
-      this.todos.forEach((todo) => {
-        const todoDate = new Date(todo.date.seconds * 1000).toDateString() // convert to milliseconds
-
-        if (!todosByDate[todoDate]) {
-          todosByDate[todoDate] = { dayTaskState: '' }
-        }
-
-        if (todo.isDone) {
-          todosByDate[todoDate].dayTaskState += 'd'
-        } else {
-          todosByDate[todoDate].dayTaskState += 'u'
-        }
-      })
-
-      this.days.forEach((day) => {
-        const dayDateString = day.date.toDateString()
-        day.dayTaskState = todosByDate[dayDateString]?.dayTaskState || ''
-      })
-    },
+    ...mapActions([
+      'fetchTodos',
+      'setActiveDate',
+      'fetchDays',
+      'setLoading',
+      'loadNextDays',
+      'loadPreviousDays',
+    ]),
 
     changeActiveDate(date) {
       this.setActiveDate(date)
     },
+    handleScroll(event) {
+      const container = event.target
+      const scrollLeft = container.scrollLeft
+      const scrollWidth = container.scrollWidth
+      const clientWidth = container.clientWidth
 
+      // Checking if the end of the container has been reached
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        this.loadNextDays()
+      }
+
+      if (scrollLeft <= 10) {
+        this.loadPreviousDays() // Call the method to load previous days
+      }
+    },
+
+    // for smooth scrolling of the calendar list using the mouse wheel
     handleWheel(event) {
       this.smoothScroll(event.deltaY)
     },
@@ -114,18 +96,18 @@ export default {
 
       const animateScroll = (currentTime) => {
         const timeElapsed = currentTime - startTime
-        const progress = Math.min(timeElapsed / duration, 1) // Нормализуем прогресс от 0 до 1
+        const progress = Math.min(timeElapsed / duration, 1) // Normalize progress from 0 to 1
         const easeInOut =
-          progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress // Функция easing
+          progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress // easing function
 
-        container.scrollLeft = start + (end - start) * easeInOut // Обновляем scrollLeft
+        container.scrollLeft = start + (end - start) * easeInOut
 
         if (progress < 1) {
-          requestAnimationFrame(animateScroll) // Запрашиваем следующий кадр анимации
+          requestAnimationFrame(animateScroll) // Request the next frame of animation
         }
       }
 
-      requestAnimationFrame(animateScroll) // Запускаем анимацию
+      requestAnimationFrame(animateScroll) // start the animation
     },
     scrollToCurrentDay() {
       const activeDateIndex = this.days.findIndex(
@@ -133,11 +115,14 @@ export default {
       )
 
       const activeDayCard = this.$refs.dayCards[activeDateIndex]
-      if (activeDayCard) {
+
+      if (activeDayCard && activeDayCard.$el) {
         activeDayCard.$el.scrollIntoView({
           inline: 'center',
+          behavior: 'auto',
         })
       }
+      this.setLoading(false)
     },
   },
 }
@@ -152,7 +137,7 @@ export default {
   padding-bottom: 8px;
   margin-bottom: 20px;
 }
-/* For WebKit browsers (Chrome, Safari) */
+
 .calendar__container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -167,7 +152,6 @@ export default {
   background-color: #888;
 }
 
-/* For Firefox */
 .calendar__container {
   scrollbar-width: thin;
   scrollbar-color: #aaaaaa transparent;

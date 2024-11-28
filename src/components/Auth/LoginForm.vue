@@ -11,7 +11,7 @@
       :autocomplete="field.autocomplete"
       :required="field.required"
       :errorMessage="field.errorMessage"
-      @update:modelValue="(value) => (field.model = value)"
+      @update:modelValue="(value) => updateValue(field, value)"
     />
     <div class="invalid-input">
       {{ errorMessage }}
@@ -38,7 +38,6 @@ export default {
         {
           model: '',
           type: 'email',
-          // type: 'text',
           placeholder: 'Email',
           name: 'username',
           autocomplete: 'username',
@@ -73,15 +72,15 @@ export default {
       }
     },
     submitButtonDisabled() {
-      return (
-        this.v$.validationFields.username.required.$invalid ||
-        this.v$.validationFields.password.required.$invalid
-      )
+      return !this.validationFields.username || !this.validationFields.password
     },
   },
   methods: {
-    async handleSubmit() {
+    updateValue(field, value) {
       this.errorMessage = ''
+      field.model = value
+    },
+    async handleSubmit() {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
@@ -120,7 +119,7 @@ h1 {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #fb6914;
   color: white;
   border: none;
   border-radius: 5px;
@@ -129,8 +128,14 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #d74f00;
 }
+
+button:disabled {
+  background-color: #808080;
+  cursor: auto;
+}
+
 .invalid-input {
   font-size: 12px;
   line-height: 12px;

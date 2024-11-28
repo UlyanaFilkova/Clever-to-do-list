@@ -77,4 +77,12 @@ export default {
   justify-content: space-between;
   min-height: 33px;
 }
+@media (max-width: 576px) {
+  h2 {
+    font-size: 20px;
+  }
+  .todo-list__container {
+    gap: 5px;
+  }
+}
 </style>

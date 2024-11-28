@@ -18,8 +18,8 @@
   </div>
 </template>
 <script>
-import CustomInput from '@/components/Todo/CustomInput.vue'
-import MediumButton from '@/components/Todo/MediumButton.vue'
+import CustomInput from '@/components/todo/CustomInput.vue'
+import MediumButton from '@/components/todo/MediumButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {

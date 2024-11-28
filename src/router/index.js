@@ -40,21 +40,16 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('userId') !== null
 
-  if (isAuthenticated) {
-    // If the user tries to get to the login or registration page, redirect to the home page
-    if (to.name === 'login' || to.name === 'registration') {
-      next({ name: 'home' })
-    }
+  // Redirect authenticated users from login/registration to home
+  if (isAuthenticated && (to.name === 'login' || to.name === 'registration')) {
+    return next({ name: 'home' })
+  }
+  // Redirect unauthenticated users to login if the route requires authentication
+  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+    return next({ name: 'login' })
   }
 
-  // Check if the route requires authentication
-  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
-    // If not authenticated, redirect to login page
-    next({ name: 'login' })
-  } else {
-    // If authenticated or the route does not require authentication, continue
-    next()
-  }
+  next()
 })
 
 export default router

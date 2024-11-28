@@ -130,7 +130,7 @@ const store = createStore({
     },
     setCurrentTodo(state, todo) {
       state.currentTodo = todo
-      
+
       localStorage.setItem('currentTodo', JSON.stringify(todo))
     },
     clearCurrentTodo(state) {
@@ -201,34 +201,33 @@ const store = createStore({
       let lastDay = state.days[state.days.length - 1].date
       lastDay = new Date(lastDay)
 
-      // Генерируем 30 новых дней, начиная с следующего дня после последнего
+      // Generate 30 new days starting from the day after the last one
       for (let i = 1; i <= 30; i++) {
         const nextDay = new Date(lastDay)
         nextDay.setDate(lastDay.getDate() + i)
         daysToAdd.push({ date: nextDay })
       }
 
-      commit('addDays', daysToAdd) // Вызываем мутацию для добавления новых дней
+      commit('addDays', daysToAdd)
       commit('fetchDays')
     },
     loadPreviousDays({ commit, state }) {
       const daysToAdd = []
-      let lastDay = state.days[0].date // Получаем первый день в массиве
+      let lastDay = state.days[0].date
       lastDay = new Date(lastDay)
-      const registrationDate = new Date(state.registrationDate) // Дата регистрации
+      const registrationDate = new Date(state.registrationDate)
 
-      // Генерируем 30 новых дней, начиная с даты, которая на месяц раньше
+      // Generate 30 new days starting from a date that is one month earlier
       for (let i = 30; i >= 1; i--) {
         const previousDay = new Date(lastDay)
         previousDay.setDate(lastDay.getDate() - i)
 
-        // Проверяем, не превышает ли день дату регистрации
         if (previousDay >= registrationDate) {
-          daysToAdd.push({ date: previousDay, dayTaskState: '' }) // Инициализируем dayTaskState
+          daysToAdd.push({ date: previousDay, dayTaskState: '' })
         }
       }
 
-      commit('addPreviousDays', daysToAdd) // Вызываем мутацию для добавления новых дней
+      commit('addPreviousDays', daysToAdd)
       // change currentDayIndex
       const today = new Date()
       today.setHours(0, 0, 0, 0)

@@ -17,7 +17,7 @@ import CalendarList from '@/components/Home/CalendarList.vue'
 import HomeHeader from '@/components/Home/HomeHeader.vue'
 import ToDoList from '@/components/Home/ToDoList.vue'
 import BigButton from '@/components/Home/BigButton.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -27,8 +27,7 @@ export default {
     BigButton,
   },
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate', 'isLoading']),
-    ...mapGetters(['activeDayInThePast']),
+    ...mapGetters(['todos', 'activeDate', 'registrationDate', 'isLoading', 'activeDayInThePast']),
   },
   methods: {
     ...mapActions(['fetchTodos', 'fetchRegistrationDate', 'fetchDays']),

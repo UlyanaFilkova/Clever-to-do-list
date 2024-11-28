@@ -20,7 +20,7 @@
 <script>
 import CustomInput from '@/components/Todo/CustomInput.vue'
 import MediumButton from '@/components/Todo/MediumButton.vue'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -60,11 +60,10 @@ export default {
   },
 
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
-    ...mapGetters(['currentTodo']),
+    ...mapGetters(['currentTodo', 'todos', 'activeDate', 'registrationDate']),
     isAddButtonDisabled() {
       if (this.currentTodo) {
-        return  (
+        return (
           this.inputFields[0].model.trim() === this.currentTodo.title &&
           this.inputFields[1].model.trim() === this.currentTodo.description &&
           this.inputFields[2].model === this.currentTodo.isDone

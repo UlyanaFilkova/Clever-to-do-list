@@ -9,7 +9,6 @@ const store = createStore({
     days: [],
     currentDayIndex: 0,
     isLoading: false,
-    // currentTodo: null,
   },
   getters: {
     days(state) {
@@ -21,6 +20,18 @@ const store = createStore({
     currentTodo() {
       const savedTodo = localStorage.getItem('currentTodo')
       return savedTodo ? JSON.parse(savedTodo) : null
+    },
+    todos(state) {
+      return state.todos
+    },
+    activeDate(state) {
+      return state.activeDate
+    },
+    registrationDate(state) {
+      return state.registrationDate
+    },
+    isLoading(state) {
+      return state.isLoading
     },
     activeDayInThePast(state) {
       if (!state.activeDate) return false

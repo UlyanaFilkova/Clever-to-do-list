@@ -24,7 +24,7 @@
 <script>
 import ToDoItem from './ToDoItem.vue'
 import SmallButton from '@/components/SmallButton.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -33,8 +33,8 @@ export default {
   },
 
   computed: {
-    ...mapState(['todos', 'activeDate', 'registrationDate']),
-    ...mapGetters(['activeDayInThePast']),
+
+    ...mapGetters(['activeDayInThePast', 'todos', 'activeDate', 'registrationDate']),
     filteredTodos() {
       const targetDateString = this.activeDate?.toDateString()
       return this.todos.filter((todo) => {

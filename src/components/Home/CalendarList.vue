@@ -15,7 +15,7 @@
 
 <script>
 import DayCard from './DayCard.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -23,9 +23,10 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'todos',
+    ...mapGetters([
+      'currentTodo',
       'days',
+      'todos',
       'activeDate',
       'registrationDate',
       'currentDayIndex',

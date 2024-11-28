@@ -31,6 +31,7 @@ export default {
     ToDoItem,
     SmallButton,
   },
+  
 
   computed: {
 
@@ -45,7 +46,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateTodoStatus', 'deleteTodo', 'setCurrentTodo', 'moveTasksToToday']),
+    ...mapActions(['updateTodoStatus', 'deleteTodo', 'setCurrentTodo', 'setLoading','moveTasksToToday']),
     async toggleTodo(todo) {
       await this.updateTodoStatus(todo)
     },

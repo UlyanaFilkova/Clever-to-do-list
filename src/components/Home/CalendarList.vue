@@ -122,7 +122,7 @@ export default {
           behavior: 'auto',
         })
       }
-      // this.setLoading(false)
+      this.setLoading(false)
     },
   },
 }

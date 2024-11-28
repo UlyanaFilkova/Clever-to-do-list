@@ -243,7 +243,7 @@ const store = createStore({
       commit('setTodos', todos)
     },
     async fetchRegistrationDate({ commit }) {
-      // commit('setLoading', true)
+      commit('setLoading', true)
       const date = await todoService.getRegistrationDate()
       commit('setRegistrationDate', date)
     },

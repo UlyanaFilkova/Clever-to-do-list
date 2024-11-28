@@ -13,9 +13,9 @@ export default {
   },
   methods: {
     logout() {
-      console.log(123)
       localStorage.removeItem('userId')
       this.$router.push({ name: 'login' })
+      this.$store.dispatch('resetStore')
     },
   },
 }

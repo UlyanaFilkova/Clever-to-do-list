@@ -47,6 +47,15 @@ const store = createStore({
     setDays(state, days) {
       state.days = days
     },
+    resetState(state) {
+      state.todos = []
+      state.activeDate = null
+      state.registrationDate = null
+      state.days = []
+      state.currentDayIndex = 0
+      state.isLoading = false
+      console.log(state)
+    },
     setCurrentDayIndex(state, index) {
       state.currentDayIndex = index
     },
@@ -145,6 +154,9 @@ const store = createStore({
     setLoading({ commit }, loading) {
       commit('setLoading', loading)
     },
+    resetStore({ commit }) {
+      commit('resetState')
+    },
     updateCurrentDayIndex({ commit }, index) {
       commit('setCurrentDayIndex', index)
     },
@@ -242,6 +254,7 @@ const store = createStore({
       commit('setTodos', todos)
     },
     async fetchRegistrationDate({ commit }) {
+      console.log(localStorage.getItem('userId'))
       commit('setLoading', true)
       const date = await todoService.getRegistrationDate()
       commit('setRegistrationDate', date)

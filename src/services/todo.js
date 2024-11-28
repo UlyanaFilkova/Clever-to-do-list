@@ -11,10 +11,10 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js'
 
 const usersCollection = collection(firebase, 'users')
-const userId = localStorage.getItem('userId')
 
 export default {
   async getTodos() {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
 
@@ -32,6 +32,7 @@ export default {
     }
   },
   async updateTodoStatus(todoId, isDone) {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
     const todoDocRef = doc(todosCollection, todoId)
@@ -45,6 +46,7 @@ export default {
     }
   },
   async deleteTodo(todoId) {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
     const todoDocRef = doc(todosCollection, todoId)
@@ -58,6 +60,7 @@ export default {
     }
   },
   async addTodo(todo) {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
 
@@ -72,6 +75,7 @@ export default {
     }
   },
   async updateTodo(todoId, newTodo) {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const todosCollection = collection(userDocRef, 'todos')
     const todoDocRef = doc(todosCollection, todoId)
@@ -85,6 +89,7 @@ export default {
     }
   },
   async getRegistrationDate() {
+    const userId = localStorage.getItem('userId')
     const userDocRef = doc(usersCollection, userId)
     const userDoc = await getDoc(userDocRef)
     if (!userDoc.exists()) {

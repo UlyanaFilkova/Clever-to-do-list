@@ -35,7 +35,7 @@ export default {
       this.$router.push({ name: 'todo' })
     },
   },
-  async created() {
+  async mounted() {
     await this.fetchRegistrationDate()
     await this.fetchTodos()
     await this.fetchDays()

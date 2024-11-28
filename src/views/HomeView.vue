@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import CalendarList from '@/components/Home/CalendarList.vue'
-import HomeHeader from '@/components/Home/HomeHeader.vue'
-import ToDoList from '@/components/Home/ToDoList.vue'
-import BigButton from '@/components/Home/BigButton.vue'
+import CalendarList from '@/components/home/CalendarList.vue'
+import HomeHeader from '@/components/home/HomeHeader.vue'
+import ToDoList from '@/components/home/ToDoList.vue'
+import BigButton from '@/components/home/BigButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {

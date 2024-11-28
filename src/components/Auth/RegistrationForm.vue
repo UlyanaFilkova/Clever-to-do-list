@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import FormInput from '@/components/Auth/FormInput.vue'
+import FormInput from '@/components/auth/FormInput.vue'
 import { required, email, minLength, sameAs } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { registerUser, checkUsernameExists } from '@/services/auth.js'

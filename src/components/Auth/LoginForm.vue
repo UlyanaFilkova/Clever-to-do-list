@@ -16,7 +16,7 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit" :disabled="submitButtonDisabled">Login</button>
+    <button type="submit" :disabled="submitButtonDisabled || requestIsProcessing">Login</button>
   </form>
 </template>
 
@@ -34,6 +34,7 @@ export default {
     return {
       v$: useVuelidate(),
       errorMessage: '',
+      requestIsProcessing: false,
       inputFields: [
         {
           model: '',
@@ -94,16 +95,18 @@ export default {
           this.errorMessage = 'Password must be at least 6 characters long'
         }
       } else {
+        this.requestIsProcessing = true
         const result = await checkUser(this.inputFields[0].model, this.inputFields[1].model)
         if (result === true) {
           this.$router.push({ name: 'home' })
           // Clear form after successful login
           this.inputFields[0].model = ''
           this.inputFields[1].model = ''
-          return
         } else {
           this.errorMessage = result
         }
+        this.requestIsProcessing = false
+        return
       }
     },
   },

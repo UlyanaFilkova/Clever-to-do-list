@@ -16,7 +16,7 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit" :disabled="submitButtonDisabled">Register</button>
+    <button type="submit" :disabled="submitButtonDisabled || requestIsProcessing">Register</button>
   </form>
 </template>
 
@@ -34,6 +34,7 @@ export default {
     return {
       v$: useVuelidate(),
       errorMessage: '',
+      requestIsProcessing: false,
       inputFields: [
         {
           model: '',
@@ -96,7 +97,6 @@ export default {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
-    
         if (this.v$.validationFields.username.required.$invalid) {
           this.errorMessage = 'Email is required'
         } else if (this.v$.validationFields.username.email.$invalid) {
@@ -111,10 +111,11 @@ export default {
           this.errorMessage = 'Passwords must match'
         }
       } else {
-        
+        this.requestIsProcessing = true
         const userExists = await checkUsernameExists(this.inputFields[0].model)
         if (userExists) {
           this.errorMessage = 'This username is already taken'
+          this.requestIsProcessing = false
           return
         }
         const result = await registerUser(this.inputFields[0].model, this.inputFields[1].model)
@@ -124,6 +125,7 @@ export default {
           this.inputFields[0].model = ''
           this.inputFields[1].model = ''
           this.inputFields[2].model = ''
+          this.requestIsProcessing = false
           return
         }
       }

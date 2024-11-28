@@ -43,7 +43,7 @@
     <ModalConfirmWindow
       :isVisible="showModal"
       @cancel="this.showModal = false"
-      @confirm="$emit('delete-todo', todo)"
+      @confirm="handleDeleteConfirmation"
     />
   </div>
 </template>
@@ -65,7 +65,12 @@ export default {
   components: {
     ModalConfirmWindow,
   },
-  methods: {},
+  methods: {
+    handleDeleteConfirmation() {
+      this.showModal = false
+      this.$emit('delete-todo', this.todo)
+    },
+  },
 }
 </script>
 

@@ -1,13 +1,7 @@
 <template>
   <div class="todo__container" @mouseenter="isHovered = true" @mouseleave="isHovered = false">
     <div class="todo__main-part">
-      <div
-        class="todo__indicator"
-        :class="{ todo__indicator_done: todo.isDone }"
-        @click.stop="$emit('toggle-todo', todo)"
-      >
-        <DoneIcon v-if="todo.isDone" />
-      </div>
+      <CustomCheckbox :checked="todo.isDone" @click.stop="$emit('toggle-todo', todo)" />
       <div class="todo__title" @click.stop="$emit('open-todo', todo)">{{ todo.title }}</div>
     </div>
     <DeleteIcon v-if="isHovered" @click.stop="this.showModal = true" />
@@ -21,7 +15,7 @@
 
 <script>
 import ConfirmModal from '@/components/base/ConfirmModal.vue'
-import DoneIcon from '@/components/icons/DoneIcon.vue'
+import CustomCheckbox from '@/components/base/CustomCheckbox.vue'
 import DeleteIcon from '@/components/icons/DeleteIcon.vue'
 
 export default {
@@ -33,8 +27,8 @@ export default {
   },
   components: {
     ConfirmModal,
-    DoneIcon,
     DeleteIcon,
+    CustomCheckbox,
   },
   data() {
     return {
@@ -69,17 +63,7 @@ export default {
   gap: 15px;
   align-items: center;
 }
-.todo__indicator {
-  width: 24px;
-  height: 24px;
-  border: 1.5px solid var(--color-main);
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: var(--color-text-main);
-}
-.todo__indicator_done {
-  background-color: var(--color-main);
-}
+
 .todo__title {
   cursor: pointer;
 }

@@ -10,7 +10,6 @@
 
 <script>
 export default {
-  name: 'LoginContainer',
   props: {
     linkText: {
       type: String,

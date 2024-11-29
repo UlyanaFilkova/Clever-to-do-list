@@ -31,16 +31,16 @@ export default {
       required: true,
     },
   },
+  components: {
+    ConfirmModal,
+    DoneIcon,
+    DeleteIcon,
+  },
   data() {
     return {
       showModal: false,
       isHovered: false,
     }
-  },
-  components: {
-    ConfirmModal,
-    DoneIcon,
-    DeleteIcon,
   },
   methods: {
     handleDeleteConfirmation() {

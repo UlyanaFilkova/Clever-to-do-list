@@ -33,25 +33,6 @@ export default {
       'isLoading',
     ]),
   },
-  watch: {
-    todos: {
-      handler() {
-        if (this.registrationDate) {
-          this.fetchDays()
-        }
-      },
-      deep: true,
-    },
-    days: {
-      handler() {
-        if (this.days.length > 0) {
-          this.$nextTick(() => {
-            this.scrollToCurrentDay()
-          })
-        }
-      },
-    },
-  },
 
   methods: {
     ...mapActions([
@@ -123,6 +104,25 @@ export default {
         })
       }
       this.setLoading(false)
+    },
+  },
+  watch: {
+    todos: {
+      handler() {
+        if (this.registrationDate) {
+          this.fetchDays()
+        }
+      },
+      deep: true,
+    },
+    days: {
+      handler() {
+        if (this.days.length > 0) {
+          this.$nextTick(() => {
+            this.scrollToCurrentDay()
+          })
+        }
+      },
     },
   },
 }

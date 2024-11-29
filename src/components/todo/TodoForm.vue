@@ -52,13 +52,6 @@ export default {
       ],
     }
   },
-  mounted() {
-    if (this.currentTodo) {
-      this.inputFields[0].model = this.currentTodo.title
-      this.inputFields[1].model = this.currentTodo.description
-      this.inputFields[2].model = this.currentTodo.isDone
-    }
-  },
 
   computed: {
     ...mapGetters(['currentTodo', 'todos', 'activeDate', 'registrationDate']),
@@ -103,6 +96,13 @@ export default {
 
       this.$router.push({ name: 'home' })
     },
+  },
+  mounted() {
+    if (this.currentTodo) {
+      this.inputFields[0].model = this.currentTodo.title
+      this.inputFields[1].model = this.currentTodo.description
+      this.inputFields[2].model = this.currentTodo.isDone
+    }
   },
 }
 </script>

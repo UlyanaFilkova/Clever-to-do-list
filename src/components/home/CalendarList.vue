@@ -144,20 +144,20 @@ export default {
 }
 
 .calendar__container::-webkit-scrollbar-thumb {
-  background-color: #aaaaaa;
+  background-color: var(--color-forth);
   border-radius: 4px;
 }
 
 .calendar__container::-webkit-scrollbar-thumb:hover {
-  background-color: #888;
+  background-color: var(--color-forth-hover);
 }
 
 .calendar__container {
   scrollbar-width: thin;
-  scrollbar-color: #aaaaaa transparent;
+  scrollbar-color: var(--color-forth) transparent;
 }
 
 .calendar__container:hover {
-  scrollbar-color: #888 transparent;
+  scrollbar-color: var(--color-forth-hover) transparent;
 }
 </style>

@@ -122,8 +122,8 @@ h1 {
 button {
   width: 100%;
   padding: 10px;
-  background-color: #fb6914;
-  color: white;
+  background-color: var(--color-main);
+  color: var(--color-text-main);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -131,18 +131,18 @@ button {
 }
 
 button:hover {
-  background-color: #d74f00;
+  background-color: var(--color-main-hover);
 }
 
 button:disabled {
-  background-color: #808080;
+  background-color: var(--color-main-disabled);
   cursor: auto;
 }
 
 .invalid-input {
   font-size: 12px;
   line-height: 12px;
-  color: red;
+  color: var(--color-invalid-input);
   margin-top: 5px;
   margin-bottom: 10px;
 }

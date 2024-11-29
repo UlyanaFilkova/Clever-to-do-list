@@ -41,10 +41,10 @@
 svg {
   height: 24px;
   width: 24px;
-  fill: #652a00;
+  fill: var(--color-twelve);
 }
 
 .back-button:hover svg {
-  fill: #818181;
+  fill: var(--color-card-third);
 }
 </style>

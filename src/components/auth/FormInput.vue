@@ -44,13 +44,13 @@ export default {
 input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-one);
   border-radius: 5px;
 }
 .invalid-input {
   font-size: 12px;
   line-height: 12px;
-  color: red;
+  color: var(--color-invalid-input);
   margin-top: 5px;
 }
 </style>

@@ -73,7 +73,7 @@ export default {
   display: flex;
 }
 .day__card {
-  border: 1.5px solid #e0e0e0;
+  border: 1.5px solid var(--color-border-one);
   border-radius: 8px;
   min-width: 50px;
   width: 60px;
@@ -87,47 +87,47 @@ export default {
 }
 .day__card_active,
 .day__card_current.day__card_active {
-  background-color: #fb6914;
-  border: 1.5px solid #fb6914;
-  color: #fff;
+  background-color: var(--color-main);
+  border: 1.5px solid var(--color-main);
+  color: var(--color-text-main);
 }
 .day__card_current.day__card_active {
-  color: #fff;
+  color: var(--color-text-main);
 }
 .day__card_active .day__dayOfWeek,
 .day__card_active .day__month,
 .day__card_current.day__card_active .day__dayOfWeek,
 .day__card_current.day__card_active .day__month {
-  color: #eaeaea;
+  color: var(--color-text-third);
 }
 .day__card_current {
-  border: 1.5px solid #d8d8d8;
-  background-color: #e2e2e2;
+  border: 1.5px solid var(--color-card-first);
+  background-color: var(--color-card-second);
 }
 .day__card_current .day__dayOfWeek,
 .day__card_current .day__month {
-  color: #818181;
+  color: var(--color-card-third);
 }
 .day__card:hover {
   cursor: pointer;
 }
 .day__card:not(.day__card_active):hover {
-  border: 1.5px solid #ffa876;
-  background-color: #ffebdf;
+  border: 1.5px solid var(--color-sixth);
+  background-color: var(--color-sixth-hover);
 }
 
 .day__card:not(.day__card_active):hover .day__dayOfWeek,
 .day__card:not(.day__card_active):hover .day__month {
-  color: #fd5d00;
+  color: var(--color-seventh);
 }
 
 .day__dayOfWeek {
-  color: #a0a0a0;
+  color: var(--color-eighth);
   font-size: 15px;
 }
 .day__month {
   font-size: 14px;
-  color: #a0a0a0;
+  color: var(--color-eighth);
 }
 .day__date {
   font-size: 22px;
@@ -143,10 +143,10 @@ export default {
   border-radius: 3px;
 }
 .day__undone {
-  background-color: #fa6610;
+  background-color: var(--color-undone);
 }
 .day__done {
-  background-color: #ffc258;
+  background-color: var(--color-done);
 }
 .day__new-year {
   margin-bottom: 5px;
@@ -158,7 +158,7 @@ export default {
 .day__new-year p {
   font-size: 20px;
   text-align: center;
-  color: #fd5d00;
+  color: var(--color-seventh);
   font-weight: 500;
 }
 

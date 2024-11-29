@@ -39,7 +39,7 @@ export default {
 }
 
 .modal {
-  background: #fff;
+  background: var(--color-text-main);
   padding: 30px 20px 20px 20px;
   border-radius: 5px;
   text-align: center;
@@ -51,7 +51,7 @@ h2 {
 }
 
 p {
-  color: #373737;
+  color: var(--color-text-second);
   margin-bottom: 20px;
 }
 
@@ -62,9 +62,9 @@ button {
 button {
   padding: 7px 10px;
   border-radius: 5px;
-  background: #bababa;
+  background: var(--color-third);
 }
 button:hover {
-  background: #9c9c9c;
+  background: var(--color-third-hover);
 }
 </style>

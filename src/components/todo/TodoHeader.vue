@@ -1,7 +1,7 @@
 <template>
   <div class="todo-header__container">
     <router-link to="home" class="back-button" @click="clearCurrentTodo()">
-      <BackIcon/>
+      <BackIcon />
       Back
     </router-link>
     <BaseButton
@@ -10,11 +10,7 @@
       text="Delete"
       class="small-button"
     ></BaseButton>
-    <ConfirmModal
-      :isVisible="showModal"
-      @confirm="handleDeleteTodo"
-      @cancel="showModal = false"
-    />
+    <ConfirmModal :isVisible="showModal" @confirm="handleDeleteTodo" @cancel="showModal = false" />
   </div>
 </template>
 <script>
@@ -59,19 +55,19 @@ export default {
   align-items: center;
   gap: 12px;
   font-size: 18px;
-  color: #652a00;
+  color: var(--color-twelve);
 }
 
 .back-button__icon svg {
   height: 24px;
   width: 24px;
-  fill: #652a00;
+  fill: var(--color-twelve);
 }
 .back-button:hover {
-  color: #818181;
+  color: var(--color-card-third);
   cursor: pointer;
 }
 .back-button:hover svg {
-  fill: #818181;
+  fill: var(--color-card-third);
 }
 </style>

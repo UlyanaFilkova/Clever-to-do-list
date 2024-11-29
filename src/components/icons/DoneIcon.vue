@@ -10,6 +10,6 @@ svg {
   margin: 3px 0 0 3px;
   width: 16px;
   height: 16px;
-  fill: #fff;
+  fill: var(--color-text-main);
 }
 </style>

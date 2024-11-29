@@ -62,7 +62,7 @@ export default {
   border-radius: 5px;
 }
 .todo__container:hover {
-  background-color: #ffebdf;
+  background-color: var(--color-sixth-hover);
 }
 .todo__main-part {
   display: flex;
@@ -72,13 +72,13 @@ export default {
 .todo__indicator {
   width: 24px;
   height: 24px;
-  border: 1.5px solid #fb6914;
+  border: 1.5px solid var(--color-main);
   border-radius: 12px;
   cursor: pointer;
-  background-color: #fff;
+  background-color: var(--color-text-main);
 }
 .todo__indicator_done {
-  background-color: #fb6914;
+  background-color: var(--color-main);
 }
 .todo__title {
   cursor: pointer;

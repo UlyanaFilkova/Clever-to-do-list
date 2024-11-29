@@ -59,14 +59,14 @@ export default {
 <style scoped>
 .input-group label {
   display: block;
-  color: #833700;
+  color: var(--color-tenth);
   margin-bottom: 5px;
 }
 .input-group input[type='text'],
 .input-group textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #d7b7a0;
+  border: 1px solid var(--color-eleventh);
   border-radius: 8px;
   display: block;
   margin-bottom: 20px;
@@ -74,7 +74,7 @@ export default {
 }
 .input-group input[type='text']:focus,
 .input-group textarea:focus {
-  outline: 1.5px solid #d7b7a0;
+  outline: 1.5px solid var(--color-eleventh);
 }
 .checkbox-container {
   display: flex;
@@ -89,7 +89,7 @@ input[type='checkbox'] {
   margin: 5px 0 0 0;
   height: 20px;
   width: 20px;
-  border: 1px solid #d7b7a0;
+  border: 1px solid var(--color-eleventh);
   border-radius: 8px;
   outline: none;
   cursor: pointer;

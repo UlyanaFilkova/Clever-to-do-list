@@ -9,23 +9,24 @@
       :name="field.name"
       @update:modelValue="(value) => (field.model = value)"
     ></CustomInput>
-    <MediumButton
+    <BaseButton
       @click="handleAddTodo"
       :disabled="isAddButtonDisabled"
       :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
+      class="medium-button submit-button"
     >
-    </MediumButton>
+    </BaseButton>
   </div>
 </template>
 <script>
 import CustomInput from '@/components/todo/CustomInput.vue'
-import MediumButton from '@/components/todo/MediumButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
     CustomInput,
-    MediumButton,
+    BaseButton,
   },
   data() {
     return {
@@ -105,4 +106,9 @@ export default {
   },
 }
 </script>
-<style scoped></style>
+
+<style scoped>
+.submit-button {
+  margin: 30px auto 0 auto;
+}
+</style>

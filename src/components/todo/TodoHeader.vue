@@ -38,7 +38,12 @@
       </div>
       Back
     </router-link>
-    <SmallButton v-if="currentTodo" @click="showModal = true" text="Delete"></SmallButton>
+    <BaseButton
+      v-if="currentTodo"
+      @click="showModal = true"
+      text="Delete"
+      class="small-button"
+    ></BaseButton>
     <ModalConfirmWindow
       :isVisible="showModal"
       @confirm="handleDeleteTodo"
@@ -48,11 +53,11 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import SmallButton from '@/components/SmallButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import ModalConfirmWindow from '@/components/ModalConfirmWindow.vue'
 export default {
   components: {
-    SmallButton,
+    BaseButton,
     ModalConfirmWindow,
   },
   data() {

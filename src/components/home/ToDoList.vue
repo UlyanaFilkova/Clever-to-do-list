@@ -2,13 +2,13 @@
   <div class="todo-list__container">
     <div class="todo-list__header">
       <h2>{{ filteredTodos.length }} Tasks</h2>
-      <SmallButton
-        class="todo-list__move-tasks"
+      <BaseButton
+        class="small-button"
         @click="moveTasksToToday()"
         v-if="activeDayInThePast"
         text="Move tasks to today"
       >
-      </SmallButton>
+      </BaseButton>
     </div>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"
@@ -23,13 +23,13 @@
 </template>
 <script>
 import ToDoItem from '@/components/home/ToDoItem.vue'
-import SmallButton from '@/components/SmallButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
     ToDoItem,
-    SmallButton,
+    BaseButton,
   },
 
   computed: {

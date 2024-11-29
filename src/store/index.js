@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import todoService from '@/services/todo.js'
+import router from '@/router/index.js'
 
 const store = createStore({
   state: {
@@ -299,7 +300,6 @@ const store = createStore({
 
             try {
               await todoService.updateTodo(todo.id, { ...todo, date: today })
-              
             } catch (error) {
               console.error(`Error updating task with ID ${todo.id}:`, error)
             }
@@ -307,6 +307,11 @@ const store = createStore({
         }),
       )
       await dispatch('fetchTodos')
+    },
+    logout({ dispatch }) {
+      localStorage.removeItem('userId')
+      router.push({ name: 'login' })
+      dispatch('resetStore')
     },
   },
 })

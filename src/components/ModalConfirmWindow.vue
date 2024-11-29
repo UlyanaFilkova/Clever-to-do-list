@@ -3,14 +3,14 @@
     <div class="modal">
       <h2>Confirm deletion</h2>
       <p>Are you sure you want to delete this task?</p>
-      <SmallButton @click="this.$emit('confirm')" text="Delete"></SmallButton>
+      <BaseButton @click="this.$emit('confirm')" text="Delete" class="small-button"></BaseButton>
       <button @click="this.$emit('cancel')">Cancel</button>
     </div>
   </div>
 </template>
 
 <script>
-import SmallButton from '@/components/SmallButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 export default {
   props: {
@@ -20,7 +20,7 @@ export default {
     },
   },
   components: {
-    SmallButton,
+    BaseButton,
   },
 }
 </script>

@@ -117,6 +117,7 @@ export default {
 
 <style scoped>
 .submit-button {
+  display: block;
   margin: 30px auto 0 auto;
 }
 </style>

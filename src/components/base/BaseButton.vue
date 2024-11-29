@@ -41,4 +41,23 @@ export default {
   background-color: var(--color-main-disabled);
   cursor: auto;
 }
+.medium-button{
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-main);
+  color: var(--color-text-main);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.medium-button:hover {
+  background-color: var(--color-main-hover);
+}
+
+.medium-button:disabled {
+  background-color: var(--color-main-disabled);
+  cursor: auto;
+}
 </style>

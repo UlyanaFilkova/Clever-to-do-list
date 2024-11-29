@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="isLoading" class="loader-overlay">
-      <img src="@/assets/200w.webp" alt="Loading..." class="loader" />
-    </div>
+    <BaseLoader v-if="isLoading" />
     <div>
       <HomeHeader />
       <CalendarList />
@@ -22,6 +20,7 @@ import CalendarList from '@/components/home/CalendarList.vue'
 import HomeHeader from '@/components/home/HomeHeader.vue'
 import ToDoList from '@/components/home/ToDoList.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseLoader from '@/components/base/BaseLoader.vue'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -30,6 +29,7 @@ export default {
     CalendarList,
     ToDoList,
     BaseButton,
+    BaseLoader,
   },
   computed: {
     ...mapGetters(['todos', 'activeDate', 'registrationDate', 'isLoading', 'activeDayInThePast']),
@@ -64,24 +64,6 @@ export default {
   .container {
     margin: 0 15px;
   }
-}
-
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.loader {
-  width: 100px;
-  height: 100px;
 }
 
 .fixed-button {

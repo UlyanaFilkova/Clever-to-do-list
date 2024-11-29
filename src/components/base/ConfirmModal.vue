@@ -3,14 +3,14 @@
     <div class="modal">
       <h2>Confirm deletion</h2>
       <p>Are you sure you want to delete this task?</p>
-      <SmallButton @click="this.$emit('confirm')" text="Delete"></SmallButton>
-      <button @click="this.$emit('cancel')">Cancel</button>
+      <BaseButton text="Delete" class="small-button margin-right" @click="this.$emit('confirm')" />
+      <BaseButton text="Cancel" class="small-button grey" @click="this.$emit('cancel')" />
     </div>
   </div>
 </template>
 
 <script>
-import SmallButton from '@/components/SmallButton.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 
 export default {
   props: {
@@ -20,7 +20,7 @@ export default {
     },
   },
   components: {
-    SmallButton,
+    BaseButton,
   },
 }
 </script>
@@ -39,7 +39,7 @@ export default {
 }
 
 .modal {
-  background: #fff;
+  background: var(--color-text-main);
   padding: 30px 20px 20px 20px;
   border-radius: 5px;
   text-align: center;
@@ -51,20 +51,11 @@ h2 {
 }
 
 p {
-  color: #373737;
+  color: var(--color-text-second);
   margin-bottom: 20px;
 }
 
-button {
-  margin: 10px;
-}
-
-button {
-  padding: 7px 10px;
-  border-radius: 5px;
-  background: #bababa;
-}
-button:hover {
-  background: #9c9c9c;
+.margin-right{
+  margin-right: 20px;
 }
 </style>

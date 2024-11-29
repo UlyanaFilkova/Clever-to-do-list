@@ -2,13 +2,13 @@
   <div class="calendar__container" @wheel.prevent="handleWheel" @scroll="handleScroll">
     <DayCard
       v-for="(day, index) in days"
+      ref="dayCards"
       :key="index"
       :date="day.date"
       :dayTaskState="day.dayTaskState"
       :isCurrent="index === currentDayIndex"
       :isActive="day.date.toDateString() === activeDate.toDateString()"
       @click="changeActiveDate(day.date)"
-      ref="dayCards"
     />
   </div>
 </template>
@@ -32,25 +32,6 @@ export default {
       'currentDayIndex',
       'isLoading',
     ]),
-  },
-  watch: {
-    todos: {
-      handler() {
-        if (this.registrationDate) {
-          this.fetchDays()
-        }
-      },
-      deep: true,
-    },
-    days: {
-      handler() {
-        if (this.days.length > 0) {
-          this.$nextTick(() => {
-            this.scrollToCurrentDay()
-          })
-        }
-      },
-    },
   },
 
   methods: {
@@ -125,6 +106,25 @@ export default {
       this.setLoading(false)
     },
   },
+  watch: {
+    todos: {
+      handler() {
+        if (this.registrationDate) {
+          this.fetchDays()
+        }
+      },
+      deep: true,
+    },
+    days: {
+      handler() {
+        if (this.days.length > 0) {
+          this.$nextTick(() => {
+            this.scrollToCurrentDay()
+          })
+        }
+      },
+    },
+  },
 }
 </script>
 <style scoped>
@@ -144,20 +144,20 @@ export default {
 }
 
 .calendar__container::-webkit-scrollbar-thumb {
-  background-color: #aaaaaa;
+  background-color: var(--color-forth);
   border-radius: 4px;
 }
 
 .calendar__container::-webkit-scrollbar-thumb:hover {
-  background-color: #888;
+  background-color: var(--color-forth-hover);
 }
 
 .calendar__container {
   scrollbar-width: thin;
-  scrollbar-color: #aaaaaa transparent;
+  scrollbar-color: var(--color-forth) transparent;
 }
 
 .calendar__container:hover {
-  scrollbar-color: #888 transparent;
+  scrollbar-color: var(--color-forth-hover) transparent;
 }
 </style>

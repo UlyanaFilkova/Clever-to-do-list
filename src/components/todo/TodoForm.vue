@@ -1,61 +1,60 @@
 <template>
   <div class="todo-form">
-    <CustomInput
+    <component
       v-for="(field, index) in inputFields"
+      :is="field.type"
       :key="index"
       :modelValue="field.model"
       :placeholder="field.placeholder"
-      :type="field.type"
       :name="field.name"
+      :text="field.text"
       @update:modelValue="(value) => (field.model = value)"
-    ></CustomInput>
-    <MediumButton
-      @click="handleAddTodo"
+    />
+    <BaseButton
       :disabled="isAddButtonDisabled"
-      :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
-    >
-    </MediumButton>
+      :text="baseButtonText"
+      class="big-button submit-button"
+      @click="handleAddTodo"
+    />
   </div>
 </template>
 <script>
-import CustomInput from '@/components/todo/CustomInput.vue'
-import MediumButton from '@/components/todo/MediumButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { mapGetters, mapActions } from 'vuex'
+import { markRaw } from 'vue'
 
 export default {
   components: {
-    CustomInput,
-    MediumButton,
+    BaseInput,
+    BaseCheckbox,
+    BaseTextarea,
+    BaseButton,
   },
   data() {
     return {
       inputFields: [
         {
           model: '',
-          placeholder: 'Title',
+          label: 'Title',
           name: 'title',
-          type: 'text',
+          type: markRaw(BaseInput),
         },
         {
           model: '',
-          placeholder: 'Description',
+          label: 'Description',
           name: 'description',
-          type: 'textarea',
+          type: markRaw(BaseTextarea),
         },
         {
           model: false,
-          placeholder: 'is done',
-          name: 'isDone',
-          type: 'checkbox',
+          text: 'is done',
+          name: 'is-done',
+          type: markRaw(BaseCheckbox),
         },
       ],
-    }
-  },
-  mounted() {
-    if (this.currentTodo) {
-      this.inputFields[0].model = this.currentTodo.title
-      this.inputFields[1].model = this.currentTodo.description
-      this.inputFields[2].model = this.currentTodo.isDone
     }
   },
 
@@ -72,6 +71,9 @@ export default {
         // if both fields are empty
         return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
       }
+    },
+    baseButtonText() {
+      return this.currentTodo ? 'Update Todo' : 'Add new Todo'
     },
   },
 
@@ -103,6 +105,19 @@ export default {
       this.$router.push({ name: 'home' })
     },
   },
+  mounted() {
+    if (this.currentTodo) {
+      this.inputFields[0].model = this.currentTodo.title
+      this.inputFields[1].model = this.currentTodo.description
+      this.inputFields[2].model = this.currentTodo.isDone
+    }
+  },
 }
 </script>
-<style scoped></style>
+
+<style scoped>
+.submit-button {
+  display: block;
+  margin: 30px auto 0 auto;
+}
+</style>

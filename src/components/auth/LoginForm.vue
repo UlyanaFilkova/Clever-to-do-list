@@ -16,12 +16,17 @@
     <div class="invalid-input">
       {{ errorMessage }}
     </div>
-    <button type="submit" :disabled="submitButtonDisabled || requestIsProcessing">Login</button>
+    <BaseButton
+      :disabled="submitButtonDisabled || requestIsProcessing"
+      class="medium-button"
+      text="Login"
+    />
   </form>
 </template>
 
 <script>
 import FormInput from '@/components/auth/FormInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import { checkUser } from '@/services/auth.js'
@@ -29,6 +34,7 @@ import { checkUser } from '@/services/auth.js'
 export default {
   components: {
     FormInput,
+    BaseButton,
   },
   data() {
     return {
@@ -119,30 +125,10 @@ h1 {
   margin-bottom: 20px;
 }
 
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #fb6914;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-button:hover {
-  background-color: #d74f00;
-}
-
-button:disabled {
-  background-color: #808080;
-  cursor: auto;
-}
-
 .invalid-input {
   font-size: 12px;
   line-height: 12px;
-  color: red;
+  color: var(--color-invalid-input);
   margin-top: 5px;
   margin-bottom: 10px;
 }

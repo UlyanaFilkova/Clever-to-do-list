@@ -22,7 +22,6 @@ export default {
       type: String,
       default: 'text',
     },
-   
     errorMessage: {
       type: String,
       default: '',

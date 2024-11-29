@@ -2,13 +2,13 @@
   <div class="calendar__container" @wheel.prevent="handleWheel" @scroll="handleScroll">
     <DayCard
       v-for="(day, index) in days"
+      ref="dayCards"
       :key="index"
       :date="day.date"
       :dayTaskState="day.dayTaskState"
       :isCurrent="index === currentDayIndex"
       :isActive="day.date.toDateString() === activeDate.toDateString()"
       @click="changeActiveDate(day.date)"
-      ref="dayCards"
     />
   </div>
 </template>

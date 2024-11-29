@@ -3,7 +3,6 @@
     <path d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"></path>
   </svg>
 </template>
-<script></script>
 
 <style scoped>
 svg {

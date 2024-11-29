@@ -1,15 +1,15 @@
 <template>
   <div class="todo-header__container">
-    <router-link to="home" class="back-button" @click="clearCurrentTodo()">
+    <router-link to="home" class="back-button" @click="clearCurrentTodo">
       <BackIcon />
       Back
     </router-link>
     <BaseButton
       v-if="currentTodo"
-      @click="showModal = true"
       text="Delete"
       class="small-button"
-    ></BaseButton>
+      @click="showModal = true"
+    />
     <ConfirmModal :isVisible="showModal" @confirm="handleDeleteTodo" @cancel="showModal = false" />
   </div>
 </template>

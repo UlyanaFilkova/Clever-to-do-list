@@ -1,31 +1,36 @@
 <template>
   <div class="todo-form">
-    <CustomInput
+    <component
       v-for="(field, index) in inputFields"
+      :is="field.type"
       :key="index"
       :modelValue="field.model"
       :placeholder="field.placeholder"
-      :type="field.type"
       :name="field.name"
+      :text="field.text"
       @update:modelValue="(value) => (field.model = value)"
-    ></CustomInput>
+    />
     <BaseButton
-      @click="handleAddTodo"
       :disabled="isAddButtonDisabled"
-      :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
+      :text="baseButtonText"
       class="big-button submit-button"
-    >
-    </BaseButton>
+      @click="handleAddTodo"
+    />
   </div>
 </template>
 <script>
-import CustomInput from '@/components/todo/CustomInput.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+import BaseTextarea from '@/components/base/BaseTextarea.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { mapGetters, mapActions } from 'vuex'
+import { markRaw } from 'vue'
 
 export default {
   components: {
-    CustomInput,
+    BaseInput,
+    BaseCheckbox,
+    BaseTextarea,
     BaseButton,
   },
   data() {
@@ -33,21 +38,21 @@ export default {
       inputFields: [
         {
           model: '',
-          placeholder: 'Title',
+          label: 'Title',
           name: 'title',
-          type: 'text',
+          type: markRaw(BaseInput),
         },
         {
           model: '',
-          placeholder: 'Description',
+          label: 'Description',
           name: 'description',
-          type: 'textarea',
+          type: markRaw(BaseTextarea),
         },
         {
           model: false,
-          placeholder: 'is done',
-          name: 'isDone',
-          type: 'checkbox',
+          text: 'is done',
+          name: 'is-done',
+          type: markRaw(BaseCheckbox),
         },
       ],
     }
@@ -66,6 +71,9 @@ export default {
         // if both fields are empty
         return !this.inputFields[0].model.trim() && !this.inputFields[1].model.trim()
       }
+    },
+    baseButtonText() {
+      return this.currentTodo ? 'Update Todo' : 'Add new Todo'
     },
   },
 

@@ -3,12 +3,12 @@
     <div class="todo-list__header">
       <h2>{{ filteredTodos.length }} Tasks</h2>
       <BaseButton
-        class="small-button"
-        @click="moveTasksToToday()"
         v-if="activeDayInThePast"
+        class="small-button"
         text="Move tasks to today"
-      >
-      </BaseButton>
+        @click="moveTasksToToday()"
+      />
+
     </div>
     <ToDoItem
       v-for="(todo, index) in filteredTodos"

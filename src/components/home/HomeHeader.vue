@@ -1,13 +1,14 @@
 <template>
   <header class="header">
     <h2>To-do List</h2>
-    <BaseButton @click="logout" text="Logout" class="small-button"></BaseButton>
+    <BaseButton @click="logout" text="Logout" class="small-button" />
   </header>
 </template>
 
 <script>
 import BaseButton from '@/components/base/BaseButton.vue'
 import { mapActions } from 'vuex'
+
 export default {
   components: {
     BaseButton,
@@ -17,6 +18,7 @@ export default {
   },
 }
 </script>
+
 <style scoped>
 .header {
   display: flex;

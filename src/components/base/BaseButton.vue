@@ -20,6 +20,12 @@ export default {
 .small-button:hover {
   background: var(--color-second-hover);
 }
+.small-button.grey {
+  background: var(--color-third);
+}
+.small-button.grey:hover {
+  background: var(--color-third-hover);
+}
 .big-button {
   width: 176px;
   padding: 14px 24px;

@@ -3,8 +3,8 @@
     <div class="modal">
       <h2>Confirm deletion</h2>
       <p>Are you sure you want to delete this task?</p>
-      <BaseButton @click="this.$emit('confirm')" text="Delete" class="small-button"></BaseButton>
-      <button @click="this.$emit('cancel')">Cancel</button>
+      <BaseButton text="Delete" class="small-button margin-right" @click="this.$emit('confirm')" />
+      <BaseButton text="Cancel" class="small-button grey" @click="this.$emit('cancel')" />
     </div>
   </div>
 </template>
@@ -55,16 +55,7 @@ p {
   margin-bottom: 20px;
 }
 
-button {
-  margin: 10px;
-}
-
-button {
-  padding: 7px 10px;
-  border-radius: 5px;
-  background: var(--color-third);
-}
-button:hover {
-  background: var(--color-third-hover);
+.margin-right{
+  margin-right: 20px;
 }
 </style>

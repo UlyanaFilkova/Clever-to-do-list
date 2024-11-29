@@ -39,13 +39,16 @@ export default {
     handleAddClick() {
       this.$router.push({ name: 'todo' })
     },
+    async initTodos() {
+      await this.fetchRegistrationDate()
+      await this.fetchTodos()
+      await this.fetchDays()
+      window.scrollTo({ top: 0 })
+    },
   },
 
-  mounted() {
-    this.fetchRegistrationDate()
-      .then(() => this.fetchTodos())
-      .then(() => this.fetchDays())
-      .then(() => window.scrollTo({ top: 0 }))
+  created() {
+    this.initTodos()
   },
 }
 </script>

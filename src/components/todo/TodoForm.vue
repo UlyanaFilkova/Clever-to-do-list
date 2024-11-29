@@ -13,7 +13,7 @@
       @click="handleAddTodo"
       :disabled="isAddButtonDisabled"
       :text="this.currentTodo ? 'Update Todo' : 'Add new Todo'"
-      class="medium-button submit-button"
+      class="big-button submit-button"
     >
     </BaseButton>
   </div>

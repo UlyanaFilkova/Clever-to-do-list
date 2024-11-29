@@ -6,16 +6,7 @@
         :class="{ todo__indicator_done: todo.isDone }"
         @click.stop="$emit('toggle-todo', todo)"
       >
-        <svg
-          v-if="todo.isDone"
-          class="todo__indicator-svg"
-          xmlns="http://www.w3.org/2000/svg"
-          x="0px"
-          y="0px"
-          viewBox="0 0 48 48"
-        >
-          <path d="M40.6 12.1L17 35.7 7.4 26.1 4.6 29 17 41.3 43.4 14.9z"></path>
-        </svg>
+        <DoneIcon v-if="todo.isDone" />
       </div>
       <div class="todo__title" @click.stop="$emit('open-todo', todo)">{{ todo.title }}</div>
     </div>
@@ -40,7 +31,7 @@
         </g>
       </svg>
     </button>
-    <ModalConfirmWindow
+    <ConfirmModal
       :isVisible="showModal"
       @cancel="this.showModal = false"
       @confirm="handleDeleteConfirmation"
@@ -49,7 +40,8 @@
 </template>
 
 <script>
-import ModalConfirmWindow from '@/components/ModalConfirmWindow.vue'
+import ConfirmModal from '@/components/base/ConfirmModal.vue'
+import DoneIcon from '@/components/icons/DoneIcon.vue'
 export default {
   props: {
     todo: {
@@ -63,7 +55,8 @@ export default {
     }
   },
   components: {
-    ModalConfirmWindow,
+    ConfirmModal,
+    DoneIcon,
   },
   methods: {
     handleDeleteConfirmation() {
@@ -103,12 +96,12 @@ export default {
 .todo__indicator_done {
   background-color: #fb6914;
 }
-.todo__indicator-svg {
+/* .todo__indicator-svg {
   margin: 3px 0 0 3px;
   width: 16px;
   height: 16px;
   fill: #fff;
-}
+} */
 .todo__title {
   cursor: pointer;
 }

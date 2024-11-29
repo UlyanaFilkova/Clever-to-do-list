@@ -31,19 +31,7 @@ export default {
 .big-button:hover {
   background-color: #d74f00;
 }
-.medium-button {
-  width: 176px;
-  display: block;
-  padding: 14px 24px;
-  background-color: #fb6914;
-  color: #fff;
-  border-radius: 8px;
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
-}
-.medium-button:hover {
-  background-color: #d74f00;
-}
-.medium-button:disabled {
+.big-button:disabled {
   background-color: #808080;
   cursor: auto;
 }

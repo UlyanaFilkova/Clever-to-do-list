@@ -87,19 +87,30 @@ export default {
       this.errorMessage = ''
       field.model = value
     },
+    getValidateMessage() {
+      const validationErrors = {
+        'username.required': 'Email is required',
+        'username.email': 'Invalid email',
+        'password.required': 'Password is required',
+        'password.minLength': 'Password must be at least 6 characters long',
+      }
+
+      if (this.v$.validationFields.$invalid) {
+        const firstInvalidField = Object.keys(this.v$.validationFields.$errors).find(
+          (key) => this.v$.validationFields.$errors[key].$message !== '',
+        )
+        const validator = this.v$.validationFields.$errors[firstInvalidField].$validator
+        const property = this.v$.validationFields.$errors[firstInvalidField].$property
+        const key = `${property}.${validator}`
+        return validationErrors[key] || this.v$.validationFields.$errors[firstInvalidField].$message
+      }
+      return ''
+    },
     async handleSubmit() {
       this.v$.validationFields.$touch()
 
       if (this.v$.validationFields.$invalid) {
-        if (this.v$.validationFields.username.required.$invalid) {
-          this.errorMessage = 'Email is required'
-        } else if (this.v$.validationFields.username.email.$invalid) {
-          this.errorMessage = 'Invalid email'
-        } else if (this.v$.validationFields.password.required.$invalid) {
-          this.errorMessage = 'Password is required'
-        } else if (this.v$.validationFields.password.minLength.$invalid) {
-          this.errorMessage = 'Password must be at least 6 characters long'
-        }
+        this.errorMessage = this.getValidateMessage()
       } else {
         this.requestIsProcessing = true
         const result = await checkUser(this.inputFields[0].model, this.inputFields[1].model)

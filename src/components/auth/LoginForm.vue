@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import FormInput from '@/components/auth/FormInput.vue'
+import FormInput from '@/components/base/FormInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import { required, email, minLength } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
@@ -106,6 +106,10 @@ export default {
       }
       return ''
     },
+    clearForm() {
+      this.inputFields[0].model = ''
+      this.inputFields[1].model = ''
+    },
     async handleSubmit() {
       this.v$.validationFields.$touch()
 
@@ -116,9 +120,7 @@ export default {
         const result = await checkUser(this.inputFields[0].model, this.inputFields[1].model)
         if (result === true) {
           this.$router.push({ name: 'home' })
-          // Clear form after successful login
-          this.inputFields[0].model = ''
-          this.inputFields[1].model = ''
+          this.clearForm()
         } else {
           this.errorMessage = result
         }

@@ -1,4 +1,4 @@
-# Clever-to-do-list
+# Clever to-do list
 
 The To-do List App is a simple yet powerful task management tool designed to help users organize their daily activities efficiently. With an intuitive interface, users can easily create, edit, and delete tasks, move them from previous days to the current day and endlessly scroll through future days
 
